@@ -1,15 +1,33 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QSpinBox, QCheckBox, QPushButton, QMessageBox
+from PyQt5.QtWidgets import (
+    QApplication, QWidget, QLabel, QLineEdit,
+    QSpinBox, QCheckBox, QPushButton, QMessageBox
+)
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt, QRect, QPropertyAnimation
 
+
 class PlaylistGenLaunchGui(QWidget):
     """
-    GUI for the first screen of the Spotify Festival Playlist Generator project, by Austin Lowey.
+    GUI for the first screen of the Spotify Festival Playlist Generator.
 
-    #####################################
-    
+    Attributes:
+        songkick_url (str): songkick.com link to a specific music festival web page.
+        tracks_per_artist (int): Number of top tracks per artist to include in the created playlist.
+        include_remixes (bool): Removes multiple remixes and edits of the same song.
+
+    Methods:
+        __init__(): Initializes the GUI with default values.
+        init_ui(): Sets up the graphical user interface.
+        start_animation(): Animation to make the button larger when the user hovers the mouse over it.
+        proceed_to_artist_selection(): Updates variables with user input and closes the window.
+
+    Returns (when running launch_gui function):
+        songkick_url (str): songkick.com link to a specific festival web page, which contains an artist lineup.
+        tracks_per_artist (int): Number of top tracks per artist to include in the created playlist. Can be b/w 1-10. Default = 5.
+        include_remixes (bool): Removes multiple remixes and edits of the same song.
+
     GUI prompts the user through 5 steps:
     
     1) Go to www.songkick.com (hyperlink provided) and enter the name of the music festival you want into the website's search bar.
@@ -24,8 +42,8 @@ class PlaylistGenLaunchGui(QWidget):
        <QCheckBox for user to optionally select>
 
     5) Select which artist to include: <Big QPushButton in Spotify green that brings user to next page>
-    
-    #####################################
+
+    ...
 
     Note on step 4 because my wife said it was confusing: When building the back-end of this project, I was using Electric Zoo 2023
     as the festival to do most of my testing. The popular 2023 House song "Where You Are" by John Summit was, unsurprisingly, added
@@ -33,14 +51,6 @@ class PlaylistGenLaunchGui(QWidget):
     Zedd, Kaskade, and GRiZ, who all remixed the same song. It's a great song, but I didn't want 4 versions of the same song in
     the same playlist, so I added the option to not include multiple remixes/edits. Repeats of the exact same song are always
     removed, regardless of what is selected for this option.
-
-    #####################################
-
-    Returns the following variables from user-inputs on this page of the GUI:
-    1) songkick_url (type=str): songkick.com link to a specific festival web page, which contains an artist lineup. Lineup will be extracted by Beautiful Soup
-       in a different module
-    2) tracks_per_artist (type=int): Number of top tracks per artist to include in the created playlist. Can be b/w 1-10. Default = 5.
-    3) include_remixes (type=bool): Removes multiple remixes and edits of the same song.
     """
     
     def __init__(self):
@@ -55,7 +65,18 @@ class PlaylistGenLaunchGui(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        """GUI design for the first screen of the Spotify Festival Playlist Generator project, by Austin Lowey."""
+        """
+        Defines layout and appearance of launch screen GUI.
+
+
+        Widgets:
+            Title label
+            Step labels and explanations
+            URL line edit
+            Number of tracks spin box
+            Checkbox for including remixes/edits
+            Proceed button
+        """
         
         # Define GUI's color scheme (based off of Spotify's) to be referenced in QWidget StyleSheets
         spotify_green = "rgb(30, 215, 96)"
@@ -111,11 +132,20 @@ class PlaylistGenLaunchGui(QWidget):
         title_label = QLabel("Spotify Festival Playlist Generator", self)
         title_label.setGeometry(200, y_title, 1200, y_title_height)
         title_label.setAlignment(Qt.AlignCenter)
-        title_label.setStyleSheet(f"color: {spotify_green}; background-color: {transparent}; font-size: 36pt; font-weight: bold; font-family: 'Arial Rounded MT Bold';")
+        title_label.setStyleSheet(
+            f"color: {spotify_green};"
+            f"background-color: {transparent};"
+            f"font-size: 36pt; font-weight: bold;"
+            f"font-family: 'Arial Rounded MT Bold';"
+        )
 
         # Step 1 text
         link_template = '<a href="{0}">{1}</a>' # Allows a hyperlink to be added to the Step 1 text
-        step1_label_text = "Step 1) Go to " + link_template.format("https://www.songkick.com", "www.songkick.com") + " and enter the name of the music festival you want into the website's search bar."
+        step1_label_text = (
+            "Step 1) Go to "
+            + link_template.format("https://www.songkick.com", "www.songkick.com")
+            + " and enter the name of the music festival you want into the website's search bar."
+        )
         step1_label = QLabel(step1_label_text, self)
         step1_label.setGeometry(x_start, y_step1_label, 1560, 40)
         step1_label.setOpenExternalLinks(True)
@@ -130,8 +160,12 @@ class PlaylistGenLaunchGui(QWidget):
 
         # Text-input line for entering URL
         self.url_lineedit = QLineEdit(self)
-        self.url_lineedit.setPlaceholderText(" Enter your festival's website link")
-        self.url_lineedit.setGeometry(x_indent, y_line_edit, 1600 - x_indent * 2, 40)
+        self.url_lineedit.setPlaceholderText(
+            " Enter your festival's website link"
+        )
+        self.url_lineedit.setGeometry(
+            x_indent, y_line_edit, 1600 - x_indent * 2, 40
+        )
         self.url_lineedit.setStyleSheet(f"background-color: {lt_grey}; color: white; border-radius: 20px; padding: 2px;")
         font_url = QFont()
         font_url.setFamily("Arial Rounded MT Bold")
@@ -139,7 +173,11 @@ class PlaylistGenLaunchGui(QWidget):
         self.url_lineedit.setFont(font_url)
         
         # Step 3 text
-        step3_label = QLabel("Step 3) Choose the number of tracks from each artist you want in your playlist (between 1-10):", self)
+        step3_label = QLabel(
+            "Step 3) Choose the number of tracks from each artist "
+            "you want in your playlist (between 1-10):",
+            self
+        )
         step3_label.setGeometry(x_start, y_step3_label, 1560, 40)
         step3_label.setFont(font)
         step3_label.setStyleSheet(f"color: white; background-color: {transparent}")
@@ -190,7 +228,13 @@ class PlaylistGenLaunchGui(QWidget):
         x_proceed_button = int((1600 - w_proceed_button) / 2)
         h_proceed_button = 100
         self.proceed_button.setGeometry(x_proceed_button, y_proceed_button, w_proceed_button, h_proceed_button)
-        self.proceed_button.setStyleSheet(f"background-color: {spotify_green}; color: black; border-style: outset; border-color: {mid_grey}; border-radius: 40px;")
+        self.proceed_button.setStyleSheet(
+            f"background-color: {spotify_green};"
+            f"color: black;"
+            f"border-style: outset;"
+            f"border-color: {mid_grey};"
+            f"border-radius: 40px;"
+        )
         self.proceed_button.setFont(QFont("Arial Rounded MT Bold", 18))
 
         # Set up animation properties to make button larger when user hovers mouse over it
@@ -198,18 +242,41 @@ class PlaylistGenLaunchGui(QWidget):
         self.animation.setDuration(200)  # Set the animation duration in milliseconds
 
         # Connect the hover events to functions
-        self.proceed_button.enterEvent = lambda event: self.start_animation(event, QRect(x_proceed_button - 5, y_proceed_button - 5, w_proceed_button + 10, h_proceed_button + 10))
-        self.proceed_button.leaveEvent = lambda event: self.start_animation(event, QRect(x_proceed_button, y_proceed_button, w_proceed_button, h_proceed_button))
+        self.proceed_button.enterEvent = lambda event: self.start_animation(
+            event, QRect(x_proceed_button - 5,
+                         y_proceed_button - 5,
+                         w_proceed_button + 10,
+                         h_proceed_button + 10)
+        )
+        self.proceed_button.leaveEvent = lambda event: self.start_animation(
+            event, QRect(
+                x_proceed_button,
+                y_proceed_button,
+                w_proceed_button,
+                h_proceed_button)
+        )
 
     def start_animation(self, event, target_geometry):
-        """Animation to make button larger when user hovers mouse over it."""
+        """
+        Animation to make the proceed button larger when the user hovers the mouse over it.
+
+        Parameters:
+            event: Mouse hover event.
+            target_geometry (QRect): Target geometry for the button.
+
+        Note: This method is connected to hover events for the proceed button.
+        """
         if not self.animation.state() == QPropertyAnimation.Running:
             self.animation.setStartValue(self.proceed_button.geometry())
             self.animation.setEndValue(target_geometry)
             self.animation.start()
 
     def proceed_to_artist_selection(self):
-        """Update variables with user input."""
+        """
+        Updates variables with user input and closes the window.
+
+        This method is called when the user clicks the proceed button.
+        """
         self.songkick_url = self.url_lineedit.text()
         self.tracks_per_artist = self.num_tracks_spinbox.value()
         self.include_remixes = self.include_remixes_checkbox.isChecked()
@@ -227,6 +294,11 @@ def launch_gui():
     """
     Instantiates a PlaylistGenLaunchGui class object. Launches the starting GUI
     screen and, once the user finishes with it, stores the users inputs.
+
+    Returns:
+        str: songkick.com link to a specific festival web page.
+        int: Number of top tracks per artist to include in the created playlist.
+        bool: Removes multiple remixes and edits of the same song.
     """
     app = QApplication(sys.argv)
     gui = PlaylistGenLaunchGui()
@@ -234,4 +306,3 @@ def launch_gui():
     app.exec_()
 
     return gui.songkick_url, gui.tracks_per_artist, gui.include_remixes
-    
