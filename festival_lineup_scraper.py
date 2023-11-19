@@ -1,60 +1,85 @@
-from bs4 import BeautifulSoup
-import requests
 from typing import Tuple, List
+
+import requests
+from bs4 import BeautifulSoup
+
 
 def get_artist_names(songkick_url: str) -> Tuple[str, List[str]]:
     """
-    Returns a list of artists performing in a festival, given a
-    songkick.com url for a specific music festival.
+    Retrieves a list of artists performing in a specific music festival.
+
+    Parameters:
+        songkick_url (str): The URL of the music festival page on Songkick.com.
+
+    Returns:
+        Tuple[str, List[str]]: A tuple containing the festival name and a sorted list of artist names.
+
+    The artist names are retrieved from the lineup on the festival page.
+    The festival name is extracted from the URL.
     """
 
     # Get web page and its html contents using bs4
     headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Max-Age': '3600',
         'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'
         }
     req = requests.get(songkick_url, headers)
     soup = BeautifulSoup(req.content, 'html.parser')
 
     # Extract artist names from html
-    ul_tag = soup.find("ul", class_="festival") # Tag containing all artists
-    a_tags = ul_tag.find_all("a") # Split ul_tag into an iterable a_tags
-    # a_tag format sample: <a href="/artists/29315-foo-fighters">Foo Fighters</a>
-    artist_names = [a_tag.contents[0] for a_tag in a_tags] # List of every artist in the web page's lineup
+    html_ul_tag = soup.find("ul", class_="festival") # Tag containing all artists
+    artist_names = [html_a_tag.contents[0] for html_a_tag in html_ul_tag.find_all("a")] # List of every artist in the web page's lineup
+    # html_a_tag format sample: <a href="/artists/29315-foo-fighters">Foo Fighters</a>
 
-    # Extract and format festival name from url
-    festival_name = songkick_url.split("id/")[1].split("-", 1)[1].replace("-", " ").title()
-    
+    # Extract and format festival name from URL
+    try:
+        festival_name = songkick_url.split("id/")[1].split("-", 1)[1].replace("-", " ").title()
+    except IndexError:
+        festival_name = "your music festival"
+        
     return festival_name, sorted(artist_names)
 
 
 def test_get_artist_names(test_url=None):
+    """
+    Tests the get_artist_names function by fetching artist names and festival name
+    from the specified or default test URL(s) and printing the results.
+
+    Parameters:
+        test_url (str, optional): URL of the festival to test. Default is None.
+            If None, sample/test URLs for ACL and EDC festivals are used.
+
+    Returns:
+        None
+
+    Note: This function calls the get_artist_names function, prints the festival name,
+    and displays the list of artist names in the lineup for the specified or default URL(s).
+    """
+    
     if test_url:
         festival_name, artist_names = get_artist_names(test_url)
         print(f"Festival name is: {festival_name}\n")
         print(f"List of artist names in lineup is:\n{artist_names}")
     else:
-        # Sample/test urls if one isn't entered
+        # Sample/test URLs if one isn't entered
         acl_url = "https://www.songkick.com/festivals/129-austin-city-limits-music\
         /id/41123551-austin-city-limits-music-festival-2023"
         edc_url = "https://www.songkick.com/festivals/562824-edc-orlando\
         /id/40754508-edc-orlando-2023"
-        
+
+        # Test the get_artist_names function with Austin City Limits 2023 (i.e., acl_url)
         festival_name_acl, artist_names_acl = get_artist_names(acl_url)
         print(f"Festival name is: {festival_name_acl}\n")
         print(f"List of artist names in lineup is:\n{artist_names_acl}\n")
         print("--------------------------------\n")
-        
+
+        # Test the get_artist_names function with EDC Orlando 2023 (i.e., edc_url)
         festival_name_edc, artist_names_edc = get_artist_names(edc_url)
         print(f"Festival name is: {festival_name_edc}\n")
         print(f"List of artist names in lineup is:\n{artist_names_edc}\n")
 
 
 """
-ACL 2023 Lineup (from songkick.com, for quick reference):
+Austin City Limits 2023 Lineup (from songkick.com, for quick reference):
 ['Alanis Morissette', 'Ali Sethi', 'Angel White', 'Arya (Serbia)', 'BLOND:ISH','Ben Kweller',
 'Breland', 'CVC', 'Calder Allen', 'Celisse', 'Charlotte Adigéry & Bolis Pupul',
 'Cigarettes After Sex', 'Declan McKenna', 'Delacey', 'Eloise', 'Foo Fighters', 'Hozier',

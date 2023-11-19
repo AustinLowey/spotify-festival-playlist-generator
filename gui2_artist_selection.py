@@ -1,6 +1,9 @@
+# This file going to be completely overhauled.
+
 import sys
 
 import pandas as pd
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QScrollArea, QLineEdit, QLabel, QTextBrowser, QSizePolicy, QFrame
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
@@ -73,8 +76,8 @@ class ArtistChooser(QMainWindow):
         
         for i, row_df in df_artists.iterrows():
             name = row_df['Artist']
-            popularity = row_df['Popularity']
-            genres = row_df['Genres']
+            popularity = row_df['Artist Popularity']
+            genres = row_df['Artist Genres']
             
             if i == len(df_artists) - 1:
                 button = QPushButton()
@@ -228,29 +231,33 @@ class ArtistChooser(QMainWindow):
         self.names_list.setPlainText(", ".join(self.names_to_add))
 
     def get_selected_names(self):
-        self.selected_names = [widget.property("artist_name") for widget in self.findChildren(QPushButton) if widget.isChecked()]
-        self.selected_names.extend(self.names_to_add)
+        selected_buttons = [widget.property("artist_name") for widget in self.findChildren(QPushButton) if widget.isChecked()]
+        new_artist_names = self.names_to_add.copy()
+        self.selected_names = selected_buttons.copy()
         self.close()
+        return self.selected_names, new_artist_names
 
     def get_selected_names_list(self):
-        return self.selected_names
+        return self.selected_names, self.names_to_add
 
-def select_artist_names(names, festival, backend_testing):
+def select_artist_names(df_artists, festival):
     app = QApplication(sys.argv)
-    window = ArtistChooser(names, festival, names_per_row=3)
+    window = ArtistChooser(df_artists, festival, names_per_row=3)
     window.setWindowTitle("Spotify Festival Playlist Generator - Artist Selection")
     window.setGeometry(160, 100, 1600, 900)
     window.show()
 
     app.exec_()
 
-    selected_artists = window.get_selected_names_list()
-    selected_artist_names = [artist.split("\n")[0] for artist in selected_artists]
+    selected_buttons, new_artist_names = window.get_selected_names_list()
+    selected_artist_names = [artist.split("\n")[0] for artist in selected_buttons]
 
-    if backend_testing:
-        print("Selected Names:", selected_artist_names)
+    if __name__ == "__main__":
+        print(f"Selected Buttons: {selected_artist_names}")
+        print(f"New/Added Artist Names: {new_artist_names}")
 
-    return selected_artist_names
+    return selected_artist_names, new_artist_names
+
 
 if __name__ == "__main__":
     artist_names = ['Alanis Morissette', 'Ali Sethi', 'Angel White', 'Arya (Serbia)', 'BLOND:ISH', 'Ben Kweller', 'Breland', 'CVC', 'Calder Allen', 'Celisse',
@@ -279,9 +286,9 @@ if __name__ == "__main__":
                     53, 69, 7, 66, 82, 67, 50, 59, 70, 63, 10, 74, 50, 76, 47, 62, 44, 71, 63, 45, 56]
 
     df_artists = pd.DataFrame({'Artist': artist_names,
-                               'Genres': genres,
-                               'Popularity': popularity,
+                               'Artist Genres': genres,
+                               'Artist Popularity': popularity,
                                })
     festival = "Austin City Limits Music Festival 2023"
     
-    selected_artist_names = select_artist_names(df_artists, festival, backend_testing=True)
+    selected_artist_names, new_artist_names = select_artist_names(df_artists, festival)
