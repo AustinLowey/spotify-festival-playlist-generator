@@ -1,0 +1,55 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Great North Folk Festival 2023 Playlist Summary</title>
+        <script>
+            function showPlot(plotId) {
+                var plots = document.getElementsByClassName("plot");
+                for (var i = 0; i < plots.length; i++) {
+                    plots[i].style.display = "none";
+                }
+                document.getElementById(plotId).style.display = "block";
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Playlist Summary -->
+        <div>
+            <h2>Playlist Summary</h2>
+            <p>Public playlist "Spotipy Playlist - Great North Folk Festival 2023" created on 11-22-2023.</p>
+            <p>Total Songs: 2 songs, 0 hr 6 min</p>
+            <p>Top 5 Genres: Hull Indie, Yorkshire Folk</p>
+            <p>Similar artists to the ones in this playlist:  Placeholder #1, Placeholder #2</p>
+        </div>
+
+        <!-- Artist Summary -->
+        <div>
+            <h2>Artist Summary</h2>
+            <embed src="artist_summary.html" type="text/html" width="1200" height="600">
+        </div>
+
+        <!-- Feature Plots -->
+        <div>
+            <h2>Feature Plots</h2>
+            <button onclick="showPlot('tempo_plot')">Show Tempo Plot</button>
+            <button onclick="showPlot('danceability_plot')">Show Danceability Plot</button>
+            <button onclick="showPlot('energy_plot')">Show Energy Plot</button>
+            <button onclick="showPlot('speechiness_plot')">Show Speechiness Plot</button>
+
+            <div id="tempo_plot" class="plot">
+                <embed src="Tempo_plot.html" type="text/html" width="800" height="600">
+            </div>
+            <div id="danceability_plot" class="plot" style="display: none;">
+                <embed src="Danceability_plot.html" type="text/html" width="800" height="600">
+            </div>
+            <div id="energy_plot" class="plot" style="display: none;">
+                <embed src="Energy_plot.html" type="text/html" width="800" height="600">
+            </div>
+            <div id="speechiness_plot" class="plot" style="display: none;">
+                <embed src="Speechiness_plot.html" type="text/html" width="800" height="600">
+            </div>
+        </div>
+    </body>
+    </html>
+    

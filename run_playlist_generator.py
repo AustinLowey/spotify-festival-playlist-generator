@@ -8,10 +8,13 @@ from festival_lineup_scraper import get_artist_names
 from spotipy_utils import (
     auth_flow, get_token_header, search_for_artists,
     get_top_tracks, create_playlist
-)
+    )
 from gui2_artist_selection import select_artist_names
 from img_conversion import img_url_to_array
-# from playlist_analytics import *
+from playlist_analytics import (
+    create_playlist_summary, create_artist_summary,
+    create_feature_plots, create_dashboard
+    )
 
 def main(
     new_playlist: bool = True,
@@ -64,6 +67,7 @@ def main(
         Energy - float (between 0-1)
         Tempo - float (beats per minute)
         Speechiness - float (between 0-1)
+        Song Duration - int (in ms)
         Artist Genres - List[str] (may be an empty list)
         Artist Popularity - int (between 1-100)
         Artist uri - str
@@ -120,8 +124,14 @@ def main(
         create_playlist(f"Spotipy Playlist - {festival_name}", spot, df_songs)
 
     # Perform feature analysis and create summary
+    recommended_artists = ['Placeholder #1', 'Placeholder #2'] # Placeholder for future feature
     if analyze_playlist == True:
-        pass
+        summary_data = create_playlist_summary(
+            df_songs, festival_name, recommended_artists
+            )
+        create_artist_summary(df_songs, festival_name)
+        create_feature_plots(df_songs, festival_name)
+        create_dashboard(summary_data, festival_name)
 
     return df_songs, df_playlist_artists
 

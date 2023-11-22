@@ -242,6 +242,7 @@ def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist=10
             Energy - float (between 0-1)
             Tempo - float (beats per minute)
             Speechiness - float (between 0-1)
+            Song Duration - int (in ms)
             Artist Genres - List[str] (may be an empty list)
             Artist Popularity - int (between 1-100)
             Artist uri - str
@@ -252,7 +253,7 @@ def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist=10
     """
 
     # Initialize lists to store track and artist information
-    songs, song_popularities, song_uris = [], [], [] # Track info
+    songs, song_popularities, song_durations, song_uris = [], [], [], [] # Track info
     danceabilities, energies, tempos, speechinesses = [], [], [], [] # Track features
     artists, artist_genres, artist_popularities, artist_uris, artist_img_url  = [], [], [], [], [] # Artist info
 
@@ -264,6 +265,7 @@ def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist=10
             # Append track info
             songs.append(track['name'])
             song_popularities.append(track['popularity'])
+            song_durations.append(track['duration_ms'])
             song_uris.append(track['uri'].split(':')[-1])
 
             # Append artist info for each song row
@@ -297,8 +299,9 @@ def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist=10
                        'Energy': energies,
                        'Tempo': tempos,
                        'Speechiness': speechinesses,
-                       "Artist Genres": artist_genres,
-                       "Artist Popularity": artist_popularities,
+                       'Song Duration': song_durations,
+                       'Artist Genres': artist_genres,
+                       'Artist Popularity': artist_popularities,
                        'Artist uri': artist_uris,
                        'Song uri': song_uris,
                        'Artist Image url': artist_img_url,
