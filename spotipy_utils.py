@@ -1,17 +1,18 @@
 ###############################################################################
 #
 # This file contains utility functions for using Spotipy/Spotify API:
-#   1) auth_flow authenticates user
-#   2) get_token_header creates search header for artist querying
-#   3) capitalize_genre is a helper function to capitalize genres, including
+#   - auth_flow authenticates user
+#   - get_token_header creates search header for artist querying
+#   - capitalize_genre is a helper function to capitalize genres, including
 #      common genre acronyms, in the following search_for_artists function
-#   4) search_for_artists queries for specific artists and returns a df
+#   - search_for_artists queries for specific artists and returns a df
 #      containing important artist info (uri, popularity, genres, img url)
-#   5) retry_spotify_request is a helper function to retry Spotify API
+#   - retry_spotify_request is a helper function to retry Spotify API
 #      requests in the following top_tracks function
-#   6) get_top_tracks gets the top 1-10 songs for each artist and returns a df
+#   - recommend_artists returns similar artists to those in playlist
+#   - get_top_tracks gets the top 1-10 songs for each artist and returns a df
 #      containing song metadata (uri, popularity, danceability, etc)
-#   7) create_playlist creates a new playlist for many songs
+#   - create_playlist creates a new playlist for many songs
 #
 ###############################################################################
 
@@ -20,6 +21,7 @@ import time
 import base64
 import json
 from typing import Dict, Tuple, List
+from collections import Counter
 
 import pandas as pd
 import requests
@@ -222,9 +224,58 @@ def retry_spotify_request(func, *args):
             # If some other SpotifyException error, print error
             print(f"SpotifyException: {e}")
             return None
-        
 
-def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist=10) -> pd.DataFrame:
+        
+def recommend_artists(spot: Spotify, df_artists: pd.DataFrame, num_recs: int=3) -> List[str]:
+    """
+    Recommends new artists based on related artists to those in df_artists.
+    The artist_related_artists method give 20 artist recommendations for any artist. This
+    method is called for each artist in df_artists; repeated artist recommendations are
+    counted and the top recurring artist names are returned.
+
+    Parameters:
+        spot: Spotify object for making API requests
+        df_artists: Pandas DataFrame with columns 'Artist' and 'Artist uri'
+        num_recs: Number of recommended artists to return (default is 3)
+
+    Returns:
+        A list of recommended artist names.
+
+    Note: Spotipy also has a recommendations() method that returns track recs (as opposed
+    to artist recs). An alternative solution using that approach may be useful.
+    """
+    
+    artist_counter = {}  # Empty counter dict
+
+    # Iterate over each artist in the dataframe
+    artist_uris = list(df_artists['Artist uri'].unique()) # List of unique Artist URIs
+    for artist_uri in artist_uris:
+        artist_recs = retry_spotify_request(spot.artist_related_artists, artist_uri)['artists']
+        if artist_recs is not None:
+            # artist_recs is a list of 20 artist dicts (assuming no request error)
+            for rec in artist_recs:
+                artist_name = rec['name']
+                # Increment the count for the related artist in the counter dictionary
+                if artist_name not in artist_counter:
+                    artist_counter[artist_name] = 1
+                else:
+                    artist_counter[artist_name] += 1
+
+    # Remove artists that are in df_artists from counter dict
+    for artist in df_artists['Artist'].unique():
+        artist_counter.pop(artist, None)
+
+    # Get the top num_recs highest occurring artists
+    top_artists_count = Counter(artist_counter).most_common(num_recs)
+    # top_artists_count is a list of tuples [(artist name, count), ...]
+
+    # Extract the artist names from the list of tuples
+    top_artist_recs = [artist[0] for artist in top_artists_count]
+
+    return top_artist_recs
+
+
+def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist: int=10) -> pd.DataFrame:
     """
     Creates DataFrame containing rows of songs for selected artists.
 
