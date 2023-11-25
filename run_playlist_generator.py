@@ -7,14 +7,19 @@ from gui1_launch import launch_gui
 from festival_lineup_scraper import get_artist_names
 from spotipy_utils import (
     auth_flow, get_token_header, search_for_artists,
-    get_top_tracks, create_playlist
+    recommend_artists, get_top_tracks, create_playlist
     )
 from gui2_artist_selection import select_artist_names
 from img_conversion import img_url_to_array
+from playlist_mods import (
+    remove_duplicates, remove_remixes_and_edits,
+    filter_songs_by_artist_popularity, create_df_playlist_artists
+    )
 from playlist_analytics import (
     create_playlist_summary, create_artist_summary,
     create_feature_plots, create_dashboard
     )
+
 
 def main(
     new_playlist: bool = True,
@@ -100,15 +105,26 @@ def main(
 
     # Get new artist data and add it to df_artists
     df_new_artists = search_for_artists(search_header, new_artist_names) # Artists added (i.e., not in lineup)
-    df_selected_artists = df_lineup_artists[df_lineup_artists['Artist'].apply(lambda x: x in selected_artist_names)] # Artists selected from lineup
-    df_playlist_artists = pd.concat([df_selected_artists, df_new_artists], ignore_index=True) # Combine both
-    df_playlist_artists = df_playlist_artists.drop_duplicates(subset='Artist').reset_index(drop=True) # Remove duplicates and reset df index
+    df_playlist_artists = create_df_playlist_artists(
+        df_lineup_artists,
+        df_new_artists,
+        selected_artist_names
+    )
 
     # Get between 1-10 top tracks from each selected artist using Spotipy
     df_songs = get_top_tracks(spot, df_playlist_artists, tracks_per_artist)
 
-    # Drop duplicates of the same song, if any (needed for if the same song is in the top 10 of multiple artists)
-    df_songs = df_songs.drop_duplicates(subset='Song uri', keep='first').reset_index(drop=True)
+    # Drop duplicates of the same song, if any
+    df_songs, duplicate_songs_removed = remove_duplicates(df_songs)
+    if duplicate_songs_removed:
+        print(f"Duplicate songs removed: {duplicate_songs_removed}")
+
+    # Drop multiple versions of songs if user selected this option
+    if include_remixes == False:
+        df_songs, remix_songs_removed = remove_remixes_and_edits(df_songs)
+        if remix_songs_removed:
+            print("Multiple versions of song(s) present.\n")
+            print(f"Songs removed: {remix_songs_removed}")
 
     # Save df_songs as a .csv file
     if save_df_songs == True:
@@ -124,8 +140,8 @@ def main(
         create_playlist(f"Spotipy Playlist - {festival_name}", spot, df_songs)
 
     # Perform feature analysis and create summary
-    recommended_artists = ['Placeholder #1', 'Placeholder #2'] # Placeholder for future feature
     if analyze_playlist == True:
+        recommended_artists = recommend_artists(spot, df_artists) # Get top 3 artist recs
         summary_data = create_playlist_summary(
             df_songs, festival_name, recommended_artists
             )
@@ -181,10 +197,11 @@ def main_offline() -> pd.DataFrame:
     # Offline substitute of updating the Artists df based on Artist Selection GUI
     df_new_artists = pd.read_csv("csv_exports/OfflineTestNewArtists.csv") # Artists added (i.e., not in lineup). Offline version.
     df_new_artists['Artist Genres'] = df_new_artists['Artist Genres'].apply(eval) # Change string representation (from .csv) of genres to list
-    df_selected_artists = df_lineup_artists[df_lineup_artists['Artist'].apply(lambda x: x in selected_artist_names)] # Artists selected from lineup
-
-    df_playlist_artists = pd.concat([df_selected_artists, df_new_artists], ignore_index=True) # Combine both
-    df_playlist_artists = df_playlist_artists.drop_duplicates(subset='Artist').reset_index(drop=True) # Remove duplicates and reset df index
+    df_playlist_artists = create_df_playlist_artists(
+        df_lineup_artists,
+        df_new_artists,
+        selected_artist_names
+    )
     
     playlist_artists_list = [row['Artist'] for i, row in df_playlist_artists.iterrows()] # To print artists in df_playlist_artists
     print("Offline version: New/added artist names overrided as ['John Summit', 'David Guetta']")
