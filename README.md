@@ -1,13 +1,12 @@
 # Spotify Festival Playlist Generator
 Creates a playlist for a specific music festival by using top songs from artists in the festival's lineup. Alternatively, a user can create a playlist just by entering multiple artists and a playlist will be created for the top songs from those artists. The user can select how many songs to include from each artist.
 
-More coming soon in November 2023. This readme is just a quick sample of a prototype for now.
-
 # Main Python Libraries Used
 - Spotipy
 - pandas
 - PyQt5
 - Beautiful Soup
+- Plotly
 
 Note: To use the Spotipy API, you need to setup an API client key and secret key (https://developer.spotify.com/documentation/web-api). In this application, 3 environment variables were setup: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER. The first and second are used for retrieving artist top tracks and track metadata. The third, SPOTIFY_USER, links to a Spotify account.
 
@@ -30,10 +29,15 @@ Finally, the playlist is created. This one included the top 8 songs from 12 diff
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/a493d5f4-941f-4a06-9e4e-70dfe44324a0" width="600">
 
-A summary page is also created in html. The layout and color scheme haven't been organized yet. Statistical analysis of some features is also planned; for example, automated analysis of tempo and/or danceability trends, then suggesting outlier songs to delete if the user wants to keep the playlist consistent with detected feature trends.
+A dashboard is also created in HTML/CSS, providing multiple capabilities:
+1) Automated trend analysis on playlist song features (Tempo, Danceability, Energy and Speechiness) to identify the strongest trends present in the playlist data. This is especially useful if your playlist already fits specific qualities and you want to prune outliers to further strengthen those qualities.
+2) Interactive feature plots for all 4 song features (all plotted vs. Song Popularity), where you can hover over any data point to see to which song and artist it belongs. Useful for finding outliers and further exploring playlist trends.
+3) Summary information on the playlist and artists, including top playlist genres, similar artist recommendations, total runtime, number of songs, etc.
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/d04301c5-f712-4779-99ad-a9d297a726e1" width="600">
 
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/8c9d3d35-ec4f-458d-880d-ef62d07101f9" width="600">
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/d00a88ed-f576-4a04-9af8-887faa3a1fee" width="600">
+Interactive hover functionality of Feature Plots:
+
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/1390a26c-3206-4b23-bc5d-8fa918657d2c" width="600">
 
 That's the end of the demo! Here's another playlist I made a few months ago for every artist that was in the Electric Zoo 2023 lineup. 818 songs and over 49 hours. Definitely wouldn't have made that manually!
 
