@@ -1,0 +1,94 @@
+/* dashboard_style.css */
+
+body {
+  box-sizing: border-box;
+  background-color: rgb(0, 0, 0);
+}
+
+#playlist-summary, #feature-plots, #artist-summary {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 3px 30px;
+  border-radius: 10px;
+  background-color: rgb(18, 18, 18);
+}
+
+#playlist-summary {
+  top: 2%;
+  left: 1%;
+  width: 41%;
+  height: 52%;
+  box-sizing: border-box;
+  padding-top: 3px;
+  padding-right: 10px;
+  padding-left: 30px;
+  border-radius: 10px;
+  background-color: rgb(18, 18, 18);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+}
+
+#playlist-summary #line0 { /* 1st line in section gets its own margin spacing */
+  font-size: 19px;
+  font-weight: bold;
+  color: white;
+  margin-top: 10px;
+}
+
+#playlist-summary #line1 {
+  font-size: 19px;
+  font-weight: bold;
+  color: white;
+  margin-top: 20px;
+}
+
+#playlist-summary #line2 {
+  font-size: 15px;
+  color: rgb(200, 200, 200);
+  margin-top: 0;
+}
+
+#feature-plots {
+  top: 2%;
+  right: 1%;
+  width: 56.5%;
+  height: 52%;
+  overflow: hidden;
+}
+
+#feature-plots .plot {
+  position: absolute;
+  top: 35px;
+  left: 25px;
+  overflow: hidden;
+}
+
+#feature-plots .plot-buttons {
+  position: absolute;
+  top: 130px;
+  right: 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+#feature-plots .plot-buttons button {
+  font-size: 13px; /* Adjust the font size as needed */
+  padding: 10px; /* Adjust the padding as needed */
+  margin-bottom: 5px;
+  border-radius: 10px;
+  background-color: rgb(200, 200, 200);
+}
+
+#artist-summary {
+  bottom: 1%;
+  left: 1%;
+  width: 98%;
+  height: 44%;
+  overflow: hidden;
+}
+
+h2 {
+  color: rgb(30, 215, 96);
+  margin: 3px;
+  font-family: Arial, Helvetica, sans-serif;
+}
