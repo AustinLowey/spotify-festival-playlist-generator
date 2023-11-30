@@ -5,6 +5,7 @@ from collections import Counter
 
 import pandas as pd
 import plotly.express as px
+from plotly import graph_objects as go
 
 
 def create_playlist_summary(df_songs: pd.DataFrame, festival_name: str, recommended_artists: List[str]) -> Dict[str, str]:
@@ -22,7 +23,7 @@ def create_playlist_summary(df_songs: pd.DataFrame, festival_name: str, recommen
     
     # Create a label for playlist name and creation date
     today = datetime.now().strftime("%m-%d-%Y")
-    created_on_msg = f'Public playlist "Spotipy Playlist - {festival_name}" created on {today}.'
+    created_on_msg = f'Public playlist created on {today}'
 
     # Calculate playlist summary information
     playlist_total_songs = len(df_songs)
@@ -102,16 +103,26 @@ def create_artist_summary(df_songs: pd.DataFrame, festival_name: str) -> pd.Data
     # Create a DataFrame from summary data
     artist_summary_df = pd.DataFrame(summary_data)
 
+    # Convert DataFrame to HTML with left-aligned columns
+    html_content = artist_summary_df.to_html(index=False, justify='left')
+
+    # Adding a couple other style/formatting rules. This likely to later be replaced by CSS.
+    table_head_style = "text-align: left; color: white; font-size: 16px; font-family: Arial, Helvetica, sans-serif;"
+    table_rows_style = "text-align: left; color: rgb(200, 200, 200); font-size: 15px; font-family: Arial, Helvetica, sans-serif;"
+    html_content = html_content.replace('<thead>', f'<thead style="{table_head_style}">')
+    html_content = html_content.replace('<tbody>', f'<tbody style="{table_rows_style}">')
+    html_content = html_content.replace('<th>Artist</th>', '<th style="width: 150px;">Artist</th>')
+    html_content = html_content.replace('<th>Total Runtime</th>', '<th style="width: 110px;">Total Runtime</th>')
+
+    # Wrap the current HTML content with a div for overflow/scrollbar
+    html_content = f'<div style="overflow: auto;">{html_content}</div>'
+
     # Save the artist summary DataFrame to an HTML file
     today = datetime.now().strftime("%Y-%m-%d")
     file_dir = f"html_exports/{festival_name.replace(' ','')}Summary_Created{today}/"
     if not os.path.exists(file_dir): # Check if the directory exists yet
         os.makedirs(file_dir) # Create the directory
     file_name = f"{file_dir}artist_summary.html"
-
-    # Convert DataFrame to HTML with left-aligned columns
-    html_content = artist_summary_df.to_html(index=False, justify='left')
-    html_content = html_content.replace('<th>', '<th style="text-align: left;">')
 
     # Save the modified HTML file
     with open(file_name, 'w') as file:
@@ -124,9 +135,9 @@ def create_feature_plots(df_songs: pd.DataFrame,
                          festival_name: str,
                          x_axis: str="Song Popularity",
                          y_axis: List[str]=["Tempo", "Danceability", "Energy", "Speechiness"]
-                         ) -> None:
+                         ) -> Dict[str, str]:
     """
-    Generate scatter plots for selected features and save them to HTML files.
+    Generate scatter plots, perform feature analysis, and save plots to HTML files.
 
     Parameters:
         df_songs (pd.DataFrame): DataFrame containing information about songs, including artists.
@@ -135,7 +146,7 @@ def create_feature_plots(df_songs: pd.DataFrame,
         y_axis (List[str]): List of features to be plotted on the y-axis. Can also be a string.
 
     Returns:
-        None
+        Dict[str, str]: Dictionary containing feature trend summary information.
     """
     
     # Get unique artists in the DataFrame
@@ -166,8 +177,13 @@ def create_feature_plots(df_songs: pd.DataFrame,
     if isinstance(y_axis, str):
         y_axis = [y_axis]
 
-    # Generate plots for each y-axis feature
+    # Initialize a dict to store messages for each identified feature trend
+    feature_trend_msgs = {}
+
+    # Perform analysis and generate plots for each y-axis feature
     for feature in y_axis:
+
+        # Create feature plot with
         fig = px.scatter(
             df_songs,
             x=x_axis,
@@ -177,39 +193,143 @@ def create_feature_plots(df_songs: pd.DataFrame,
             color_discrete_map=color_map
         )
 
-        # Create and center plot title
+        # Define a 30 bpm range since most genres are characterized by 20-30 bpm ranges
+        # This design decision based on domain knowledge of genre norms
+        if feature == 'Tempo':
+            feature_range = 30
+
+        # Define a 0.3 range for the 3 features whose values are b/w 0 and 1
+        # This design decision based mainly on Exploratory Data Analysis (EDA) with multiple datasets
+        elif feature in {'Danceability', 'Energy', 'Speechiness'}:
+            feature_range = 0.3
+
+        # Edge case: If this function gets used in the future for some other feature before function is updated
+        else:
+            feature_range = 0
+
+        # Calculate mean and standard deviation of the feature, and range upper/lower bounds
+        mean_feature = df_songs[feature].mean()
+        std_feature = df_songs[feature].std()
+        lower_bound = mean_feature - feature_range / 2
+        upper_bound = mean_feature + feature_range / 2
+
+        # Identify songs within and outside of the feature range
+        within_range = df_songs[(df_songs[feature] >= lower_bound) & (df_songs[feature] <= upper_bound)]
+        outside_range = df_songs[(df_songs[feature] < lower_bound) | (df_songs[feature] > upper_bound)]
+
+        # Calculate the percentage of songs within the feature range
+        percentage_within_range = round((len(within_range) / len(df_songs)) * 100)
+
+        # Determine if there is a trend based on if 79% (z = +-1.25) of songs are within defined feature range
+        if percentage_within_range >= 79:
+            # If 79% within defined range, assert that a trend is present and do the following
+
+            # Process feature range into desired format for message creation
+            if feature == "Tempo":
+                feature_range = f"{round(feature_range)} BPM"
+
+            elif feature in {'Danceability', 'Energy', 'Speechiness'}:
+                feature_range = round(feature_range, 2)
+
+            # Create messages and add them to dictionary (to add to dashboard later)
+            trend_msg = f"{feature}"
+            trend_details_msg = f"{percentage_within_range}% of songs within {feature_range} {feature} range"
+            feature_trend_msgs[trend_msg] = trend_details_msg
+
+            # Print outlier songs:
+            # print(outside_range[['Song', 'Artist', feature]])
+
+            # Add uppper and lower bound lines to the plot
+            fig.add_shape(
+                type="line",
+                x0=df_songs[x_axis].min(),
+                x1=df_songs[x_axis].max(),
+                y0=lower_bound,
+                y1=lower_bound,
+                line=dict(color="red", width=2),
+            )
+
+            fig.add_shape(
+                type="line",
+                x0=df_songs[x_axis].min(),
+                x1=df_songs[x_axis].max(),
+                y0=upper_bound,
+                y1=upper_bound,
+                line=dict(color="red", width=2),
+            )
+
+        # Create and center plot title, define spacing/margins, choose plot and text colors
         fig.update_layout(
             title=f"{feature} vs. Song Popularity",
             title_x=0.5,
+            paper_bgcolor='rgb(200, 200, 200)',
+            #plot_bgcolor='rgb(200, 200, 200)',
+            margin=dict(l=25, r=20, t=40, b=5),
+            legend=dict(
+                x=1,
+                y=1,
+                traceorder='normal',
+                orientation='v',
+                xanchor='left',
+                yanchor='top',
+            ),
+            title_font=dict(color='black'),
+            xaxis=dict(title_font=dict(color='black'), tickfont=dict(color='black')),
+            yaxis=dict(title_font=dict(color='black'), tickfont=dict(color='black')),
+            font=dict(color='black')
         )
 
         # Save each plot to an HTML file
         today = datetime.now().strftime("%Y-%m-%d")
         file_dir = f"html_exports/{festival_name.replace(' ','')}Summary_Created{today}/"
-        if not os.path.exists(file_dir): # Check if the directory exists yet
-            os.makedirs(file_dir) # Create the directory
+        if not os.path.exists(file_dir):
+            os.makedirs(file_dir)
         file_name = f"{file_dir}{feature.replace(' ', '_')}_plot.html"
-        fig.write_html(file_name)
+        fig.write_html(file_name, full_html=False, include_plotlyjs='cdn', default_width=605, default_height=335)
+          
+    return feature_trend_msgs
 
 
-def create_dashboard(summary_data: Dict[str, str], festival_name: str) -> None:
+def create_dashboard(
+        summary_data: Dict[str, str],
+        feature_trend_msgs: Dict[str, str],
+        festival_name: str) -> None:
     """
     Generate an HTML dashboard combining playlist, artist, and feature plot summaries.
 
     Parameters:
-        summary_data (Dict[str, str]): Dictionary containing various summary information.
+        summary_data (Dict[str, str]): Dictionary containing various playlist summary information.
+        feature_trend_msgs Dict[str, str]: Dictionary containing feature trend summary information.
         festival_name (str): Name of the festival for which the dashboard is generated.
 
     Returns:
         None
     """
-    
+
+    # Define sizes for html components
+    f_plot_w = 630 # Set this equal to 25px above default_width (from create_feature_plots)
+    f_plot_h = 360 # Set this equal to 25px above default_height (from create_feature_plots)
+    artist_summary_h = 275
+    artist_summary_w = 1390
+
+    # Feature trend messages:
+    if len(feature_trend_msgs) == 4: # If all 4 features are in dict, all 4 have trend present
+        trend_msg_html1 = "All song features"
+    else:
+        trend_msg_html1 = ', '.join(feature_trend_msgs.keys()) # Genres with trends present in playlist
+    trend_msg_html2 = '\n'.join(
+        f'<div id="line2">{trend_details_msg}</span></div>'
+        for trend_details_msg in feature_trend_msgs.values()
+    )
+
     # Generate the HTML for the dashboard format
     dashboard_html = f"""
     <!DOCTYPE html>
     <html>
+
     <head>
         <title>{festival_name} Playlist Summary</title>
+        <link rel="stylesheet" type="text/css" href="../styles/dashboard_style.css">  
         <script>
             function showPlot(plotId) {{
                 var plots = document.getElementsByClassName("plot");
@@ -220,44 +340,56 @@ def create_dashboard(summary_data: Dict[str, str], festival_name: str) -> None:
             }}
         </script>
     </head>
+
     <body>
         <!-- Playlist Summary -->
-        <div>
+        <div id="playlist-summary">
             <h2>Playlist Summary</h2>
-            <p>{summary_data["created_on_msg"]}</p>
-            <p>Total Songs: {summary_data["num_dur_songs"]}</p>
-            <p>Top 5 Genres: {summary_data["top_genres_str"]}</p>
-            <p>Similar artists to the ones in this playlist:  {summary_data["recommended_artists_str"]}</p>
-        </div>
-
-        <!-- Artist Summary -->
-        <div>
-            <h2>Artist Summary</h2>
-            <embed src="artist_summary.html" type="text/html" width="1200" height="600">
+            <div id="line0">Spotipy Playlist - {festival_name}</div>
+            <div id="line2">{summary_data["created_on_msg"]}</div>
+            <div id="line1">{summary_data["num_dur_songs"]}</div>
+            <div id="line2">Total song runtime</div>
+            <div id="line1">{summary_data["top_genres_str"]}</div>
+            <div id="line2">Top 5 genres</div>
+            <div id="line1">{summary_data["recommended_artists_str"]}</div>
+            <div id="line2">Similar artists you may want to add</div>
+            <div id="line1">{trend_msg_html1} have strong trends</div>
+            {trend_msg_html2}
         </div>
 
         <!-- Feature Plots -->
-        <div>
+        <div id="feature-plots">
             <h2>Feature Plots</h2>
-            <button onclick="showPlot('tempo_plot')">Show Tempo Plot</button>
-            <button onclick="showPlot('danceability_plot')">Show Danceability Plot</button>
-            <button onclick="showPlot('energy_plot')">Show Energy Plot</button>
-            <button onclick="showPlot('speechiness_plot')">Show Speechiness Plot</button>
-
-            <div id="tempo_plot" class="plot">
-                <embed src="Tempo_plot.html" type="text/html" width="800" height="600">
+            <div class="plot-buttons">
+                <button onclick="showPlot('tempo_plot')">Show Tempo Plot</button>
+                <button onclick="showPlot('danceability_plot')">Show Danceability Plot</button>
+                <button onclick="showPlot('energy_plot')">Show Energy Plot</button>
+                <button onclick="showPlot('speechiness_plot')">Show Speechiness Plot</button>
             </div>
-            <div id="danceability_plot" class="plot" style="display: none;">
-                <embed src="Danceability_plot.html" type="text/html" width="800" height="600">
-            </div>
-            <div id="energy_plot" class="plot" style="display: none;">
-                <embed src="Energy_plot.html" type="text/html" width="800" height="600">
-            </div>
-            <div id="speechiness_plot" class="plot" style="display: none;">
-                <embed src="Speechiness_plot.html" type="text/html" width="800" height="600">
+            <div class="plots-container" style="overflow: hidden;">
+                <div id="tempo_plot" class="plot">
+                    <embed src="Tempo_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
+                </div>
+                <div id="danceability_plot" class="plot" style="display: none;">
+                    <embed src="Danceability_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
+                </div>
+                <div id="energy_plot" class="plot" style="display: none;">
+                    <embed src="Energy_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
+                </div>
+                <div id="speechiness_plot" class="plot" style="display: none;">
+                    <embed src="Speechiness_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
+                </div>
             </div>
         </div>
+
+        <!-- Artist Summary -->
+        <div id="artist-summary">
+            <h2>Artist Summary</h2>
+            <embed src="artist_summary.html" type="text/html" width="{artist_summary_w}" height="{artist_summary_h}">
+        </div>
+
     </body>
+
     </html>
     """
 
@@ -277,11 +409,12 @@ if __name__ == '__main__':
     df_songs = pd.read_csv("csv_exports/EdcOrlando2023Songs_Created2023-11-21.csv")
     df_songs['Artist Genres'] = df_songs['Artist Genres'].apply(eval)
     
-    recommended_artists = ["Placholder Artist #1", "Placholder Artist #2", "Placholder Artist #3"]
+    recommended_artists = ['Nicky Romero', 'Sebastian Ingrosso', 'Hardwell']
     print(f"df loaded with length: {len(df_songs)}")
+    print("---------------------------------------")
 
     # Call all functions in the module
     summary_data = create_playlist_summary(df_songs, "Edc Orlando 2023", recommended_artists)
     artist_summary_df = create_artist_summary(df_songs, "Edc Orlando 2023")
-    create_feature_plots(df_songs, "Edc Orlando 2023")
-    create_dashboard(summary_data, "Edc Orlando 2023")
+    feature_trend_msgs = create_feature_plots(df_songs, "Edc Orlando 2023")
+    create_dashboard(summary_data, feature_trend_msgs, "Edc Orlando 2023")

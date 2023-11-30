@@ -226,7 +226,7 @@ def retry_spotify_request(func, *args):
             return None
 
         
-def recommend_artists(spot: Spotify, df_artists: pd.DataFrame, num_recs: int=3) -> List[str]:
+def recommend_artists(spot: Spotify, df_songs: pd.DataFrame, num_recs: int=3) -> List[str]:
     """
     Recommends new artists based on related artists to those in df_artists.
     The artist_related_artists method give 20 artist recommendations for any artist. This
@@ -235,7 +235,7 @@ def recommend_artists(spot: Spotify, df_artists: pd.DataFrame, num_recs: int=3) 
 
     Parameters:
         spot: Spotify object for making API requests
-        df_artists: Pandas DataFrame with columns 'Artist' and 'Artist uri'
+        df_songs: DataFrame. Can be df_songs or df_artists
         num_recs: Number of recommended artists to return (default is 3)
 
     Returns:
