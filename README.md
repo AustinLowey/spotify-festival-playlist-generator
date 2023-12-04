@@ -31,9 +31,10 @@ Finally, the playlist is created. This one included the top 8 songs from 12 diff
 
 A dashboard is also created in HTML/CSS, providing multiple capabilities:
 1) Automated trend analysis on playlist song features (Tempo, Danceability, Energy and Speechiness) to identify the strongest trends present in the playlist data. This is especially useful if your playlist already fits specific qualities and you want to prune outliers to further strengthen those qualities.
-2) Interactive feature plots for all 4 song features (all plotted vs. Song Popularity), where you can hover over any data point to see to which song and artist it belongs. Useful for finding outliers and further exploring playlist trends.
+2) Interactive feature plots for all 4 song features (all plotted vs. Song Popularity), where you can hover over any data point to see to which song and artist it belongs, as well as hide artists using the plot's interactive legend. Useful for finding outliers and further exploring playlist trends.
 3) Summary information on the playlist and artists, including top playlist genres, similar artist recommendations, total runtime, number of songs, etc.
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/d04301c5-f712-4779-99ad-a9d297a726e1" width="600">
+
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/d486cb2c-867c-4109-b10c-741a6ad40e71" width="600">
 
 Interactive hover functionality of Feature Plots:
 
