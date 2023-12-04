@@ -1,3 +1,5 @@
+# Note: HTML/CSS outputs associated with this file are a prototype and will eventually be replaced/cleaned up.
+
 import os
 from datetime import datetime
 from typing import List, Dict
@@ -213,6 +215,12 @@ def create_feature_plots(df_songs: pd.DataFrame,
         lower_bound = mean_feature - feature_range / 2
         upper_bound = mean_feature + feature_range / 2
 
+        # Edge cases for if upper/lower bounds are out of range
+        if lower_bound < 0:
+            lower_bound = 0
+        if feature in {'Danceability', 'Energy', 'Speechiness'} and upper_bound > 1:
+            upper_bound = 1
+
         # Identify songs within and outside of the feature range
         within_range = df_songs[(df_songs[feature] >= lower_bound) & (df_songs[feature] <= upper_bound)]
         outside_range = df_songs[(df_songs[feature] < lower_bound) | (df_songs[feature] > upper_bound)]
@@ -224,16 +232,16 @@ def create_feature_plots(df_songs: pd.DataFrame,
         if percentage_within_range >= 79:
             # If 79% within defined range, assert that a trend is present and do the following
 
-            # Process feature range into desired format for message creation
+            # Process lower/upper bounds into desired format for message creation
             if feature == "Tempo":
-                feature_range = f"{round(feature_range)} BPM"
+                within_msg = f"{round(lower_bound)} - {round(upper_bound)} BPM"
 
             elif feature in {'Danceability', 'Energy', 'Speechiness'}:
-                feature_range = round(feature_range, 2)
+                within_msg = f"{round(lower_bound, 2)} - {round(upper_bound, 2)}"
 
             # Create messages and add them to dictionary (to add to dashboard later)
             trend_msg = f"{feature}"
-            trend_details_msg = f"{percentage_within_range}% of songs within {feature_range} {feature} range"
+            trend_details_msg = f"{percentage_within_range}% of songs within {within_msg} {feature} range"
             feature_trend_msgs[trend_msg] = trend_details_msg
 
             # Print outlier songs:
@@ -258,10 +266,19 @@ def create_feature_plots(df_songs: pd.DataFrame,
                 line=dict(color="red", width=2),
             )
 
+        # For adding units to plot y-axis
+        if feature == "Tempo":
+            y_units = "BPM"
+
+        elif feature in {'Danceability', 'Energy', 'Speechiness'}:
+            y_units = "0-1"
+
         # Create and center plot title, define spacing/margins, choose plot and text colors
         fig.update_layout(
             title=f"{feature} vs. Song Popularity",
             title_x=0.5,
+            xaxis_title=f"Song Popularity (1-100)",
+            yaxis_title=f"{feature} ({y_units})",
             paper_bgcolor='rgb(200, 200, 200)',
             #plot_bgcolor='rgb(200, 200, 200)',
             margin=dict(l=25, r=20, t=40, b=5),

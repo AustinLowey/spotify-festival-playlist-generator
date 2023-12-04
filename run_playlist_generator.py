@@ -141,13 +141,13 @@ def main(
 
     # Perform feature analysis and create summary
     if analyze_playlist == True:
-        recommended_artists = recommend_artists(spot, df_artists) # Get top 3 artist recs
+        recommended_artists = recommend_artists(spot, df_playlist_artists) # Get top 3 artist recs
         summary_data = create_playlist_summary(
             df_songs, festival_name, recommended_artists
             )
         create_artist_summary(df_songs, festival_name)
-        create_feature_plots(df_songs, festival_name)
-        create_dashboard(summary_data, festival_name)
+        feature_trend_msgs = create_feature_plots(df_songs, festival_name)
+        create_dashboard(summary_data, feature_trend_msgs, festival_name)
 
     return df_songs, df_playlist_artists
 
@@ -234,5 +234,4 @@ EDC_URL = "https://www.songkick.com/festivals/562824-edc-orlando\
 Great North Folk Festival 2023 link (contains 1 artist in lineup):
 GNF_URL = "https://www.songkick.com/festivals/1550489-great-north-folk\
 /id/41010280-great-north-folk-festival-2023"
-
 """
