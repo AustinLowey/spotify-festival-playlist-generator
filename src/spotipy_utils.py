@@ -143,7 +143,7 @@ def search_for_artists(search_header: Dict[str, str], artist_names: List[str]) -
             Artist Genres - List[str] (may be an empty list)
             Artist Popularity - int (between 1-100)
             Artist uri - str
-            Artist img_url - str
+            Artist Image url - str
     """
 
     # If a single artist name is entered as a string, convert it to list
@@ -186,12 +186,13 @@ def search_for_artists(search_header: Dict[str, str], artist_names: List[str]) -
             img_url.append(None)
 
     # Create DataFrame from collected information
-    df_artists = pd.DataFrame({'Artist': name,
-                       'Artist Genres': all_genres,
-                       'Artist Popularity': popularity,
-                       'Artist uri': uri,
-                       'Artist Image url': img_url,
-                       })
+    df_artists = pd.DataFrame({
+        'Artist': name,
+        'Artist Genres': all_genres,
+        'Artist Popularity': popularity,
+        'Artist uri': uri,
+        'Artist Image url': img_url,
+    })
     
     return df_artists
 
@@ -298,7 +299,7 @@ def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist: i
             Artist Popularity - int (between 1-100)
             Artist uri - str
             Song uri - str
-            Artist img_url - str
+            Artist Image url - str
 
     Note: Track feature descriptions at https://developer.spotify.com/documentation/web-api/reference/get-audio-features
     """

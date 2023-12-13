@@ -4,7 +4,10 @@ import sys
 
 import pandas as pd
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QScrollArea, QLineEdit, QLabel, QTextBrowser, QSizePolicy, QFrame
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
+    QScrollArea, QLineEdit, QLabel, QTextBrowser, QFrame
+)
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 

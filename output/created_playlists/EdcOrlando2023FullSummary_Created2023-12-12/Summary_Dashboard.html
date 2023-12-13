@@ -4,7 +4,7 @@
 
     <head>
         <title>Edc Orlando 2023 Full Playlist Summary</title>
-        <link rel="stylesheet" type="text/css" href="dashboard_style.css">   
+        <link rel="stylesheet" type="text/css" href="../styles/dashboard_style.css">  
         <script>
             function showPlot(plotId) {
                 var plots = document.getElementsByClassName("plot");
@@ -20,10 +20,16 @@
         <!-- Playlist Summary -->
         <div id="playlist-summary">
             <h2>Playlist Summary</h2>
-            <p>Public playlist Public playlist "Spotipy Playlist - Edc Orlando 2023 Full" created on 11-28-2023.</p>
-            <p>Total Songs: 1165 songs, 58 hr 15 min</p>
-            <p>Top 5 Genres: edm, pop dance, brostep, electro house, house</p>
-            <p>Similar artists to the ones in this playlist: Biscits, SIDEPIECE, Matroda</p>
+            <div id="line0">Spotipy Playlist - Edc Orlando 2023 Full</div>
+            <div id="line2">Public playlist created on 12-12-2023</div>
+            <div id="line1">1165 songs, 58 hr 15 min</div>
+            <div id="line2">Total song runtime</div>
+            <div id="line1">edm, pop dance, brostep, electro house, house</div>
+            <div id="line2">Top 5 genres</div>
+            <div id="line1">Biscits, SIDEPIECE, Matroda</div>
+            <div id="line2">Similar artists you may want to add</div>
+            <div id="line1">Speechiness have strong trends</div>
+            <div id="line2">93% of songs within 0 - 0.24 Speechiness range</span></div>
         </div>
 
         <!-- Feature Plots -->
@@ -37,16 +43,16 @@
             </div>
             <div class="plots-container" style="overflow: hidden;">
                 <div id="tempo_plot" class="plot">
-                    <embed src="Tempo_plot.html" type="text/html" width="630" height="360, style="overflow: hidden;"">
+                    <embed src="summary_dashboard_components/Tempo_plot.html" type="text/html" width="630" height="360" style="overflow: hidden;">
                 </div>
                 <div id="danceability_plot" class="plot" style="display: none;">
-                    <embed src="Danceability_plot.html" type="text/html" width="630" height="360, style="overflow: hidden;"">
+                    <embed src="summary_dashboard_components/Danceability_plot.html" type="text/html" width="630" height="360" style="overflow: hidden;">
                 </div>
                 <div id="energy_plot" class="plot" style="display: none;">
-                    <embed src="Energy_plot.html" type="text/html" width="630" height="360, style="overflow: hidden;"">
+                    <embed src="summary_dashboard_components/Energy_plot.html" type="text/html" width="630" height="360" style="overflow: hidden;">
                 </div>
                 <div id="speechiness_plot" class="plot" style="display: none;">
-                    <embed src="Speechiness_plot.html" type="text/html" width="630" height="360", style="overflow: hidden;">
+                    <embed src="summary_dashboard_components/Speechiness_plot.html" type="text/html" width="630" height="360" style="overflow: hidden;">
                 </div>
             </div>
         </div>
@@ -54,7 +60,7 @@
         <!-- Artist Summary -->
         <div id="artist-summary">
             <h2>Artist Summary</h2>
-            <embed src="artist_summary.html" type="text/html" width="1400" height="275">
+            <embed src="summary_dashboard_components/artist_summary.html" type="text/html" width="1390" height="275">
         </div>
 
     </body>
