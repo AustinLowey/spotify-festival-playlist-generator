@@ -132,11 +132,11 @@ def create_df_playlist_artists(
 # Test the functions in this file if executed directly
 if __name__ == '__main__':
     df_test1 = pd.read_csv(
-        "csv_exports/EdcOrlando2023Songs_Created2023-11-13.csv"
-        ) # Larger df w/ len>1,000
+        "output/sample_data/EdcOrlando2023FullSongs.csv"
+    ) # Larger df w/ len>1,000
     df_test2 = pd.read_csv(
-        "csv_exports/EdcOrlando2023Songs_Created2023-11-21.csv"
-        ) # Smaller df w/ len=94 (containing no exact duplicate songs)
+        "output/sample_data/EdcOrlando2023SampleSongs.csv"
+    ) # Smaller df w/ len=94 (containing no exact duplicate songs)
 
     print("#########################################################\n")
     print("---Testing remove_duplicates function---")
@@ -153,9 +153,9 @@ if __name__ == '__main__':
     print(f"After removing songs, df length is: {len(df_one_version1)} songs")
     print(f"{len(removed_song_names1)} remix/edit songs removed\n")
     df_one_version2, removed_song_names2 = remove_remixes_and_edits(df_test2)
-    print(f"Test df1 length: {len(df_test1)} songs")
-    print(f"After removing songs, df length is: {len(df_one_version1)} songs")
-    print(f"{len(removed_song_names1)} remix/edit songs removed: {removed_song_names2}\n")
+    print(f"Test df2 length: {len(df_test2)} songs")
+    print(f"After removing songs, df length is: {len(df_one_version2)} songs")
+    print(f"{len(removed_song_names2)} remix/edit songs removed: {removed_song_names2}\n")
     print("#########################################################\n")
     
     print("---Testing filter_songs_by_artist_popularity function---")

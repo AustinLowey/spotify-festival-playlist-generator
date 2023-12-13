@@ -10,7 +10,11 @@ import plotly.express as px
 from plotly import graph_objects as go
 
 
-def create_playlist_summary(df_songs: pd.DataFrame, festival_name: str, recommended_artists: List[str]) -> Dict[str, str]:
+def create_playlist_summary(
+        df_songs: pd.DataFrame,
+        festival_name: str,
+        recommended_artists: List[str]
+) -> Dict[str, str]:
     """
     Generate a summary of playlist information.
 
@@ -32,9 +36,16 @@ def create_playlist_summary(df_songs: pd.DataFrame, festival_name: str, recommen
     playlist_duration_mins = df_songs["Song Duration"].sum() // 60000 # Convert ms to mins
 
     # Convert total songs and duration to format "# songs, #hr #min"
-    num_dur_songs = (f"{playlist_total_songs} songs, "
-                     f"{playlist_duration_mins // 60} hr {playlist_duration_mins % 60} min"
-    )
+    if playlist_duration_mins // 60 > 0: # Runtime display: # hr # min
+        num_dur_songs = (
+            f"{playlist_total_songs} songs, "
+            f"{playlist_duration_mins // 60} hr {playlist_duration_mins % 60} min"
+        )
+    else: # Runtime display: # min (edge case where playlist runtime < 60min)
+        num_dur_songs = (
+            f"{playlist_total_songs} songs, "
+            f"{playlist_duration_mins % 60} min"
+        )
 
     # Get flattened list of all genres across all artists, including repeat genres
     unique_artists = df_songs.drop_duplicates(subset='Artist', keep='first')
@@ -56,7 +67,10 @@ def create_playlist_summary(df_songs: pd.DataFrame, festival_name: str, recommen
     }
 
 
-def create_artist_summary(df_songs: pd.DataFrame, festival_name: str) -> pd.DataFrame:
+def create_artist_summary(
+        df_songs: pd.DataFrame,
+        festival_name: str
+) -> pd.DataFrame:
     """
     Generate a summary of artist information from a DataFrame and save it to an HTML file.
 
@@ -121,7 +135,7 @@ def create_artist_summary(df_songs: pd.DataFrame, festival_name: str) -> pd.Data
 
     # Save the artist summary DataFrame to an HTML file
     today = datetime.now().strftime("%Y-%m-%d")
-    file_dir = f"html_exports/{festival_name.replace(' ','')}Summary_Created{today}/"
+    file_dir = f"output/created_playlists/{festival_name.replace(' ','')}Summary_Created{today}/summary_dashboard_components/"
     if not os.path.exists(file_dir): # Check if the directory exists yet
         os.makedirs(file_dir) # Create the directory
     file_name = f"{file_dir}artist_summary.html"
@@ -133,11 +147,12 @@ def create_artist_summary(df_songs: pd.DataFrame, festival_name: str) -> pd.Data
     return artist_summary_df
 
 
-def create_feature_plots(df_songs: pd.DataFrame,
-                         festival_name: str,
-                         x_axis: str="Song Popularity",
-                         y_axis: List[str]=["Tempo", "Danceability", "Energy", "Speechiness"]
-                         ) -> Dict[str, str]:
+def create_feature_plots(
+        df_songs: pd.DataFrame,
+        festival_name: str,
+        x_axis: str="Song Popularity",
+        y_axis: List[str]=["Tempo", "Danceability", "Energy", "Speechiness"]
+) -> Dict[str, str]:
     """
     Generate scatter plots, perform feature analysis, and save plots to HTML files.
 
@@ -241,7 +256,10 @@ def create_feature_plots(df_songs: pd.DataFrame,
 
             # Create messages and add them to dictionary (to add to dashboard later)
             trend_msg = f"{feature}"
-            trend_details_msg = f"{percentage_within_range}% of songs within {within_msg} {feature} range"
+            trend_details_msg = (
+                f"{percentage_within_range}% of songs"
+                f"within {within_msg} {feature} range"
+            )
             feature_trend_msgs[trend_msg] = trend_details_msg
 
             # Print outlier songs:
@@ -298,11 +316,20 @@ def create_feature_plots(df_songs: pd.DataFrame,
 
         # Save each plot to an HTML file
         today = datetime.now().strftime("%Y-%m-%d")
-        file_dir = f"html_exports/{festival_name.replace(' ','')}Summary_Created{today}/"
+        file_dir = (
+            f"output/created_playlists/{festival_name.replace(' ','')}"
+            f"Summary_Created{today}/summary_dashboard_components/"
+        )
         if not os.path.exists(file_dir):
             os.makedirs(file_dir)
         file_name = f"{file_dir}{feature.replace(' ', '_')}_plot.html"
-        fig.write_html(file_name, full_html=False, include_plotlyjs='cdn', default_width=605, default_height=335)
+        fig.write_html(
+            file_name,
+            full_html=False,
+            include_plotlyjs='cdn',
+            default_width=605,
+            default_height=335
+        )
           
     return feature_trend_msgs
 
@@ -310,7 +337,8 @@ def create_feature_plots(df_songs: pd.DataFrame,
 def create_dashboard(
         summary_data: Dict[str, str],
         feature_trend_msgs: Dict[str, str],
-        festival_name: str) -> None:
+        festival_name: str
+) -> None:
     """
     Generate an HTML dashboard combining playlist, artist, and feature plot summaries.
 
@@ -385,16 +413,16 @@ def create_dashboard(
             </div>
             <div class="plots-container" style="overflow: hidden;">
                 <div id="tempo_plot" class="plot">
-                    <embed src="Tempo_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
+                    <embed src="summary_dashboard_components/Tempo_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
                 </div>
                 <div id="danceability_plot" class="plot" style="display: none;">
-                    <embed src="Danceability_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
+                    <embed src="summary_dashboard_components/Danceability_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
                 </div>
                 <div id="energy_plot" class="plot" style="display: none;">
-                    <embed src="Energy_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
+                    <embed src="summary_dashboard_components/Energy_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
                 </div>
                 <div id="speechiness_plot" class="plot" style="display: none;">
-                    <embed src="Speechiness_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
+                    <embed src="summary_dashboard_components/Speechiness_plot.html" type="text/html" width="{f_plot_w}" height="{f_plot_h}" style="overflow: hidden;">
                 </div>
             </div>
         </div>
@@ -402,7 +430,7 @@ def create_dashboard(
         <!-- Artist Summary -->
         <div id="artist-summary">
             <h2>Artist Summary</h2>
-            <embed src="artist_summary.html" type="text/html" width="{artist_summary_w}" height="{artist_summary_h}">
+            <embed src="summary_dashboard_components/artist_summary.html" type="text/html" width="{artist_summary_w}" height="{artist_summary_h}">
         </div>
 
     </body>
@@ -412,18 +440,20 @@ def create_dashboard(
 
     # Save the dashboard HTML to a file
     today = datetime.now().strftime("%Y-%m-%d")
-    file_dir = f"html_exports/{festival_name.replace(' ','')}Summary_Created{today}/"
+    file_dir = f"output/created_playlists/{festival_name.replace(' ','')}Summary_Created{today}/"
     if not os.path.exists(file_dir): # Check if the directory exists yet
         os.makedirs(file_dir) # Create the directory
-    file_name = f"{file_dir}dashboard.html"
+    file_name = f"{file_dir}Summary_Dashboard.html"
     with open(file_name, "w") as dashboard_file:
         dashboard_file.write(dashboard_html)
 
 
 # Test the functions if this script is executed directly
 if __name__ == '__main__':
-    # Import df, then change string representation (from .csv) of genres to list
-    df_songs = pd.read_csv("csv_exports/EdcOrlando2023Songs_Created2023-11-21.csv")
+    # Import df then change string representation (from .csv) of genres to list
+    df_songs = pd.read_csv(
+        "output/sample_data/EdcOrlando2023SampleSongs.csv"
+    )
     df_songs['Artist Genres'] = df_songs['Artist Genres'].apply(eval)
     
     recommended_artists = ['Nicky Romero', 'Sebastian Ingrosso', 'Hardwell']
@@ -431,7 +461,11 @@ if __name__ == '__main__':
     print("---------------------------------------")
 
     # Call all functions in the module
-    summary_data = create_playlist_summary(df_songs, "Edc Orlando 2023", recommended_artists)
+    summary_data = create_playlist_summary(
+        df_songs,
+        "Edc Orlando 2023",
+        recommended_artists
+    )
     artist_summary_df = create_artist_summary(df_songs, "Edc Orlando 2023")
     feature_trend_msgs = create_feature_plots(df_songs, "Edc Orlando 2023")
     create_dashboard(summary_data, feature_trend_msgs, "Edc Orlando 2023")
