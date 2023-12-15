@@ -1,4 +1,5 @@
-# Note: HTML/CSS outputs associated with this file are a prototype and will eventually be replaced/cleaned up.
+# Note: HTML/CSS outputs associated with this file are a prototype
+# and will be replaced/cleaned up fairly soon.
 
 import os
 from datetime import datetime
@@ -7,7 +8,6 @@ from collections import Counter
 
 import pandas as pd
 import plotly.express as px
-from plotly import graph_objects as go
 
 
 def create_playlist_summary(
@@ -19,8 +19,8 @@ def create_playlist_summary(
     Generate a summary of playlist information.
 
     Parameters:
-        df_songs (pd.DataFrame): DataFrame containing information about songs, including artists.
-        festival_name (str): Name of the festival for which the summary is generated.
+        df_songs (pd.DataFrame): DataFrame containing song and artist info.
+        festival_name (str): Name of the music festival.
         recommended_artists (List[str]): List of recommended artists.
 
     Returns:
@@ -33,13 +33,16 @@ def create_playlist_summary(
 
     # Calculate playlist summary information
     playlist_total_songs = len(df_songs)
-    playlist_duration_mins = df_songs["Song Duration"].sum() // 60000 # Convert ms to mins
+    playlist_duration_mins = (
+        df_songs["Song Duration"].sum() // 60000
+     ) # Convert ms to mins
 
     # Convert total songs and duration to format "# songs, #hr #min"
     if playlist_duration_mins // 60 > 0: # Runtime display: # hr # min
         num_dur_songs = (
             f"{playlist_total_songs} songs, "
-            f"{playlist_duration_mins // 60} hr {playlist_duration_mins % 60} min"
+            f"{playlist_duration_mins // 60} hr "
+            f"{playlist_duration_mins % 60} min"
         )
     else: # Runtime display: # min (edge case where playlist runtime < 60min)
         num_dur_songs = (
@@ -47,13 +50,18 @@ def create_playlist_summary(
             f"{playlist_duration_mins % 60} min"
         )
 
-    # Get flattened list of all genres across all artists, including repeat genres
+    # Flattened list of all genres across all artists, including repeat genres
     unique_artists = df_songs.drop_duplicates(subset='Artist', keep='first')
-    all_genres = [genre for genres in unique_artists['Artist Genres'] for genre in genres]
+    all_genres = [
+        genre for genres in unique_artists['Artist Genres'] for genre in genres
+    ]
 
-    # Get top 5 recurring genres in the playlist (not accounting for # songs by each artist)
+    # Get top 5 recurring genres in the playlist based on artists
+    # (not accounting for # songs by each artist, which was a design choice)
     counter = Counter(all_genres)
-    top_genres = [genre for genre, count in counter.most_common(5)] # List of up to 5 genres
+    top_genres = [
+        genre for genre, count in counter.most_common(5)
+    ] # List of up to 5 genres
     top_genres_str = ", ".join(top_genres)
 
     # Generate a string of recommended artists
@@ -72,43 +80,48 @@ def create_artist_summary(
         festival_name: str
 ) -> pd.DataFrame:
     """
-    Generate a summary of artist information from a DataFrame and save it to an HTML file.
+    Generate a summary of artist information from a DataFrame and save it to
+        an HTML file.
 
     Parameters:
-        df_songs (pd.DataFrame): DataFrame containing information about songs, including artists.
-        festival_name (str): Name of the festival for which the summary is generated.
+        df_songs (pd.DataFrame): DataFrame containing song and artist info.
+        festival_name (str): Name of the music festival.
 
     Returns:
-        pd.DataFrame: DataFrame containing the summary information for each artist.
+        pd.DataFrame: DataFrame containing summary information for each artist.
     """
     
     # Get unique artists in the DataFrame
     unique_artists = df_songs["Artist"].unique()
 
     # Create a DataFrame to store artist summary information
-    summary_data = []
+    artist_summary_data = []
 
     # Convert lists in genres column to strings
-    df_songs['Artist Genres'] = df_songs['Artist Genres'].apply(", ".join)
+    df_songs['Artist Genres'] = (
+        df_songs['Artist Genres'].apply(", ".join)
+    )
 
-    # Iterate over unique artists
+    # For each artist, get summary of each column, including number of tracks,
+    # mean for all track features, total runtime
     for artist in unique_artists:
         artist_data = df_songs[df_songs["Artist"] == artist]
         genres = artist_data["Artist Genres"].unique()
         num_songs = len(artist_data)
         runtime_sec = artist_data["Song Duration"].sum() // 1000
         runtime_str = f"{runtime_sec // 60} min {runtime_sec % 60} sec"
+        popularity = artist_data["Artist Popularity"].iloc[0]
         avg_tempo = int(artist_data["Tempo"].mean())
         avg_danceability = round(artist_data["Danceability"].mean(), 2)
         avg_energy = round(artist_data["Energy"].mean(), 2)
         avg_speechiness = round(artist_data["Speechiness"].mean(), 2)
 
-        # Create artist summary info dict
-        summary_data.append({
+        # Append summary data for current artist
+        artist_summary_data.append({
             "Artist": artist,
             "Total Songs": num_songs,
             "Total Runtime": runtime_str,
-            "Artist Popularity (0-100)": artist_data["Artist Popularity"].iloc[0],
+            "Artist Popularity (0-100)": popularity,
             "Artist Genres": "\n".join(genres),
             "Average Tempo (bpm)": avg_tempo,
             "Average Danceability (0-1)": avg_danceability,
@@ -117,27 +130,52 @@ def create_artist_summary(
         })
 
     # Create a DataFrame from summary data
-    artist_summary_df = pd.DataFrame(summary_data)
+    artist_summary_df = pd.DataFrame(artist_summary_data)
 
     # Convert DataFrame to HTML with left-aligned columns
     html_content = artist_summary_df.to_html(index=False, justify='left')
 
-    # Adding a couple other style/formatting rules. This likely to later be replaced by CSS.
-    table_head_style = "text-align: left; color: white; font-size: 16px; font-family: Arial, Helvetica, sans-serif;"
-    table_rows_style = "text-align: left; color: rgb(200, 200, 200); font-size: 15px; font-family: Arial, Helvetica, sans-serif;"
-    html_content = html_content.replace('<thead>', f'<thead style="{table_head_style}">')
-    html_content = html_content.replace('<tbody>', f'<tbody style="{table_rows_style}">')
-    html_content = html_content.replace('<th>Artist</th>', '<th style="width: 150px;">Artist</th>')
-    html_content = html_content.replace('<th>Total Runtime</th>', '<th style="width: 110px;">Total Runtime</th>')
+    # Adding style/formatting rules. This likely to be replaced by CSS later.
+    table_head_style = (
+        "text-align: left;"
+        "color: white;"
+        "font-size: 16px;"
+        "font-family: Arial, Helvetica, sans-serif;"
+    )
+    table_rows_style = (
+        "text-align: left;"
+        "color: rgb(200, 200, 200);"
+        "font-size: 15px;"
+        "font-family: Arial, Helvetica, sans-serif;"
+    )
+    html_content = html_content.replace(
+        '<thead>',
+        f'<thead style="{table_head_style}">'
+    )
+    html_content = html_content.replace(
+        '<tbody>',
+        f'<tbody style="{table_rows_style}">'
+    )
+    html_content = html_content.replace(
+        '<th>Artist</th>',
+        '<th style="width: 150px;">Artist</th>'
+    )
+    html_content = html_content.replace(
+        '<th>Total Runtime</th>',
+        '<th style="width: 110px;">Total Runtime</th>'
+    )
 
     # Wrap the current HTML content with a div for overflow/scrollbar
     html_content = f'<div style="overflow: auto;">{html_content}</div>'
 
     # Save the artist summary DataFrame to an HTML file
     today = datetime.now().strftime("%Y-%m-%d")
-    file_dir = f"output/created_playlists/{festival_name.replace(' ','')}Summary_Created{today}/summary_dashboard_components/"
-    if not os.path.exists(file_dir): # Check if the directory exists yet
-        os.makedirs(file_dir) # Create the directory
+    file_dir = (
+        f"output/created_playlists/{festival_name.replace(' ','')}"
+        f"Summary_Created{today}/summary_dashboard_components/"
+    )
+    if not os.path.exists(file_dir): # Create dir if it DNE yet
+        os.makedirs(file_dir)
     file_name = f"{file_dir}artist_summary.html"
 
     # Save the modified HTML file
@@ -148,22 +186,24 @@ def create_artist_summary(
 
 
 def create_feature_plots(
-        df_songs: pd.DataFrame,
-        festival_name: str,
-        x_axis: str="Song Popularity",
-        y_axis: List[str]=["Tempo", "Danceability", "Energy", "Speechiness"]
+    df_songs: pd.DataFrame,
+    festival_name: str,
+    x_axis: str="Song Popularity",
+    y_axis: List[str]=["Tempo", "Danceability", "Energy", "Speechiness"]
 ) -> Dict[str, str]:
     """
-    Generate scatter plots, perform feature analysis, and save plots to HTML files.
+    Generate scatter plots, perform feature analysis, and save plots as
+        HTML files.
 
     Parameters:
-        df_songs (pd.DataFrame): DataFrame containing information about songs, including artists.
-        festival_name (str): Name of the festival for which the plots are generated.
+        df_songs (pd.DataFrame): DataFrame containing song and artist info.
+        festival_name (str): Name of the music festival.
         x_axis (str): Feature to be plotted on the x-axis.
-        y_axis (List[str]): List of features to be plotted on the y-axis. Can also be a string.
+        y_axis (List[str]): List of features to be plotted on the y-axis.
+            Can also be a single string.
 
     Returns:
-        Dict[str, str]: Dictionary containing feature trend summary information.
+        Dict[str, str]: Dictionary containing feature trend summary info.
     """
     
     # Get unique artists in the DataFrame
@@ -177,8 +217,8 @@ def create_feature_plots(
         0x000080, 0x808080, 0x8000FF,  # Navy, Grey, Indigo
         0xFF00FF, 0x00FFFF, 0xFFFF00,  # Magenta, Cyan, Yellow
         0xFF6347, 0x4682B4, 0x800000,  # Tomato, Steel Blue, Maroon
-        0x556B2F, 0xFF69B4, 0x9932CC,  # Dark Olive Green, Hot Pink, Dark Orchid
-        0x483D8B, 0x32CD32, 0xFF4500,  # Dark Slate Blue, Lime Green, Orange Red
+        0x556B2F, 0xFF69B4, 0x9932CC,  # Olive Green, Hot Pink, Dark Orchid
+        0x483D8B, 0x32CD32, 0xFF4500,  # Dark Blue, Lime Green, Orange Red
         0x9400D3, 0x00CED1, 0x2E8B57,  # Dark Violet, Dark Turquoise, Sea Green
         0x7FFF00, 0x6A5ACD, 0xDC143C,  # Chartreuse, Slate Blue, Crimson
         0x8A2BE2, 0xFF8C00, 0xFFD700,  # Blue Violet, Dark Orange, Gold
@@ -187,10 +227,13 @@ def create_feature_plots(
         0xFF1493, 0x228B22             # Deep Pink, Forest Green
     ]
 
-    # Manually specify colors for each artist (total 3 colors right now)
-    color_map = {artist: f"#{i:06x}" for artist, i in zip(unique_artists, colors)}
+    # Map colors to be used in plot legend
+    color_map = {
+        artist: f"#{i:06x}" for artist, i in zip(unique_artists, colors)
+    }
 
     # If a single y is entered as a string, convert it to list
+    # Allows this function to be used for generating other plots in the future
     if isinstance(y_axis, str):
         y_axis = [y_axis]
 
@@ -200,7 +243,7 @@ def create_feature_plots(
     # Perform analysis and generate plots for each y-axis feature
     for feature in y_axis:
 
-        # Create feature plot with
+        # Create feature plot with interacative hover capability
         fig = px.scatter(
             df_songs,
             x=x_axis,
@@ -210,59 +253,72 @@ def create_feature_plots(
             color_discrete_map=color_map
         )
 
-        # Define a 30 bpm range since most genres are characterized by 20-30 bpm ranges
-        # This design decision based on domain knowledge of genre norms
+        # Define a 30 BPM range since most genres are characterized by ranges.
+        # of 20-30 BPM. This design decision based on researching genre norms.
         if feature == 'Tempo':
             feature_range = 30
 
-        # Define a 0.3 range for the 3 features whose values are b/w 0 and 1
-        # This design decision based mainly on Exploratory Data Analysis (EDA) with multiple datasets
+        # Define a 0.3 range for the 3 features whose values are b/w 0 and 1.
+        # This design decision based mainly on Exploratory Data Analysis (EDA)
+        # with multiple datasets.
         elif feature in {'Danceability', 'Energy', 'Speechiness'}:
             feature_range = 0.3
 
-        # Edge case: If this function gets used in the future for some other feature before function is updated
+        # Edge case: If this function gets used in the future for some other
+        # feature before function is updated.
         else:
             feature_range = 0
 
-        # Calculate mean and standard deviation of the feature, and range upper/lower bounds
+        # Calculate feature mean and range upper/lower bounds
         mean_feature = df_songs[feature].mean()
-        std_feature = df_songs[feature].std()
         lower_bound = mean_feature - feature_range / 2
         upper_bound = mean_feature + feature_range / 2
 
         # Edge cases for if upper/lower bounds are out of range
         if lower_bound < 0:
             lower_bound = 0
-        if feature in {'Danceability', 'Energy', 'Speechiness'} and upper_bound > 1:
+        if (
+            feature in {'Danceability', 'Energy', 'Speechiness'}
+            and upper_bound > 1
+        ):
             upper_bound = 1
 
-        # Identify songs within and outside of the feature range
-        within_range = df_songs[(df_songs[feature] >= lower_bound) & (df_songs[feature] <= upper_bound)]
-        outside_range = df_songs[(df_songs[feature] < lower_bound) | (df_songs[feature] > upper_bound)]
+        # Identify songs within feature range
+        within_range = df_songs[
+            (df_songs[feature] >= lower_bound) &
+            (df_songs[feature] <= upper_bound)
+        ]
 
         # Calculate the percentage of songs within the feature range
-        percentage_within_range = round((len(within_range) / len(df_songs)) * 100)
+        percent_within_range = round((len(within_range) / len(df_songs)) * 100)
 
-        # Determine if there is a trend based on if 79% (z = +-1.25) of songs are within defined feature range
-        if percentage_within_range >= 79:
-            # If 79% within defined range, assert that a trend is present and do the following
+        # Determine if there is a trend based on if 79% (z within +-1.25) of
+        # songs are within defined feature range
+        if percent_within_range >= 79:
 
-            # Process lower/upper bounds into desired format for message creation
+            # Process lower/upper bounds into desired format for msg creation
             if feature == "Tempo":
-                within_msg = f"{round(lower_bound)} - {round(upper_bound)} BPM"
+                within_msg = (
+                    f"{round(lower_bound)} - {round(upper_bound)} BPM"
+                )
 
             elif feature in {'Danceability', 'Energy', 'Speechiness'}:
-                within_msg = f"{round(lower_bound, 2)} - {round(upper_bound, 2)}"
+                within_msg = (
+                    f"{round(lower_bound, 2)} - {round(upper_bound, 2)}"
+                )
 
-            # Create messages and add them to dictionary (to add to dashboard later)
-            trend_msg = f"{feature}"
+            # Create messages and add to dict to add to summary dashboard
             trend_details_msg = (
-                f"{percentage_within_range}% of songs"
+                f"{percent_within_range}% of songs"
                 f"within {within_msg} {feature} range"
             )
-            feature_trend_msgs[trend_msg] = trend_details_msg
+            feature_trend_msgs[feature] = trend_details_msg
 
             # Print outlier songs:
+            # outside_range = df_songs[
+            #     (df_songs[feature] < lower_bound) |
+            #     (df_songs[feature] > upper_bound)
+            # ]
             # print(outside_range[['Song', 'Artist', feature]])
 
             # Add uppper and lower bound lines to the plot
@@ -291,7 +347,7 @@ def create_feature_plots(
         elif feature in {'Danceability', 'Energy', 'Speechiness'}:
             y_units = "0-1"
 
-        # Create and center plot title, define spacing/margins, choose plot and text colors
+        # Create and center plot title, define spacing/margins, choose colors
         fig.update_layout(
             title=f"{feature} vs. Song Popularity",
             title_x=0.5,
@@ -309,8 +365,14 @@ def create_feature_plots(
                 yanchor='top',
             ),
             title_font=dict(color='black'),
-            xaxis=dict(title_font=dict(color='black'), tickfont=dict(color='black')),
-            yaxis=dict(title_font=dict(color='black'), tickfont=dict(color='black')),
+            xaxis=dict(
+                title_font=dict(color='black'),
+                tickfont=dict(color='black')
+            ),
+            yaxis=dict(
+                title_font=dict(color='black'),
+                tickfont=dict(color='black')
+            ),
             font=dict(color='black')
         )
 
@@ -340,28 +402,30 @@ def create_dashboard(
         festival_name: str
 ) -> None:
     """
-    Generate an HTML dashboard combining playlist, artist, and feature plot summaries.
+    Generate an HTML dashboard combining playlist summary details and plots.
 
     Parameters:
-        summary_data (Dict[str, str]): Dictionary containing various playlist summary information.
-        feature_trend_msgs Dict[str, str]: Dictionary containing feature trend summary information.
-        festival_name (str): Name of the festival for which the dashboard is generated.
+        summary_data (Dict[str, str]): Dictionary containing playlist info.
+        feature_trend_msgs Dict[str, str]: Dictionary containing feature
+            trend summary messages.
+        festival_name (str): Name of the music festival.
 
     Returns:
         None
     """
 
-    # Define sizes for html components
-    f_plot_w = 630 # Set this equal to 25px above default_width (from create_feature_plots)
-    f_plot_h = 360 # Set this equal to 25px above default_height (from create_feature_plots)
+    # Define sizes for html components. Set 25px above default width and
+    # height from create_feature_plots function.
+    f_plot_w = 630
+    f_plot_h = 360
     artist_summary_h = 275
     artist_summary_w = 1390
 
-    # Feature trend messages:
-    if len(feature_trend_msgs) == 4: # If all 4 features are in dict, all 4 have trend present
+    # Create trend messages for features that have strong trends present
+    if len(feature_trend_msgs) == 4:
         trend_msg_html1 = "All song features"
     else:
-        trend_msg_html1 = ', '.join(feature_trend_msgs.keys()) # Genres with trends present in playlist
+        trend_msg_html1 = ', '.join(feature_trend_msgs.keys())
     trend_msg_html2 = '\n'.join(
         f'<div id="line2">{trend_details_msg}</span></div>'
         for trend_details_msg in feature_trend_msgs.values()
@@ -440,9 +504,12 @@ def create_dashboard(
 
     # Save the dashboard HTML to a file
     today = datetime.now().strftime("%Y-%m-%d")
-    file_dir = f"output/created_playlists/{festival_name.replace(' ','')}Summary_Created{today}/"
-    if not os.path.exists(file_dir): # Check if the directory exists yet
-        os.makedirs(file_dir) # Create the directory
+    file_dir = (
+        f"output/created_playlists/{festival_name.replace(' ','')}"
+        f"Summary_Created{today}/"
+    )
+    if not os.path.exists(file_dir): # Create directory if it DNE yet
+        os.makedirs(file_dir)
     file_name = f"{file_dir}Summary_Dashboard.html"
     with open(file_name, "w") as dashboard_file:
         dashboard_file.write(dashboard_html)

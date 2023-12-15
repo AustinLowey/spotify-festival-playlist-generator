@@ -12,27 +12,33 @@ def get_artist_names(songkick_url: str) -> Tuple[str, List[str]]:
         songkick_url (str): The URL of the music festival page on Songkick.com.
 
     Returns:
-        Tuple[str, List[str]]: A tuple containing the festival name and a sorted list of artist names.
-
-    The artist names are retrieved from the lineup on the festival page.
-    The festival name is extracted from the URL.
+        str: Festival name, extracted from the URL.
+        List[str]: Sorted list of artist names in festival lineup, extracted
+            from the user-provided festival web page.
     """
 
     # Get web page and its html contents using bs4
     headers = {
-        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'
-        }
+        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) '
+        'Gecko/20100101 Firefox/52.0'
+    }
     req = requests.get(songkick_url, headers)
     soup = BeautifulSoup(req.content, 'html.parser')
 
     # Extract artist names from html
-    html_ul_tag = soup.find("ul", class_="festival") # Tag containing all artists
-    artist_names = [html_a_tag.contents[0] for html_a_tag in html_ul_tag.find_all("a")] # List of every artist in the web page's lineup
-    # html_a_tag format sample: <a href="/artists/29315-foo-fighters">Foo Fighters</a>
+    html_ul_tag = soup.find("ul", class_="festival") # Tag with all artists
+    artist_names = [
+        html_a_tag.contents[0] for html_a_tag in html_ul_tag.find_all("a")
+    ] # List of every artist in the web page's lineup
+
+    # html_a_tag sample: <a href="/artists/29315-foo-fighters">Foo Fighters</a>
 
     # Extract and format festival name from URL
     try:
-        festival_name = songkick_url.split("id/")[1].split("-", 1)[1].replace("-", " ").title()
+        festival_name = (songkick_url
+        .split("id/")[1].split("-", 1)[1]
+        .replace("-", " ").title()
+        )
     except IndexError:
         festival_name = "your music festival"
         
@@ -41,8 +47,8 @@ def get_artist_names(songkick_url: str) -> Tuple[str, List[str]]:
 
 def test_get_artist_names(test_url=None):
     """
-    Tests the get_artist_names function by fetching artist names and festival name
-    from the specified or default test URL(s) and printing the results.
+    Tests the get_artist_names function by fetching artist names and festival
+    name from the specified or default test URL(s) and printing the results.
 
     Parameters:
         test_url (str, optional): URL of the festival to test. Default is None.
@@ -50,32 +56,37 @@ def test_get_artist_names(test_url=None):
 
     Returns:
         None
-
-    Note: This function calls the get_artist_names function, prints the festival name,
-    and displays the list of artist names in the lineup for the specified or default URL(s).
     """
     
-    if test_url:
+    if test_url: # If test URL provided
         festival_name, artist_names = get_artist_names(test_url)
         print(f"Festival name is: {festival_name}\n")
         print(f"List of artist names in lineup is:\n{artist_names}")
     else:
         # Sample/test URLs if one isn't entered
-        acl_url = "https://www.songkick.com/festivals/129-austin-city-limits-music\
-        /id/41123551-austin-city-limits-music-festival-2023"
-        edc_url = "https://www.songkick.com/festivals/562824-edc-orlando\
-        /id/40754508-edc-orlando-2023"
+        acl_url = (
+            "https://www.songkick.com/festivals/129-austin-city-limits-music"
+            "/id/41123551-austin-city-limits-music-festival-2023"
+        )
+        edc_url = (
+            "https://www.songkick.com/festivals/562824-edc-orlando"
+            "/id/40754508-edc-orlando-2023"
+        )
 
-        # Test the get_artist_names function with Austin City Limits 2023 (i.e., acl_url)
+        # Test the get_artist_names function with Austin City Limits 2023 URL
         festival_name_acl, artist_names_acl = get_artist_names(acl_url)
         print(f"Festival name is: {festival_name_acl}\n")
         print(f"List of artist names in lineup is:\n{artist_names_acl}\n")
         print("--------------------------------\n")
 
-        # Test the get_artist_names function with EDC Orlando 2023 (i.e., edc_url)
+        # Test the get_artist_names function with EDC Orlando 2023 URL
         festival_name_edc, artist_names_edc = get_artist_names(edc_url)
         print(f"Festival name is: {festival_name_edc}\n")
         print(f"List of artist names in lineup is:\n{artist_names_edc}\n")
+
+
+if __name__ == "__main__":
+    test_get_artist_names()
 
 
 """
