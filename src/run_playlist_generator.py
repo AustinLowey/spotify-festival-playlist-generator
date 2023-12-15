@@ -194,6 +194,8 @@ def main(
             f"output/created_playlists/{festival_name.replace(' ','')}"
             f"Summary_Created{today}/"
         )
+        if not os.path.exists(file_dir): # If directory DNE yet
+            os.makedirs(file_dir) # Create the directory
         
     # Save df_songs as a .csv file
     if save_df_songs:

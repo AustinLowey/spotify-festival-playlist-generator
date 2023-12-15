@@ -4,7 +4,7 @@
 #   - auth_flow authenticates user
 #   - get_token_header creates search header for artist querying
 #   - capitalize_genre is a helper function to capitalize genres, including
-#      common genre acronyms, in the following search_for_artists function
+#      common genre acronyms, in the succeeding search_for_artists function
 #   - search_for_artists queries for specific artists and returns a df
 #      containing important artist info (uri, popularity, genres, img url)
 #   - retry_spotify_request is a helper function to retry Spotify API
@@ -20,7 +20,7 @@ import os
 import time
 import base64
 import json
-from typing import Dict, Tuple, List
+from typing import Dict, List
 from collections import Counter
 
 import pandas as pd
@@ -33,23 +33,32 @@ from spotipy.client import SpotifyException
 
 def auth_flow() -> Spotify:
     """
-    Authenticate user with Authorization Code Flow (as opposed to Client Credential Flow).
+    Authenticate user with Authorization Code Flow
+    (as opposed to Client Credential Flow).
+
+    Parameters:
+        None
 
     Returns:
         Spotify: Authenticated Spotify instance.
 
-    Needed for accessing Spotify account and associated actions (ex: add to playlist).
+    Needed for accessing Spotify account and associated actions
+    (ex: adding songs to playlist).
 
-    List of scopes: https://developer.spotify.com/documentation/web-api/concepts/scopes
+    List of scopes available at:
+    https://developer.spotify.com/documentation/web-api/concepts/scopes
     """
     
     auth_manager = SpotifyOAuth(
         redirect_uri = 'http://localhost:8080',
-        scope=["playlist-modify-private",
-               "playlist-modify-public",
-               "user-read-currently-playing",
-               "user-read-playback-state",
-               "user-modify-playback-state"])
+        scope=[
+            "playlist-modify-private",
+            "playlist-modify-public",
+            "user-read-currently-playing",
+            "user-read-playback-state",
+            "user-modify-playback-state"
+        ]
+    )
     
     return Spotify(auth_manager=auth_manager)
 
@@ -58,10 +67,11 @@ def get_token_header() -> Dict[str, str]:
     """
     Setup function to allow for artist or song searching.
 
+    Parameters:
+        None
+
     Returns:
         Dict[str, str]: Search header for Spotify API.
-    
-    Some of this function taken from https://www.youtube.com/watch?v=WAmEZBEeNmg&t=1002s
     """
 
     # Get environment variable values to use Spotipy API
@@ -75,8 +85,10 @@ def get_token_header() -> Dict[str, str]:
 
     # Spotify API token request
     url = "https://accounts.spotify.com/api/token"
-    headers = {"Authorization": "Basic " + auth_base64,
-               "Content-Type": "application/x-www-form-urlencoded"}
+    headers = {
+        "Authorization": "Basic " + auth_base64,
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
     data = {"grant_type": "client_credentials"}
 
     # Make post request to obtain token
@@ -107,18 +119,21 @@ def capitalize_genre(genre):
         'pov: indie' -> 'POV: Indie'
         'uk garage'  -> 'UK Garage'
 
-    List of all 6,300 Spotify genres available at https://everynoise.com/everynoise1d.cgi?scope=all
+    List of all 6,300 Spotify genres available at:
+    https://everynoise.com/everynoise1d.cgi?scope=all
     """
 
-    # Acronyms (dict keys) and what they'll be replaced with (dict values). Can add to this over time
-    acronyms = {'Edm': 'EDM',
-                'Dnb': 'DnB',
-                'Uk': 'UK',
-                'Pov': 'POV',
-                'Mbp': 'MBP',
-                'Atl': 'ATL',
-                'Nyc': 'NYC',
-                }
+    # Acronyms (dict keys) and what they'll be replaced with (dict values).
+    # Probably non-exhaustive. Others can be added over time as discovered.
+    acronyms = {
+        'Edm': 'EDM',
+        'Dnb': 'DnB',
+        'Uk': 'UK',
+        'Pov': 'POV',
+        'Mbp': 'MBP',
+        'Atl': 'ATL',
+        'Nyc': 'NYC',
+    }
 
     # Convert the genre string to the preferred capitalization format
     genre = genre.title()
@@ -129,9 +144,14 @@ def capitalize_genre(genre):
     return genre
 
 
-def search_for_artists(search_header: Dict[str, str], artist_names: List[str]) -> pd.DataFrame:
+def search_for_artists(
+    search_header: Dict[str, str],
+    artist_names: List[str]
+) -> pd.DataFrame:
     """
-    Query for specific artists and return a DataFrame containing important artist info.
+    Query for specific artists. Finds top query for each artists in
+    artist_names list, then returns a DataFrame containing important
+    artist info.
 
     Parameters:
         search_header (Dict[str, str]): Search header for Spotify API.
@@ -151,7 +171,11 @@ def search_for_artists(search_header: Dict[str, str], artist_names: List[str]) -
         artist_names = [artist_names]
 
     # Initialize lists to store artist information
-    name, all_genres, popularity, uri, img_url = [], [], [], [], []
+    name = []
+    all_genres = []
+    popularity = []
+    uri = []
+    img_url = []
 
     # Establish search url for artist querying
     search_url = "https://api.spotify.com/v1/search"
@@ -159,15 +183,23 @@ def search_for_artists(search_header: Dict[str, str], artist_names: List[str]) -
     # Loop through every artist name to get all artists' info
     for artist_name in artist_names:
         # Build API query and make the API request
-        # Note: This query can be modified to instead search for songs, playlists, etc.
+        # Note: This query can be modified to instead search
+        # for songs, playlists, etc.
         query = f"?q={artist_name}&type=artist&limit=1"
-        response = requests.get(search_url + query, headers=search_header)
+        response = requests.get(
+            search_url + query,
+            headers=search_header
+        )
         artist_info = json.loads(response.content)["artists"]["items"][0]
 
-        # Prints a warning if result of query isn't exactly what was searched (ex: Tiesto vs Tiësto)
+        # Prints a warning if result of query isn't exactly
+        # what was searched (ex: Tiesto vs Tiësto)
         name_query_result = artist_info['name']
         if name_query_result.upper() != artist_name.upper():
-            print(f"Warning: Searching for {artist_name} yielded result {name_query_result}.")
+            print(
+                f"Warning: Searching for {artist_name} "
+                f"yielded result {name_query_result}."
+            )
 
         # Extract artist genres and convert to preferred capitalization format
         genres = artist_info['genres']
@@ -227,36 +259,45 @@ def retry_spotify_request(func, *args):
             return None
 
         
-def recommend_artists(spot: Spotify, df_artists: pd.DataFrame, num_recs: int=3) -> List[str]:
+def recommend_artists(
+    spot: Spotify,
+    df_artists: pd.DataFrame,
+    num_recs: int=3
+) -> List[str]:
     """
-    Recommends new artists based on related artists to those in df_artists.
-    The artist_related_artists method give 20 artist recommendations for any artist. This
-    method is called for each artist in df_artists; repeated artist recommendations are
-    counted and the top recurring artist names are returned.
+    Recommends new artists based on artists related to those in df_artists.
+    The artist_related_artists method give 20 artist recommendations for any
+    artist. This method is called for each artist in df_artists; repeated
+    artist recommendations are counted and the top recurring artist names
+    are returned.
 
     Parameters:
         spot: Spotify object for making API requests
-        df_artists: DataFrame. Can be df_songs or df_artists (df is used to see playlist artists)
+        df_artists: DataFrame. Can be df_songs or df_artists
+            (df argument is used just to see unique playlist artists)
         num_recs: Number of recommended artists to return (default is 3)
 
     Returns:
-        A list of recommended artist names.
+        List[str]: List of recommended artist names.
 
-    Note: Spotipy also has a recommendations() method that returns track recs (as opposed
-    to artist recs). An alternative solution using that approach may be useful.
+    Note: Spotipy also has a recommendations() method that returns track recs
+    (as opposed to artist recs). An alternative solution using that approach
+    may be useful.
     """
     
     artist_counter = {}  # Empty counter dict
 
     # Iterate over each artist in the dataframe
-    artist_uris = list(df_artists['Artist uri'].unique()) # List of unique Artist URIs
+    artist_uris = list(df_artists['Artist uri'].unique()) # Unique Artist URIs
     for artist_uri in artist_uris:
-        artist_recs = retry_spotify_request(spot.artist_related_artists, artist_uri)['artists']
-        if artist_recs is not None:
-            # artist_recs is a list of 20 artist dicts (assuming no request error)
+        artist_recs = retry_spotify_request(
+            spot.artist_related_artists,
+            artist_uri
+        )['artists']
+        if artist_recs: # List of 20 artist dicts, if no requests error
             for rec in artist_recs:
                 artist_name = rec['name']
-                # Increment the count for the related artist in the counter dictionary
+                # Increment dict counter for artist rec
                 if artist_name not in artist_counter:
                     artist_counter[artist_name] = 1
                 else:
@@ -276,14 +317,19 @@ def recommend_artists(spot: Spotify, df_artists: pd.DataFrame, num_recs: int=3) 
     return top_artist_recs
 
 
-def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist: int=10) -> pd.DataFrame:
+def get_top_tracks(
+    spot: Spotify,
+    df_artists: pd.DataFrame,
+    tracks_per_artist: int=10
+) -> pd.DataFrame:
     """
     Creates DataFrame containing rows of songs for selected artists.
 
     Parameters:
         spot (Spotify): Authenticated Spotify instance.
         df_artists (pd.DataFrame): DataFrame containing artist info.
-        tracks_per_artist (int, optional): Number of top tracks to include per artist.
+        tracks_per_artist (int, optional): Number of tracks per artist to
+            include in playlist.
 
     Returns:
         pd.DataFrame: DataFrame with song metadata. Columns:
@@ -301,17 +347,38 @@ def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist: i
             Song uri - str
             Artist Image url - str
 
-    Note: Track feature descriptions at https://developer.spotify.com/documentation/web-api/reference/get-audio-features
+    Note: Track feature descriptions available at:
+    https://developer.spotify.com/documentation/web-api/reference/
+    get-audio-features
     """
 
-    # Initialize lists to store track and artist information
-    songs, song_popularities, song_durations, song_uris = [], [], [], [] # Track info
-    danceabilities, energies, tempos, speechinesses = [], [], [], [] # Track features
-    artists, artist_genres, artist_popularities, artist_uris, artist_img_url  = [], [], [], [], [] # Artist info
+    # Initialize lists to store song/track and artist information
+
+    # Song/Track general info:
+    songs = []
+    song_popularities = []
+    song_durations = []
+    song_uris = []
+
+    # Song/track features:
+    danceabilities = []
+    energies = []
+    tempos = []
+    speechinesses = []
+
+    # Artist info
+    artists = []
+    artist_genres = []
+    artist_popularities = []
+    artist_uris = []
+    artist_img_url  = []
 
     # Iterate through each artist in the DataFrame
     for i, row in df_artists.iterrows():
-        top_tracks = retry_spotify_request(spot.artist_top_tracks, row['Artist uri'])['tracks']
+        top_tracks = retry_spotify_request(
+            spot.artist_top_tracks,
+            row['Artist uri']
+        )['tracks']
 
         for track in top_tracks[:tracks_per_artist]:
             # Append track info
@@ -328,48 +395,56 @@ def get_top_tracks(spot: Spotify, df_artists: pd.DataFrame, tracks_per_artist: i
             artist_img_url.append(row['Artist Image url'])
 
             # Ensure there are track features, otherwise append None
-            features = retry_spotify_request(spot.audio_features, track['uri'])[0]
-            if features:
+            features = retry_spotify_request(
+                spot.audio_features,
+                track['uri']
+            )[0]
+            if features: # Append track features
                 danceabilities.append(features['danceability'])
                 energies.append(features['energy'])
                 tempos.append(features['tempo'])
                 speechinesses.append(features['speechiness'])
                 
-            # This is for an edge case that can occur if the artist query yields a non-music page
-            # Ex: If user misspells an artist name and the search result is "Air Conditioner Sounds"
-            else:
+            # Edge case if artist query yields non-music page.
+            # Ex: If user misspells an artist name and the search result is
+            # "Air Conditioner Sounds"
+            else: # No track features to append. Append None for that row.
                 danceabilities.append(None)
                 energies.append(None)
                 tempos.append(None)
                 speechinesses.append(None)
 
     # Create DataFrame from collected information
-    df_songs = pd.DataFrame({'Song': songs,
-                       'Artist': artists,
-                       'Song Popularity': song_popularities,
-                       'Danceability': danceabilities,
-                       'Energy': energies,
-                       'Tempo': tempos,
-                       'Speechiness': speechinesses,
-                       'Song Duration': song_durations,
-                       'Artist Genres': artist_genres,
-                       'Artist Popularity': artist_popularities,
-                       'Artist uri': artist_uris,
-                       'Song uri': song_uris,
-                       'Artist Image url': artist_img_url,
-                       })
+    df_songs = pd.DataFrame({
+        'Song': songs,
+        'Artist': artists,
+        'Song Popularity': song_popularities,
+        'Danceability': danceabilities,
+        'Energy': energies,
+        'Tempo': tempos,
+        'Speechiness': speechinesses,
+        'Song Duration': song_durations,
+        'Artist Genres': artist_genres,
+        'Artist Popularity': artist_popularities,
+        'Artist uri': artist_uris,
+        'Song uri': song_uris,
+        'Artist Image url': artist_img_url,
+    })
     
     return df_songs
 
 
 def create_playlist(playlist_name: str, spot: Spotify, df_songs: pd.DataFrame):
     """
-    Creates a new playlist in Spotify and adds songs to it from DataFrame df_songs.
+    Creates a new Spotify playlist and adds songs to it from DataFrame.
 
     Parameters:
         playlist_name (str): Name of the new playlist.
         spot (Spotify): Authenticated Spotify instance.
         df_songs (pd.DataFrame): DataFrame with song metadata.
+
+    Returns:
+        None
     """
 
     # Get the user's Spotify ID
@@ -377,7 +452,10 @@ def create_playlist(playlist_name: str, spot: Spotify, df_songs: pd.DataFrame):
 
     # Create a new playlist and get playlist URI
     playlist = spot.user_playlist_create(
-        user=user, name=playlist_name, public=True, description='Created using Spotipy.'
+        user=user,
+        name=playlist_name,
+        public=True,
+        description='Created using Spotipy.'
     )
     playlist_uri = playlist['uri']
 
