@@ -1,297 +1,513 @@
-# This file going to be completely overhauled.
-
 import sys
+from typing import List, Tuple
 
 import pandas as pd
-
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
-    QScrollArea, QLineEdit, QLabel, QTextBrowser, QFrame
+    QApplication, QDesktopWidget, QGridLayout, QGroupBox, QHBoxLayout, QLabel,
+    QLineEdit, QPushButton, QScrollArea, QSizePolicy, QTextBrowser, 
+    QVBoxLayout, QWidget
 )
-from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 
-class ArtistChooser(QMainWindow):
-    def __init__(self, df_artists, festival, names_per_row=3):
+from gui.gui_components import (
+    ArtistSelectionButton, ColorScheme, CustomProceedButton
+)
+
+
+class PlaylistGenArtistSelection(QWidget):
+    """Artist Selection screen GUI class."""
+
+    def __init__(self, df_artists: pd.DataFrame, festival_name: bool) -> None:
+        """
+        Initialize the GUI
+
+        Parameters:
+            df_artists (pd.DataFrame): DataFrame containing artist info.
+            festival_name (str): Name of the festival for the title label.
+        """
+
         super().__init__()
+        self.df_artists = df_artists
+        self.festival_name = festival_name
 
-        self.selected_names = []
-        self.names_to_add = []
-        self.additional_label_shown = False
+        # Set extra_artists_display to False on GUI launch
+        self.extra_artists_displaying = False
 
-        self.initUI(df_artists, festival, names_per_row)
+        # Initialize variables that will be outputs from this GUI screen
+        self.selected_artist_names = []
+        self.extra_artist_names = []
+        
+        self.init_ui() # Set up GUI
 
-    def initUI(self, df_artists, festival, names_per_row):
-        central_widget = QWidget(self)
-        self.setCentralWidget(central_widget)
 
-        layout = QVBoxLayout()
-        central_widget.setStyleSheet("background-color: rgb(18, 18, 18);")
+    def init_ui(self) -> None:
+        """Set up the GUI screen."""
 
-        select_label = QLabel(f'Select "{festival}" artists to include in your playlist:')
-        select_label.setStyleSheet("color: rgb(30, 215, 96); font-size: 32px;")
-        layout.addWidget(select_label)
+        # Initialize color scheme
+        color = ColorScheme()
 
+        # Set window name and bg color
+        self.setWindowTitle(
+            "Spotify Festival Playlist Generator - Select Artists"
+        )
+        self.setStyleSheet(f"background-color: black;")
+
+        # Create a QVBoxLayout for the main layout
+        screen_layout = QVBoxLayout(self)
+        window_margin = 10 # Space between containers and window edges
+        screen_layout.setContentsMargins(
+            window_margin,
+            window_margin,
+            window_margin,
+            window_margin
+        )
+        screen_layout.setSpacing(window_margin)
+
+        # Define container style (to be used in 2 container style sheets)
+        container_style = (
+            # Add background design:
+            f"background-color: {color.dark_grey};"
+            f"border-radius: 15px;"
+
+            # Set font style for every label in this container:
+            f"font-size: 14pt;"
+            f"color: white;"
+            f"font-family: 'Arial Rounded MT Bold';"
+        )
+
+        # GroupBox for top-container (for container/background StyleSheet)
+        container_top_groupbox = QGroupBox(self)
+        container_top_groupbox.setStyleSheet(container_style)
+
+        # QVBoxLayout for top-container
+        container_top_layout = QVBoxLayout(container_top_groupbox)
+        screen_layout.addWidget(container_top_groupbox)
+
+        # Title label in top container
+        title_style = (
+            f"font-size: 16pt;"
+            f"color: {color.spotify_green};"
+        ) # Used in 2 labels (title labels of each container)
+        top_title_label = QLabel(
+            f'Select "{self.festival_name}" artists for your playlist:'
+        )
+        top_title_label.setStyleSheet(title_style)
+        top_title_label.setIndent(10)
+        container_top_layout.addWidget(top_title_label)
+
+        # Define button styles for use in multiple buttons in this GUI screen
+        self.buttons_style = (
+            f"background-color: {color.mid_grey};"
+            f"border: 2px solid {color.lighter_grey};"
+            f"border-radius: 10px;"
+            f"padding: 8px 25px 8px 25px;"
+            f"font-size: 11pt;"
+        )
+        self.buttons_hover_style = (
+            f"background-color: {color.mid_grey};"
+            f"border: 2px solid white;"  # Change border color on hover
+            f"border-radius: 10px;"
+            f"padding: 8px 25px 8px 25px;"
+            f"font-size: 11pt;"
+        )
+
+        # Add button to select/de-select all artists
+        select_all_button_layout = QHBoxLayout()
+        container_top_layout.addSpacing(5) # Spacing above button
+        container_top_layout.addLayout(select_all_button_layout)
+        container_top_layout.addSpacing(5) # Spacing below button
+        select_all_button = QPushButton("Select All Artists")
+        select_all_button.setStyleSheet(self.buttons_style)
+        select_all_button.enterEvent = (
+            lambda event: self.on_hover_enter(select_all_button)
+        ) # Hover effect - change border color
+        select_all_button.leaveEvent = (
+            lambda event: self.on_hover_leave(select_all_button)
+        ) # End hover effect
+        select_all_button.clicked.connect(self.select_all_artists)
+        select_all_button_layout.addSpacing(10)
+        select_all_button_layout.addWidget(select_all_button)
+        
+        # QLabel - Add notes on popularity and genres
+        notes_label = QLabel(
+            "Artist popularity is between 1-100.\n"
+            "Genres that say N/A are not available in Spotify's database."
+        )
+        notes_label.setStyleSheet(
+            "font-size: 11pt;"
+        )
+        select_all_button_layout.addSpacing(10) # Spacing b/w button and notes
+        select_all_button_layout.addWidget(notes_label)
+        select_all_button_layout.addStretch() # Push button and notes left
+
+        # Scroll area to contain grid of artist selection buttons
         scroll_area = QScrollArea()
-        scroll_area.setStyleSheet(
-            """
-            QScrollBar:vertical, QScrollBar:horizontal {
-                border: 1px solid #222222;
-                background: #121212;
+        scrollbar_stylesheet = (
+            f"""
+            QScrollBar:vertical, QScrollBar:horizontal {{
+                border: 1px solid {color.mid_grey};
+                background: {color.dark_grey};
                 width: 12px;
                 margin: 0px 0px 0px 0px;
-            }
+            }}
 
-            QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-                background: #1ED760;
+            QScrollBar::handle:vertical, QScrollBar::handle:horizontal {{
+                background: {color.spotify_green};
                 min-height: 20px;
-            }
+            }}
 
-            QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal {
-                background: #121212;
+            QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal {{
+                background: {color.dark_grey};
                 height: 0px;
                 subcontrol-position: bottom;
                 subcontrol-origin: margin;
-            }
+            }}
 
-            QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal {
-                background: #121212;
-                height: 0 px;
+            QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal {{
+                background: {color.dark_grey};
+                height: 0px;
                 subcontrol-position: top;
                 subcontrol-origin: margin;
-            }
+            }}
 
             QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical,
-            QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
-                background: #121212;
-            }
+            QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {{
+                background: {color.dark_grey};
+            }}
             """
         )
+        scroll_area.setStyleSheet(scrollbar_stylesheet) # Add custom scrollbar
+        container_top_layout.addWidget(scroll_area)
         scroll_widget = QWidget()
+        scroll_widget.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
         scroll_area.setWidget(scroll_widget)
         scroll_area.setWidgetResizable(True)
 
-        checkboxes_layout = QVBoxLayout()
-        row = QWidget()
-        row_layout = QHBoxLayout()
+        # Grid layout containing artist selection buttons
+        artist_selection_gridlayout = QGridLayout()
+        artist_selection_gridlayout.setSpacing(10)
+        scroll_widget.setLayout(artist_selection_gridlayout)
 
-        max_button_width = 500
-        
-        for i, row_df in df_artists.iterrows():
-            name = row_df['Artist']
-            popularity = row_df['Artist Popularity']
-            genres = row_df['Artist Genres']
-            
-            if i == len(df_artists) - 1:
-                button = QPushButton()
-            else:
-                button = QPushButton()
-            button.setText("")  # Set text of the QPushButton to an empty string
-            button.setStyleSheet("background-color: rgb(40, 40, 40); border-style: outset; border-width: 2px; border-color: rgb(30, 215, 96); border-radius: 10px; text-align: center;")
-            button.setFixedHeight(115)
-            button.setCheckable(True)
-            button.clicked.connect(self.button_clicked)
-            button.setProperty("artist_name", name)  # Store the artist name as a property
+        # Create an artist selection button for each
+        for i, artist_row in self.df_artists.iterrows():
+            # Create custom button
+            artist_button = ArtistSelectionButton(
+                artist_row['Artist'],
+                artist_row['Artist Popularity'],
+                artist_row['Artist Genres'],
+                artist_row['Artist Image url']
+            )
 
-            # Create a QLabel for the top line with a larger white font
-            top_line_label = QLabel(name)
-            top_line_label.setStyleSheet("color: white; border: none;")
-            top_line_label.setFont(QFont("Arial Rounded MT Bold", 14))  # Increase font size
-            
-            if genres:
-                genres_str = ', '.join(genres)
-            else:
-                genres_str = "N/A"
-            other_lines_label = QLabel(f"Popularity: {popularity}\nGenres: {genres_str}")
-            other_lines_label.setStyleSheet("color: grey; border: none;")
-            other_lines_label.setFont(QFont("Arial Rounded MT Bold", 10))  # Decrease font size
-            other_lines_label.setWordWrap(True)  # Allow text to wrap to the next line
+            # Add button to layout
+            buttons_per_row = 3
+            row_position = i // buttons_per_row
+            col_position = i % buttons_per_row
+            artist_selection_gridlayout.addWidget(
+                artist_button,
+                row_position,
+                col_position
+            )
 
-            # Create a QVBoxLayout to contain the top and other lines labels
-            label_layout = QVBoxLayout()
-            label_layout.addWidget(top_line_label)
-            label_layout.addWidget(other_lines_label)
-            label_layout.setAlignment(Qt.AlignTop)
+        # GroupBox for bottom-container (for container/background StyleSheet)
+        container_bottom_groupbox = QGroupBox(self)
+        container_bottom_groupbox.setStyleSheet(container_style)
 
-            button_layout = QVBoxLayout()
-            button_layout.addLayout(label_layout)
-            button.setLayout(button_layout)
+        # QVBoxLayout for bottom-container
+        container_bottom_layout = QVBoxLayout(container_bottom_groupbox)
+        container_bottom_layout.setContentsMargins(20, 10, 40, 10)
+        screen_layout.addWidget(container_bottom_groupbox)
 
-            row_layout.addWidget(button)
+        # Title label in bottom container
+        bottom_title_label = QLabel(
+            "(Optional) Add extra artists for your playlist:"
+        )
+        bottom_title_label.setStyleSheet(title_style)
+        container_bottom_layout.addWidget(bottom_title_label)
+        container_bottom_layout.addSpacing(10) # Add space above QLineEdit
 
-            if (i + 1) % names_per_row == 0 or i == len(df_artists) - 1:
-                row.setLayout(row_layout)
-                checkboxes_layout.addWidget(row)
-                row = QWidget()
-                row_layout = QHBoxLayout()
+        # QLineEdit for user to input extra artist names to use in playlist
+        self.extra_artists_lineedit = QLineEdit()
+        self.extra_artists_lineedit.setPlaceholderText(
+            "Type artist name then press Enter"
+        )
+        self.extra_artists_lineedit.setStyleSheet(
+            f"background-color: {color.mid_grey};"
+            f"border: 3px solid white;"
+            f"padding: 10px 18px 10px 18px;"
+            f"border-radius: 27px;" # Semi-circle border-radius
+        )
+        self.extra_artists_lineedit.setFixedWidth(425)
+        self.extra_artists_lineedit.returnPressed.connect(
+            self.add_extra_artist_name
+        ) # Add inputted text to extra artists list when Enter is pressed
+        container_bottom_layout.addWidget(self.extra_artists_lineedit)
 
-        # Set a fixed width for all buttons
-        for i in range(checkboxes_layout.count()):
-            row = checkboxes_layout.itemAt(i).widget()
-            for btn in row.findChildren(QPushButton):
-                btn.setFixedWidth(max_button_width)
+        # Extra artists display (only shown after first artist entered)
+        self.extra_artists_display_groupbox = QGroupBox()
+        container_bottom_layout.addWidget(self.extra_artists_display_groupbox)
+        extra_artists_display_layout = QVBoxLayout()
+        self.extra_artists_display_groupbox.setLayout(
+            extra_artists_display_layout
+        )
+        extra_artists_display_layout.addSpacing(10) # Spacing at top of section
+        self.extra_artists_display_groupbox.hide() # Hidden during GUI start
 
-        scroll_widget.setLayout(checkboxes_layout)
-        layout.addWidget(scroll_area)
+        # Extra artists display label
+        self.extra_artists_display_label = QLabel("Extra artists being added:")
+        extra_artists_display_layout.addWidget(
+            self.extra_artists_display_label
+        )
 
-        self.name_input = QLineEdit()
-        self.name_input.setPlaceholderText("Add additional artists to include in the playlist (type-in artist then press Enter)")
-        self.name_input.setStyleSheet("color: white;")
-        self.name_input.setFont(QFont("Arial Rounded MT Bold", 14))
-        self.name_input.returnPressed.connect(self.add_name)
-        layout.addWidget(self.name_input)
+        # Extra artists display QTextBrowser
+        self.extra_artists_display_browser = QTextBrowser()
+        self.extra_artists_display_browser.setFixedHeight(50)
+        self.extra_artists_display_browser.setStyleSheet(
+            # Custom scroll bar within widget:
+            scrollbar_stylesheet +
 
-        self.additional_artists_label = QLabel("Additional artists that will be added to playlist:")
-        self.additional_artists_label.setStyleSheet("color: white;")
-        self.additional_artists_label.setFont(QFont("Arial Rounded MT Bold", 14))
-        self.additional_artists_label.hide()  # Initially hide the label
-        layout.addWidget(self.additional_artists_label)
-
-        self.names_list = QTextBrowser()
-        
-        # Set the stylesheet for QTextBrowser scroll bars
-        self.names_list.setStyleSheet(
+            # Widget border and padding:
             """
-            QScrollBar:vertical, QScrollBar:horizontal {
-                border: 1px solid #222222;
-                background: #121212;
-                width: 12px;
-                margin: 0px 0px 0px 0px;
-            }
-
-            QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-                background: #1ED760;
-                min-height: 20px;
-            }
-
-            QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal {
-                background: #121212;
-                height: 0px;
-                subcontrol-position: bottom;
-                subcontrol-origin: margin;
-            }
-
-            QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal {
-                background: #121212;
-                height: 0 px;
-                subcontrol-position: top;
-                subcontrol-origin: margin;
-            }
-
-            QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical,
-            QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
-                background: #121212;
-            }
-            
             QTextBrowser {
-                color: white;
-                border: 2px solid #1ED760; /* Set the border color */
+               border: 2px solid white;
+               border-radius: 10px;
+               padding: 5px 10px 5px 10px;
             }
             """
         )
-        self.names_list.setFont(QFont("Arial Rounded MT Bold", 14))
-        self.names_list.setOpenExternalLinks(True)
-        self.names_list.setFixedHeight(80)
-        self.names_list.setLineWrapMode(QTextBrowser.WidgetWidth)  # Enable text wrapping
-        self.names_list.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)  # Show vertical scroll bar when needed
-        self.names_list.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)  # Show horizontal scroll bar when needed
-        self.names_list.setFrameShape(QFrame.NoFrame)  # Initially set frame shape to NoFrame
-        self.names_list.hide()  # Initially hide the QTextBrowser
-        layout.addWidget(self.names_list)
+        extra_artists_display_layout.addWidget(
+            self.extra_artists_display_browser
+        )
 
-        button_layout = QHBoxLayout()
-        create_playlist_button = QPushButton("Create Playlist")
-        create_playlist_button.clicked.connect(self.get_selected_names)
-        create_playlist_button.setStyleSheet("background-color: rgb(30, 215, 96); color: black; border-style: outset; border-width: 2px; border-color: rgb(18, 18, 18); border-radius: 40px;")
-        create_playlist_button.setFixedHeight(100)
-        create_playlist_button.setFixedWidth(240)
-        create_playlist_button.setFont(QFont("Arial Rounded MT Bold", 18))
-        button_layout.addWidget(create_playlist_button)
-        layout.addLayout(button_layout)
+        # QHBoxLayout to hold buttons for removing artist(s) from extra display
+        remove_artists_buttons_layout = QHBoxLayout()
+        extra_artists_display_layout.addLayout(
+            remove_artists_buttons_layout
+        )
+        extra_artists_display_layout.setContentsMargins(
+            0,
+            0, 
+            0,
+            0
+        ) # Override inherited margins from earlier container_bottom_layout
 
-        central_widget.setLayout(layout)
+        # Button to remove most recently-entered extra artist
+        pop_extra_artists_button = QPushButton("Remove Last Entered Artist")
+        pop_extra_artists_button.setStyleSheet(self.buttons_style)
+        pop_extra_artists_button.enterEvent = (
+            lambda event: self.on_hover_enter(pop_extra_artists_button)
+        ) # Hover effect - change border color
+        pop_extra_artists_button.leaveEvent = (
+            lambda event: self.on_hover_leave(pop_extra_artists_button)
+        ) # End hover effect
+        pop_extra_artists_button.clicked.connect(
+            self.pop_extra_artist_name
+        )
+        remove_artists_buttons_layout.addWidget(pop_extra_artists_button)
 
-    def button_clicked(self):
-        button = self.sender()
-        if button.isChecked():
-            button.setStyleSheet("background-color: rgb(30, 215, 96); color: white; border-style: outset; border-width: 2px; border-color: rgb(40, 40, 40); border-radius: 10px;")
-        else:
-            button.setStyleSheet("background-color: rgb(40, 40, 40); border-style: outset; border-width: 2px; border-color: rgb(30, 215, 96); border-radius: 10px;")
+        # Button to remove all extra artists
+        reset_extra_artist_button = QPushButton("Reset All Extra Artists")
+        reset_extra_artist_button.setStyleSheet(self.buttons_style)
+        reset_extra_artist_button.enterEvent = (
+            lambda event: self.on_hover_enter(reset_extra_artist_button)
+        ) # Hover effect - change border color
+        reset_extra_artist_button.leaveEvent = (
+            lambda event: self.on_hover_leave(reset_extra_artist_button)
+        ) # End hover effect
+        reset_extra_artist_button.clicked.connect(
+            self.reset_extra_artist_names
+        )
+        reset_extra_artist_button.setFixedWidth(
+            pop_extra_artists_button.sizeHint().width()
+        ) # Set this button to match the size of the other
+        remove_artists_buttons_layout.addWidget(reset_extra_artist_button)
+        
+        # Push buttons in this row left
+        remove_artists_buttons_layout.addStretch()
 
-    def add_name(self):
-        name = self.name_input.text()
+        # Use Custom Button class. Proceed button to go to playlist creation.
+        proceed_button = CustomProceedButton(
+            ["Customize Playlist"],
+            click_handler=self.proceed_to_customization_screen,
+            size=(290, 50),
+            hover_effect="expand"
+        )
+
+        # Use below code to move button to lower-left side of screen:
+        """
+        # Create a QGridLayout to control layout of buttons
+        # Note: Grid chosen over QHBoxLayout to get best button hover effect
+        proceed_button_layout = QGridLayout()
+        screen_layout.addLayout(proceed_button_layout)
+
+        # Add button margins to add a little space above and below button and
+        # add push button to the left with the 3rd arg value.
+        proceed_button_layout.setContentsMargins(0, 10, 950, 10)
+
+        proceed_button_layout.addWidget(
+            proceed_button,
+            0, 0, 1, 1,
+            alignment=Qt.AlignCenter
+        )
+
+        # Spacer to push button to the left. This approach chosen for best
+        # button hover effects.
+        spacer_label = QLabel()
+        proceed_button_layout.addWidget(
+            spacer_label,
+            0, 1, 1, 1,
+            alignment=Qt.AlignCenter
+        )
+        """
+
+        # Center proceed_button and add spacing
+        screen_layout.addSpacing(10) # Spacing above proceed button
+        screen_layout.addWidget(proceed_button, alignment=Qt.AlignCenter)
+        screen_layout.addSpacing(10) # Spacing below proceed button
+
+    
+    def select_all_artists(self) -> None:
+        """
+        Sets all artist selection buttons to selected state,
+        OR deselects all buttons if they are all currently selected.
+        """
+
+        # Check if all artist buttons are currently selected
+        all_selected = all(
+            button.is_selected for button in self.findChildren(
+                ArtistSelectionButton
+            )
+        )
+
+        # Toggle selection for all artist buttons
+        for button in self.findChildren(ArtistSelectionButton):
+            button.is_selected = not all_selected
+            button.update_style()
+
+        # Update list of selected artist names based on selected buttons
+        self.selected_artist_names = [
+            button.name
+            for button in self.findChildren(ArtistSelectionButton)
+            if button.is_selected
+        ]
+
+
+    def add_extra_artist_name(self) -> None:
+        """Adds QLineEdit input to extra artist names list on Enter press."""
+
+        name = self.extra_artists_lineedit.text()
         if name.strip():
-            self.names_to_add.append(name)
-            self.name_input.clear()
-            self.update_names_list()
-            if not self.additional_label_shown:
-                self.additional_artists_label.show()
-                self.names_list.show()  # Show the QTextBrowser after the first name is added
-                self.names_list.setFrameShape(QFrame.Box)  # Change frame shape to Box
-                self.additional_label_shown = True
+            self.extra_artist_names.append(name)
+            self.extra_artists_lineedit.clear()
+            self.update_extra_artists_display()
+            if not self.extra_artists_displaying:
+                self.extra_artists_display_groupbox.show()
+                self.extra_artists_displaying = True
 
-    def update_names_list(self):
-        self.names_list.setPlainText(", ".join(self.names_to_add))
 
-    def get_selected_names(self):
-        selected_buttons = [widget.property("artist_name") for widget in self.findChildren(QPushButton) if widget.isChecked()]
-        new_artist_names = self.names_to_add.copy()
-        self.selected_names = selected_buttons.copy()
+    def update_extra_artists_display(self) -> None:
+        """Updates the extra artists display for each user interaction."""
+
+        self.extra_artists_display_browser.setPlainText(
+            ", ".join(self.extra_artist_names)
+        )
+
+    
+    def pop_extra_artist_name(self) -> None:
+        """Remove most recently-entered extra artist name."""
+
+        if self.extra_artist_names: # Only pop and update if list not empty
+            self.extra_artist_names.pop()
+            self.update_extra_artists_display()
+
+
+    def reset_extra_artist_names(self) -> None:
+        """Remove all entered extra artist names."""
+
+        self.extra_artist_names = []
+        self.update_extra_artists_display()
+
+
+    def proceed_to_customization_screen(self) -> None:
+        """Finish this GUI screen and proceed to next one on button press."""
+
+        # Update list of selected artist names based on selected buttons
+        self.selected_artist_names = [
+            button.name
+            for button in self.findChildren(ArtistSelectionButton)
+            if button.is_selected
+        ]
+
+        # Close the window
         self.close()
-        return self.selected_names, new_artist_names
 
-    def get_selected_names_list(self):
-        return self.selected_names, self.names_to_add
 
-def select_artist_names(df_artists, festival):
+    def on_hover_enter(self, button):
+        """When hovering over the button, change its border color."""
+        button.setStyleSheet(self.buttons_hover_style)
+
+
+    def on_hover_leave(self, button):
+        """When hovering ends, reset the border color."""
+        button.setStyleSheet(self.buttons_style)
+
+
+def launch_gui_artist_selection(
+    df_artists: pd.DataFrame,
+    festival_name: str
+) -> Tuple[List[str], List[str]]:
+    """
+    Launches the GUI for artist selection.
+
+    Initializes the QApplication and PlaylistGenArtistSelection GUI instance,
+    displays the GUI, and starts the application's event loop for interaction
+    handling.
+
+    Parameters:
+        df_artists (pd.DataFrame): DataFrame containing artist information.
+        festival_name (str): Name of the festival for the title label.
+
+    Returns:
+        Tuple[List[str], List[str]]: Tuple containing the selected artist
+            names list (buttons) and extra artist names list (user-entered).
+    """
+
+    # Initialize the QApplication and the PlaylistGenFestivalLink GUI instance
     app = QApplication(sys.argv)
-    window = ArtistChooser(df_artists, festival, names_per_row=3)
-    window.setWindowTitle("Spotify Festival Playlist Generator - Artist Selection")
-    window.setGeometry(160, 100, 1600, 900)
-    window.show()
+    gui = PlaylistGenArtistSelection(df_artists, festival_name)
 
+    # Center the window on the screen. Hard code size for this 1 screen.
+    screen_geometry = QDesktopWidget().screenGeometry()
+    width_gui = 1600
+    height_gui = 900
+    gui.setGeometry(
+        (screen_geometry.width() - width_gui) // 2,
+        (screen_geometry.height() - height_gui) // 2,
+        width_gui,
+        height_gui
+    )
+
+    # Display GUI and start application's event loop for interaction handling
+    gui.show()
     app.exec_()
 
-    selected_buttons, new_artist_names = window.get_selected_names_list()
-    selected_artist_names = [artist.split("\n")[0] for artist in selected_buttons]
-
-    if __name__ == "__main__":
-        print(f"Selected Buttons: {selected_artist_names}")
-        print(f"New/Added Artist Names: {new_artist_names}")
-
-    return selected_artist_names, new_artist_names
+    return gui.selected_artist_names, gui.extra_artist_names
 
 
 if __name__ == "__main__":
-    artist_names = ['Alanis Morissette', 'Ali Sethi', 'Angel White', 'Arya (Serbia)', 'BLOND:ISH', 'Ben Kweller', 'Breland', 'CVC', 'Calder Allen', 'Celisse',
-             'Charlotte Adigéry & Bolis Pupul', 'Cigarettes After Sex', 'Declan McKenna', 'Delacey', 'Eloise', 'Foo Fighters', 'Hozier', 'Katy Kirby',
-             'M83', 'Madison Cunningham', 'Maggie Rogers', 'Major Lazer', 'Morgan Wade', 'Mumford & Sons', 'Nemegata', 'Nessa Barrett', 'Noah Kahan',
-             'ODESZA', 'Oliver Hazard', 'SIDEPIECE', 'Shania Twain', 'Suki Waterhouse', 'Sunrose', 'The 1975', 'The Breeders', 'The Lumineers',
-             'The Mars Volta', 'The Teskey Brothers', 'The Walkmen', 'Tove Lo', 'Yeah Yeah Yeahs', 'corook', 'half•alive']
-    genres = [['canadian pop', 'canadian singer-songwriter', 'lilith', 'neo mellow', 'pop rock', 'singer-songwriter'],
-              ['classic pakistani pop', 'indian indie', 'pakistani pop', 'sufi'], [], [], ['deep disco house'],
-              ['dallas indie', 'pop rock'], ['black americana'], ['cardiff indie'], [], [], ['belgian electronic', 'belgian indie'],
-              ['ambient pop', 'dream pop', 'el paso indie', 'shoegaze'], ['pov: indie'], ['modern alternative pop'], ['bedroom soul'],
-              ['alternative metal', 'alternative rock', 'modern rock', 'permanent wave', 'post-grunge', 'rock'],
-              ['irish singer-songwriter', 'modern rock', 'pov: indie'], ['indie pop'],
-              ['french shoegaze', 'french synthpop', 'indietronica', 'metropopolis', 'neo-synthpop'], ['pop folk'], ['indie pop'],
-              ['dance pop', 'edm', 'electro house', 'moombahton', 'pop', 'pop dance'], ['modern country pop'],
-              ['modern folk rock', 'modern rock', 'neo mellow', 'stomp and holler', 'uk americana'], [], ['social media pop'],
-              ['pov: indie'], ['chillwave', 'edm', 'indietronica'], ['stomp and holler'], ['edm', 'house', 'tech house'],
-              ['canadian country', 'canadian pop', 'contemporary country', 'country', 'country dawn'], ['indie pop'], [],
-              ['modern alternative rock', 'modern rock', 'pop', 'pov: indie', 'rock'], ['alternative rock', 'boston rock'],
-              ['folk-pop', 'modern rock', 'stomp and holler'], ['el paso indie', 'garage rock'], ['australian americana'],
-              ['chamber pop', 'indie rock', 'noise pop'],
-              ['dance pop', 'metropopolis', 'pop', 'swedish electropop', 'swedish pop', 'swedish synthpop'],
-              ['alternative dance', 'alternative rock', 'art pop', 'chamber pop', 'dance-punk', 'garage rock', 'indie rock', 'modern rock', 'neo-synthpop', 'new rave'],
-              [], ['alt z', 'pov: indie']]
-    popularity = [65, 56, 24, 47, 55, 34, 56, 30, 21, 15, 37, 79, 61, 40, 51, 75, 80, 37, 68, 47, 66, 73,
-                    53, 69, 7, 66, 82, 67, 50, 59, 70, 63, 10, 74, 50, 76, 47, 62, 44, 71, 63, 45, 56]
+    df_artists = pd.read_csv("output/sample_data/ElectricZoo2023Artists.csv")
+    df_artists['Artist Genres'] = df_artists['Artist Genres'].apply(eval)
+    print(f"df_artists loaded with len: {len(df_artists)}")
 
-    df_artists = pd.DataFrame({'Artist': artist_names,
-                               'Artist Genres': genres,
-                               'Artist Popularity': popularity,
-                               })
-    festival = "Austin City Limits Music Festival 2023"
+    festival_name = "Electric Zoo 2023"
+    print(f"Launching GUI screen...")
     
-    selected_artist_names, new_artist_names = select_artist_names(df_artists, festival)
+    selected_artist_names, extra_artist_names = launch_gui_artist_selection(
+        df_artists, festival_name
+    )
+    print(
+        f"{len(selected_artist_names)} artist names selected:\n"
+        f"{selected_artist_names}")
+    
+    print(
+        f"{len(extra_artist_names)} extra artist names entered:\n"
+        f"{extra_artist_names}")

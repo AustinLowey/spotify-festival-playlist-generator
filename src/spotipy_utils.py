@@ -243,7 +243,7 @@ def retry_spotify_request(func, *args):
     try:
         return func(*args)
     
-    except spotipy.client.SpotifyException as e:
+    except SpotifyException as e:
         if e.http_status == 429:
             # Rate limit reached, wait for Retry-After seconds
             retry_after = int(e.headers.get('Retry-After', 10))

@@ -131,7 +131,7 @@ class PlaylistGenFestivalLinkGui(QWidget):
             f"border-radius: 16px;"
             f"padding: 2px;"
             f"padding-left: 10px;"
-            f"margin-left: {indent_value};" # QLineEdit doesn't have .setIndent
+            f"margin-left: {indent_value};"
             f"margin-right: {indent_value};"
         )
         
@@ -263,12 +263,13 @@ def launch_gui_festival_link() -> Tuple[bool, str]:
     """
     Launch the Festival Link GUI.
 
-    Initializes the QApplication and the PlaylistGenFestivalLink GUI instance.
+    Initializes the QApplication and PlaylistGenFestivalLink GUI instance.
     Centers the window on the screen and starts the application's event loop
     for interaction handling.
 
     Returns:
-        Tuple[bool, str]: Tuple containing skip_this_step flag and festival link.
+        Tuple[bool, str]: Tuple containing skip_this_step flag and
+            festival link.
     """
 
     # Initialize the QApplication and the PlaylistGenFestivalLink GUI instance

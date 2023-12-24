@@ -19,6 +19,10 @@ class PlaylistGenSongCustomizationGui(QWidget):
 
     def __init__(self, df_artists: pd.DataFrame) -> None:
         """
+        Initializes the Song Customization GUI.
+
+        Parameters:
+            df_artists (pd.DataFrame): DataFrame containing artist info.
         """
 
         super().__init__()
@@ -33,8 +37,7 @@ class PlaylistGenSongCustomizationGui(QWidget):
         
 
     def init_ui(self) -> None:
-        """
-        """
+        """Initializes the GUI screen and components."""
 
         # Initialize color scheme
         color = ColorScheme()
@@ -182,12 +185,12 @@ class PlaylistGenSongCustomizationGui(QWidget):
 
         # Create a QGridLayout to control layout of buttons
         # Note: Grid chosen over QHBoxLayout to get best button hover effect
-        self.proceed_button_layout = QGridLayout()
-        container_left_layout.addLayout(self.proceed_button_layout)
+        proceed_button_layout = QGridLayout()
+        container_left_layout.addLayout(proceed_button_layout)
 
         # Define margins for proceed_button_layout
         # Left and bottom margins equal to indent value
-        self.proceed_button_layout.setContentsMargins(
+        proceed_button_layout.setContentsMargins(
             indent_value,
             0,
             0,
@@ -201,19 +204,20 @@ class PlaylistGenSongCustomizationGui(QWidget):
             size=(250, 50),
             hover_effect="expand"
         )
-        self.proceed_button_layout.addWidget(
+        proceed_button_layout.addWidget(
             proceed_button,
             0, 0, 1, 1,
             alignment=Qt.AlignCenter
         )
 
-        spacer_label = QLabel() # Better button hover effects than QSpacerItem
-        self.proceed_button_layout.addWidget(
+        # Spacer to push button to the left. This approach chosen for best
+        # button hover effects.
+        spacer_label = QLabel()
+        proceed_button_layout.addWidget(
             spacer_label,
             0, 1, 1, 1,
             alignment=Qt.AlignCenter
         )
-        self.proceed_button_layout.setSpacing(10)
 
         # GroupBox for right-container (for container/background StyleSheet)
         container_right_groupbox = QGroupBox(self)
@@ -433,9 +437,22 @@ class PlaylistGenSongCustomizationGui(QWidget):
 
 
 def launch_gui_song_customization(
-        df_artists: pd.DataFrame
+    df_artists: pd.DataFrame
 ) -> Tuple[int, bool, bool]:
     """
+    Launches the GUI for song customization.
+
+    Initializes the QApplication and PlaylistGenSongCustomizationGui instance,
+    displays the GUI, and starts the application's event loop for interaction
+    handling.
+
+    Parameters:
+        df_artists (pd.DataFrame): DataFrame containing artist information.
+
+    Returns:
+        Tuple[int, bool, bool]: Tuple containing the selected number of
+        tracks per artist, the flag indicating whether to useartist popularity
+        filtering, and the flag indicating whether to include remixes.
     """
 
     # Initialize the QApplication and the PlaylistGenFestivalLink GUI instance
@@ -468,7 +485,7 @@ if __name__ == "__main__":
 
     # Import df then change string representation (from .csv) of genres to list
     df_artists = pd.read_csv(
-        "output/sample_data/OfflineTestEdcLineupArtists.csv"
+        "output/sample_data/EdcOrlando2023Artists.csv"
     )
     df_artists['Artist Genres'] = df_artists['Artist Genres'].apply(eval)
     print(f"df_artists loaded with len: {len(df_artists)}")
