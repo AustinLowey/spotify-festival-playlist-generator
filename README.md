@@ -23,9 +23,7 @@ If the user picks the "From Music Festival" option, they are taken to the below 
 
 The artist lineup is obtained using the user-provided link. Each artist in the lineup is then searched for in Spotify and the artists' popularities and genres (if there are any published), are shown in the below GUI. The user can scroll through the GUI and select which artists they want to include. They can also manually enter other artists to add.
 
-Note: This GUI screen is about to get completely overhauled.
-
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/d9c2a111-7308-41ea-a7cb-08e964dcbf2d" width="600">
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/b376979e-758e-4d51-8f3e-89b3865117a5" width="600">
 
 The next GUI screen shows some info about the to-be-created playlist, as well as allows the user to customize the playlist using the following inputs:
 1) Number of songs from each artist.
