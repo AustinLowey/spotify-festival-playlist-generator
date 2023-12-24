@@ -1,8 +1,7 @@
 import sys
 
 from PyQt5.QtWidgets import (
-    QApplication, QDesktopWidget, QGroupBox,
-    QLabel, QVBoxLayout, QWidget
+    QApplication, QDesktopWidget, QGroupBox, QLabel, QVBoxLayout, QWidget
 )
 from PyQt5.QtCore import Qt
 

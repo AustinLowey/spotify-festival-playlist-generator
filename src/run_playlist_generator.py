@@ -6,7 +6,7 @@ import pandas as pd
 
 from gui.gui1ab_launch import launch_gui_start_screen
 from gui.gui2a_festival_link import launch_gui_festival_link
-from gui.gui3a_artist_selection import select_artist_names # Overhaul planned
+from gui.gui3a_artist_selection import launch_gui_artist_selection
 # from gui.gui3b_manually_enter_artists # Planned. Not yet implemented
 from gui.gui4ab_song_customization import launch_gui_song_customization
 
@@ -15,8 +15,6 @@ from spotipy_utils import (
     auth_flow, get_token_header, search_for_artists,
     recommend_artists, get_top_tracks, create_playlist
 )
-
-from img_conversion import img_url_to_array
 from playlist_mods import (
     remove_duplicates, remove_remixes_and_edits,
     filter_songs_by_artist_popularity, create_df_playlist_artists
@@ -115,7 +113,7 @@ def main(
         )
 
         # GUI screen 3a. Select artists from lineup (and/or add other artists)
-        selected_artist_names, new_artist_names = select_artist_names(
+        selected_artist_names, new_artist_names = launch_gui_artist_selection(
             df_lineup_artists,
             festival_name
         )
