@@ -309,7 +309,7 @@ def create_feature_plots(
 
             # Create messages and add to dict to add to summary dashboard
             trend_details_msg = (
-                f"{percent_within_range}% of songs"
+                f"{percent_within_range}% of songs "
                 f"within {within_msg} {feature} range"
             )
             feature_trend_msgs[feature] = trend_details_msg

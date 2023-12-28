@@ -4,7 +4,7 @@ import requests
 import numpy as np
 import cv2
 from PyQt5.QtWidgets import (
-    QHBoxLayout, QLabel, QPushButton, QRadioButton, 
+    QApplication, QHBoxLayout, QLabel, QPushButton, QRadioButton,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget
 )
 from PyQt5.QtCore import Qt
@@ -27,8 +27,11 @@ class ColorScheme:
         # Note: Black and white are also used in GUI color schemes.
 
 
-class CustomProceedButton(QPushButton):
-    """Custom next-screen button to be used throughout the entire GUI."""
+class CustomProceedButton_old(QPushButton):
+    """
+    Deprecated custom next-screen button, replaced by new, simpler
+    CustomProceedButton class.
+    """
 
     def __init__(
         self,
@@ -121,6 +124,100 @@ class CustomProceedButton(QPushButton):
 
         self.setFixedSize(*self.size)
         self.button_layout.setContentsMargins(35, 10, 2, 2)
+            
+
+class CustomProceedButton(QPushButton):
+    """Custom next-screen button to be used throughout the entire GUI."""
+
+    def __init__(
+        self,
+        button_text_lines: List[str],
+        font_sizes: Tuple[int, int] = (15, 11),
+        click_handler: Callable[[], None] = None
+    ) -> None:
+        """
+        Custom proceed button class for use across GUI screens.
+
+        Parameters:
+            button_text (list): A list of strings, with each string
+                representing a line of text for the button.
+            font_sizes: Tuple[int, int]: 1st font size for the top line of
+                button text and 2nd font size for all other lines of text
+            click_handler (function): The function called on button click.
+        """
+
+        super().__init__()
+
+        # Initialize color scheme and set button style
+        color = ColorScheme()
+        self.setStyleSheet(
+            f"background-color: {color.spotify_green};"
+            f"border-radius: 15px;"
+            f"color: black;"
+            f"font-family: 'Arial Rounded MT Bold';"
+        )
+
+        # Button layout containing lines of text
+        self.button_layout = QVBoxLayout(self)
+        self.setLayout(self.button_layout)
+
+        # Set button-margin around the text and remove spacing b/w lines
+        self.top_margin = 15
+        self.default_contents_margins = (
+            self.top_margin * 3,
+            self.top_margin,
+            self.top_margin * 3,
+            self.top_margin,
+        ) # Used as default margins and also again in ending hover effects
+        self.button_layout.setContentsMargins(*self.default_contents_margins)
+        self.button_layout.setSpacing(0)
+
+        # Add lines of text to button
+        for i, text_line in enumerate(button_text_lines):
+            line_label = QLabel(text_line)
+            if i == 0: # Larger font in first line of button
+                line_label.setStyleSheet(
+                    f"font-size: {font_sizes[0]}pt;"
+                )
+            else:
+                line_label.setStyleSheet(
+                    f"font-size: {font_sizes[1]}pt;"
+                )
+            line_label.setAlignment(Qt.AlignLeft)
+            self.button_layout.addWidget(line_label)
+            if i == 0 and len(button_text_lines) != 1: # If multiple text lines
+                self.button_layout.addSpacing(5) # Add spacing below line 1
+
+        # Adjust button size to fit contents
+        self.setFixedSize(self.button_layout.sizeHint())
+
+        # Add hover effects
+        self.enterEvent = self.on_hover_enter # When hovering over button
+        self.leaveEvent = self.on_hover_leave # After hovering ends
+
+        # Note: Could add different hover effect for color change or bold text
+
+        # Connect the click event to the specified handler
+        if click_handler:
+            self.clicked.connect(click_handler)
+         # else: Button is for show only, with no functionality yet
+
+
+    def on_hover_enter(self, event):
+        """When hovering over button, increase button width."""
+        self.button_layout.setContentsMargins(
+            self.top_margin * 3 + 5,
+            self.top_margin,
+            self.top_margin * 3 + 5,
+            self.top_margin
+        )
+        self.setFixedSize(self.button_layout.sizeHint())
+
+
+    def on_hover_leave(self, event):
+        """When hovering ends, reset button size."""
+        self.button_layout.setContentsMargins(*self.default_contents_margins)
+        self.setFixedSize(self.button_layout.sizeHint())
 
 
 class YesNoRadioButtons(QWidget):
@@ -415,10 +512,11 @@ class ArtistSelectionButton(QPushButton):
 
 # Test the custom button if executed as main
 if __name__ == "__main__":
-    def test_custom_button():
+    def test_custom_buttons():
+        """Tests the ArtistSelectionButton and CustomProceedButton classes."""
+
         import sys
         from PyQt5.QtWidgets import QApplication
-        import numpy as np
 
         # Example data for testing
         name = "Artist Test Name"
@@ -428,14 +526,54 @@ if __name__ == "__main__":
             "https://i.scdn.co/image/ab6761610000f178133f44ab343b35c715a4ac97"
         )
 
+        # Create a main window and layout to put the buttons into.
         app = QApplication(sys.argv)
-        custom_button = ArtistSelectionButton(
+        main_window = QWidget()
+        main_layout = QVBoxLayout(main_window)
+
+        # Custom artist button
+        custom_artist_button = ArtistSelectionButton(
             name,
             popularity,
             genres,
             image_url
         )
-        custom_button.show()
+        main_layout.addWidget(
+            custom_artist_button,
+            alignment=Qt.AlignHCenter
+        )
+
+        test_button_text = [
+            "From Music Festival",
+            "Create playlist for artists from a specific",
+            "festival's lineup (using songkick.com).",
+            "More artists' names can be added later."
+        ]
+
+        # Custom proceed button - old
+        custom_proceed_button_old = CustomProceedButton_old(
+            test_button_text,
+            click_handler=None,
+            size=(415, 120),
+            hover_effect="expand"
+        )
+        main_layout.addWidget(
+            custom_proceed_button_old,
+            alignment=Qt.AlignHCenter
+        )
+
+        # Custom proceed button - new
+        custom_proceed_button_new = CustomProceedButton(
+            test_button_text,
+            click_handler=None
+        )
+        main_layout.addWidget(
+            custom_proceed_button_new,
+            alignment=Qt.AlignHCenter
+        )
+
+        main_window.show()
         sys.exit(app.exec_())
 
-    test_custom_button()
+
+    test_custom_buttons()

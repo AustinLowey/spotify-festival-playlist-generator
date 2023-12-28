@@ -115,7 +115,7 @@ class PlaylistGenFestivalLinkGui(QWidget):
 
         # Create Step 3 label
         step3_label = QLabel(
-            "Step 3) Select the festival, then copy and paste below."
+            "Step 3) Select the festival, then copy and paste the link below."
         )
         step3_label.setIndent(indent_value)
         container_layout.addWidget(step3_label)
@@ -157,22 +157,18 @@ class PlaylistGenFestivalLinkGui(QWidget):
             indent_value
         )
 
-        # Set additional horizontal spacing between buttons
-        self.buttons_layout.setHorizontalSpacing(250)
-
-        # Define button size for buttons on this GUI screen
-        button_size = (315, 120)
+        # Extra spacing to push buttons further away from center
+        self.buttons_layout.setHorizontalSpacing(225)
 
         # Use Custom Button class to create a proceed button to next page
         proceed_button = CustomProceedButton(
-            ["Select Artists",
-             "Go to artist selection page",
-             "to choose artists from your",
-             "festival's lineup."
+            [
+                "Select Artists",
+                "Go to artist selection page",
+                "to choose artists from your  ",
+                "festival's lineup."
             ],
             click_handler=self.proceed_to_artist_selection,
-            size=button_size,
-            hover_effect="expand"
         )
         self.buttons_layout.addWidget(
             proceed_button,
@@ -182,14 +178,13 @@ class PlaylistGenFestivalLinkGui(QWidget):
 
         # Use Custom Button class to create a button to skip this page
         skip_button = CustomProceedButton(
-            ["Skip This Step",
-             "Can't find the link to your",
-             "festival's lineup? Enter artist",
-             "names manually instead."
+            [
+                "Skip This Step",
+                "Can't find the link to your",
+                "festival's lineup? Enter artist",
+                "names manually instead."
              ],
              click_handler=self.skip_festival_link,
-             size=button_size,
-             hover_effect="expand"
         )
         skip_button.setStyleSheet(
             # Override button style for color and border
@@ -209,6 +204,7 @@ class PlaylistGenFestivalLinkGui(QWidget):
             alignment=Qt.AlignCenter
         )
         
+
     def proceed_to_artist_selection(self) -> None:
         """
         Process the user's input and proceed to the artist selection page.
@@ -247,11 +243,10 @@ class PlaylistGenFestivalLinkGui(QWidget):
         # Close the window
         self.close()
 
+
     def skip_festival_link(self) -> None:
         """
         Action to skip the festival link step when skip-button is clicked.
-
-        Sets the self.skip_this_step flag to True and closes the window.
         """
 
         # Sets "skip step" bool to True and closes window

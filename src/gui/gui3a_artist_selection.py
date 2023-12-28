@@ -228,7 +228,7 @@ class PlaylistGenArtistSelection(QWidget):
         # QLineEdit for user to input extra artist names to use in playlist
         self.extra_artists_lineedit = QLineEdit()
         self.extra_artists_lineedit.setPlaceholderText(
-            "Type artist name then press Enter"
+            "Type artist's name then press Enter"
         )
         self.extra_artists_lineedit.setStyleSheet(
             f"background-color: {color.mid_grey};"
@@ -236,7 +236,7 @@ class PlaylistGenArtistSelection(QWidget):
             f"padding: 10px 18px 10px 18px;"
             f"border-radius: 27px;" # Semi-circle border-radius
         )
-        self.extra_artists_lineedit.setFixedWidth(425)
+        self.extra_artists_lineedit.setFixedWidth(445)
         self.extra_artists_lineedit.returnPressed.connect(
             self.add_extra_artist_name
         ) # Add inputted text to extra artists list when Enter is pressed
@@ -327,9 +327,7 @@ class PlaylistGenArtistSelection(QWidget):
         # Use Custom Button class. Proceed button to go to playlist creation.
         proceed_button = CustomProceedButton(
             ["Customize Playlist"],
-            click_handler=self.proceed_to_customization_screen,
-            size=(290, 50),
-            hover_effect="expand"
+            click_handler=self.proceed_to_customization_screen
         )
 
         # Use below code to move button to lower-left side of screen:
