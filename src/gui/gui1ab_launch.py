@@ -84,30 +84,27 @@ class PlaylistGenLaunchGui(QWidget):
         prompt_label.setAlignment(Qt.AlignCenter)
         container_layout.addWidget(prompt_label)
 
-        # Define button size for buttons on this GUI screen
-        button_size = (415, 120)
-
         # Use Custom Button class to create option "From Music Festival"
         button1 = CustomProceedButton(
-            ["From Music Festival",
-             "Create playlist for artists from a specific",
-             "festival's lineup (using songkick.com).",
-             "More artist names can be added later."
+            [
+                "From Music Festival",
+                "Create playlist for artists from a specific",
+                "festival's lineup (using songkick.com).",
+                "More artists' names can be added later."
             ],
-            click_handler=self.on_button1_clicked,
-            size=button_size,
-            hover_effect="expand"
+            click_handler=self.on_button1_clicked
         )
         container_layout.addWidget(button1, alignment=Qt.AlignCenter)
 
         # Use Custom Button class to create option "Enter Artist Names"
         button2 = CustomProceedButton(
-            ["Enter Artist Names",
-             "Manually enter multiple artist names."
-            ],
-            click_handler=self.on_button2_clicked,
-            size=button_size,
-            hover_effect="expand"
+            [
+                "Enter Artists' Names",
+                "Manually enter multiple artists' names.   ",
+                " ",
+                " "
+            ], # Spaces used to match button2 size to button1 size
+            click_handler=self.on_button2_clicked
         )
         container_layout.addWidget(button2, alignment=Qt.AlignCenter)
 

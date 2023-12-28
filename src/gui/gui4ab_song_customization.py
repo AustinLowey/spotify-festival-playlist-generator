@@ -4,8 +4,8 @@ from collections import Counter
 
 import pandas as pd
 from PyQt5.QtWidgets import (
-    QApplication, QDesktopWidget, QGridLayout, QGroupBox, QHBoxLayout,
-    QLabel, QSizePolicy, QSpacerItem, QSpinBox, QVBoxLayout, QWidget
+    QApplication, QDesktopWidget, QGridLayout, QGroupBox,
+    QHBoxLayout, QLabel,QSpinBox, QVBoxLayout, QWidget
 )
 from PyQt5.QtCore import Qt
 
@@ -103,7 +103,7 @@ class PlaylistGenSongCustomizationGui(QWidget):
         # Add QHBoxLayout row to contain Q1 label and spinbox. Create label.
         q1_layout = QHBoxLayout()
         container_left_layout.addLayout(q1_layout)
-        q1_label = QLabel("How many songs from each artist: ")
+        q1_label = QLabel("Number of songs per artist (1-10): ")
         q1_label.setIndent(indent_value)
         q1_layout.addWidget(q1_label)
 
@@ -129,17 +129,8 @@ class PlaylistGenSongCustomizationGui(QWidget):
         q1_layout.addWidget(self.q1_spinbox)
 
         # Adjust spacing of Q1 layout
-        q1_layout.setSpacing(10)
-        spacer_item = QSpacerItem(0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        q1_layout.addSpacerItem(spacer_item)
-        
-        # Define radio button style for Q2 and Q3 (to avoid duplicate code)
-        radio_button_style = (
-            f"background-color: {color.mid_grey};"
-            f"border-radius: 10px;"
-            f"margin-left: {indent_value};" # QCheckBox doesn't have .setIndent
-            f"margin-right: {indent_value};"
-        )
+        q1_layout.setSpacing(10) # Spacing b/w question and spinbox
+        q1_layout.addStretch() # Pushes everything left
 
         # Create QVBoxLayout for Q2 Label and Radio Buttons (to remove spacing)
         q2_layout = QVBoxLayout()
@@ -165,7 +156,7 @@ class PlaylistGenSongCustomizationGui(QWidget):
         self.q2_radio_buttons = YesNoRadioButtons(indent_value, True)
         q2_layout.addWidget(self.q2_radio_buttons)
         
-        # Create QVBoxLayout for Q# Label and Radio Buttons (to remove spacing)
+        # Create QVBoxLayout for Q3 Label and Radio Buttons (to remove spacing)
         q3_layout = QVBoxLayout()
         container_left_layout.addLayout(q3_layout)
         q3_layout.setSpacing(0)
@@ -184,7 +175,8 @@ class PlaylistGenSongCustomizationGui(QWidget):
         q3_layout.addWidget(self.q3_radio_buttons)
 
         # Create a QGridLayout to control layout of buttons
-        # Note: Grid chosen over QHBoxLayout to get best button hover effect
+        # Note: Grid chosen over QHBoxLayout to get best button hover effect,
+        # as QHBox approach made button width expand in only one direction.
         proceed_button_layout = QGridLayout()
         container_left_layout.addLayout(proceed_button_layout)
 
@@ -197,28 +189,26 @@ class PlaylistGenSongCustomizationGui(QWidget):
             indent_value
         )
 
+        # Note: 29 columns in QGridLayout, with button spanning first 15. While
+        # convoluted, this gives the best button expansion hover effects. The
+        # ratio 15/29 is associated with the button's current width and the
+        # available space b/w the container_left_layout left and right margins.
+        num_cols_in_grid = 29
+        num_cols_button_spanning = num_cols_in_grid // 2 + 1
+        for i in range(num_cols_in_grid):
+            proceed_button_layout.setColumnStretch(i, 1)
+
         # Use Custom Button class. Proceed button to go to playlist creation.
         proceed_button = CustomProceedButton(
             ["Create Playlist"],
-            click_handler=self.proceed_to_playlist_creation,
-            size=(250, 50),
-            hover_effect="expand"
+            click_handler=self.proceed_to_playlist_creation
         )
         proceed_button_layout.addWidget(
             proceed_button,
-            0, 0, 1, 1,
+            0, 0, 1, num_cols_button_spanning,
             alignment=Qt.AlignCenter
         )
-
-        # Spacer to push button to the left. This approach chosen for best
-        # button hover effects.
-        spacer_label = QLabel()
-        proceed_button_layout.addWidget(
-            spacer_label,
-            0, 1, 1, 1,
-            alignment=Qt.AlignCenter
-        )
-
+  
         # GroupBox for right-container (for container/background StyleSheet)
         container_right_groupbox = QGroupBox(self)
         container_right_groupbox.setStyleSheet(container_style)
