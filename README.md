@@ -1,16 +1,23 @@
 # Spotify Festival Playlist Generator
-Creates a playlist for a specific music festival by using top songs from artists in the festival's lineup. Alternatively, a user can create a playlist just by entering multiple artists and a playlist will be created for the top songs from those artists. The user can select how many songs to include from each artist.
 
-# Main Python Libraries Used
-- Spotipy
+## Top-Level Overview
+- Generates a Spotify playlist by curating top tracks from either a user-inputted music festival's artist lineup and/or manually entered artists' names.
+- Can create a playlist with dozens of hours of songs in 1-2 minutes.
+- Scrapes and extracts a specific music festival's lineup using Beautiful Soup.
+- Guides users through the process with a set of PyQt GUI screens, facilitating artist selection from the imported festival lineup.
+- Leverages Spotipy to retrieve top tracks for each artist and create a playlist in Spotify.
+- Delivers automated track feature analytics using track metadata and presents the user with an HTML/CSS playlist summary dashboard.
+
+## Main Python Libraries Used
 - pandas
+- Spotipy (Python library for the Spotify Web API)
 - PyQt5
 - Beautiful Soup
 - Plotly
 
 Note: To use the Spotipy API, you need to setup an API client key and secret key (https://developer.spotify.com/documentation/web-api). In this application, 3 environment variables were setup: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER. The first and second are used for retrieving artist top tracks and track metadata. The third, SPOTIFY_USER, links to a Spotify account.
 
-# Demo
+## Demo
 A video will be added in the coming weeks, once a few more planned GUI features/improvements have been implemented.
 
 Running run_playlist_generator.py launches the below GUI, which asks the user if they'd like to create a playlist for a specific music festival or create a playlist by manually enter artist names.
