@@ -4,7 +4,7 @@ import requests
 import numpy as np
 import cv2
 from PyQt5.QtWidgets import (
-    QApplication, QHBoxLayout, QLabel, QPushButton, QRadioButton,
+    QHBoxLayout, QLabel, QPushButton, QRadioButton,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget
 )
 from PyQt5.QtCore import Qt

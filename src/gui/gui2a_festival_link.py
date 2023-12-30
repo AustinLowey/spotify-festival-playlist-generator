@@ -245,11 +245,7 @@ class PlaylistGenFestivalLinkGui(QWidget):
 
 
     def skip_festival_link(self) -> None:
-        """
-        Action to skip the festival link step when skip-button is clicked.
-        """
-
-        # Sets "skip step" bool to True and closes window
+        """Skip the festival link step when skip-button is clicked."""
         self.skip_this_step = True
         self.close()
 

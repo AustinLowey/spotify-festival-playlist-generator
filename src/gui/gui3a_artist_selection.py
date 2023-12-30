@@ -283,12 +283,9 @@ class PlaylistGenArtistSelection(QWidget):
         extra_artists_display_layout.addLayout(
             remove_artists_buttons_layout
         )
-        extra_artists_display_layout.setContentsMargins(
-            0,
-            0, 
-            0,
-            0
-        ) # Override inherited margins from earlier container_bottom_layout
+
+        # Override inherited margins from parent container_bottom_layout
+        extra_artists_display_layout.setContentsMargins(0, 0, 0, 0) 
 
         # Button to remove most recently-entered extra artist
         pop_extra_artists_button = QPushButton("Remove Last Entered Artist")
@@ -390,7 +387,11 @@ class PlaylistGenArtistSelection(QWidget):
 
 
     def add_extra_artist_name(self) -> None:
-        """Adds QLineEdit input to extra artist names list on Enter press."""
+        """
+        Adds QLineEdit's input to extra artist names list on Enter press.
+        Also unhides the extra artists display after first interaction
+        with this section.
+        """
 
         name = self.extra_artists_lineedit.text()
         if name.strip():
@@ -412,7 +413,6 @@ class PlaylistGenArtistSelection(QWidget):
     
     def pop_extra_artist_name(self) -> None:
         """Remove most recently-entered extra artist name."""
-
         if self.extra_artist_names: # Only pop and update if list not empty
             self.extra_artist_names.pop()
             self.update_extra_artists_display()
@@ -420,7 +420,6 @@ class PlaylistGenArtistSelection(QWidget):
 
     def reset_extra_artist_names(self) -> None:
         """Remove all entered extra artist names."""
-
         self.extra_artist_names = []
         self.update_extra_artists_display()
 
@@ -439,12 +438,12 @@ class PlaylistGenArtistSelection(QWidget):
         self.close()
 
 
-    def on_hover_enter(self, button):
+    def on_hover_enter(self, button: QPushButton) -> None:
         """When hovering over the button, change its border color."""
         button.setStyleSheet(self.buttons_hover_style)
 
 
-    def on_hover_leave(self, button):
+    def on_hover_leave(self, button: QPushButton) -> None:
         """When hovering ends, reset the border color."""
         button.setStyleSheet(self.buttons_style)
 
@@ -504,8 +503,10 @@ if __name__ == "__main__":
     )
     print(
         f"{len(selected_artist_names)} artist names selected:\n"
-        f"{selected_artist_names}")
+        f"{selected_artist_names}"
+    )
     
     print(
         f"{len(extra_artist_names)} extra artist names entered:\n"
-        f"{extra_artist_names}")
+        f"{extra_artist_names}"
+    )
