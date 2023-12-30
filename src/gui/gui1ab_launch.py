@@ -108,10 +108,12 @@ class PlaylistGenLaunchGui(QWidget):
         )
         container_layout.addWidget(button2, alignment=Qt.AlignCenter)
 
+
     def on_button1_clicked(self):
         """If first button "From Music Festival" is clicked."""
         self.create_from_festival = True
         self.close()
+
 
     def on_button2_clicked(self):
         """If second button "Enter Artist Names" is clicked."""
@@ -127,6 +129,7 @@ def launch_gui_start_screen() -> bool:
         bool: True if the user chooses to create a playlist from a festival,
               False if the user chooses to enter artist names manually.
     """
+    
     # Initialize the QApplication and the PlaylistGenFestivalLink GUI instance
     app = QApplication(sys.argv)
     gui = PlaylistGenLaunchGui()

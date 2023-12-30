@@ -332,7 +332,7 @@ class PlaylistGenSongCustomizationGui(QWidget):
             average song length of 3min 17s, and (optionally, if 
             artist_popularity_filtering is enabled) artists' popularities.
 
-        Uses:
+        Uses Attributes:
             self.df_artists (pd.DataFrame): DataFrame containing artist info,
                 including names and popularities
             self.tracks_per_artist (int): Max number of tracks per artist
@@ -393,7 +393,6 @@ class PlaylistGenSongCustomizationGui(QWidget):
         Dynamically update the estimated playlist length label any time
         the spinbox or q2 radio buttons are modified.
         """
-
         est_playlist_len = self.estimate_playlist_length()
         self.est_playlist_len_value_label.setText(est_playlist_len)
 
@@ -402,7 +401,7 @@ class PlaylistGenSongCustomizationGui(QWidget):
         """
         Gets top artists genres (up to 5) in DataFrame of artists.
 
-        Uses:
+        Uses Attribute:
             self.df_artists (pd.DataFrame): DataFrame containing artist info,
                 including names and popularities.
         

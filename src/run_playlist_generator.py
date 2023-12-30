@@ -7,7 +7,7 @@ import pandas as pd
 from gui.gui1ab_launch import launch_gui_start_screen
 from gui.gui2a_festival_link import launch_gui_festival_link
 from gui.gui3a_artist_selection import launch_gui_artist_selection
-# from gui.gui3b_manually_enter_artists # Planned. Not yet implemented
+from gui.gui3b_artist_manual_entry import launch_gui_artist_manual_entry
 from gui.gui4ab_song_customization import launch_gui_song_customization
 
 from festival_lineup_scraper import get_artist_names
@@ -26,7 +26,7 @@ from playlist_analytics import (
 
 
 def main(
-    new_playlist: bool = True,
+    create_new_playlist: bool = True,
     analyze_playlist: bool = True,
     save_df_songs: bool = True,
     save_df_artists: bool = False
@@ -35,7 +35,7 @@ def main(
     Main function of Spotify Festival Playlist Generator.
 
     Parameters:
-        new_playlist (bool): Flag indicating whether to create a new playlist.
+        create_new_playlist (bool): Flag indicating whether to create a new playlist.
         analyze_playlist (bool): Flag indicating whether to perform playlist
             analysis.
         save_df_songs (bool): Flag indicating whether to save song information
@@ -100,49 +100,56 @@ def main(
         # option to skip festival link step and enter artist names instead.
         festival_link, skip_this_step = launch_gui_festival_link()
 
-        if skip_this_step:
+        if skip_this_step: # Skip festival link search step
+            print(
+                "Skipping festival link screen."
+                "Enter artists' names manually instead."
+            )
             create_from_festival = False # End while loop
 
-        # Search songkick.com for lineup and process festival name from URL
-        festival_name, lineup_artist_names = get_artist_names(festival_link)
+        else: # Search for festival, extract lineup, and get data for artists
 
-        # Search Spotify for each artist name in festival lineup.
-        df_lineup_artists = search_for_artists(
-            search_header,
-            lineup_artist_names
-        )
+            # Search songkick.com for lineup and process festival name from URL
+            festival_name, lineup_artist_names = get_artist_names(
+                festival_link
+            )
 
-        # GUI screen 3a. Select artists from lineup (and/or add other artists)
-        selected_artist_names, new_artist_names = launch_gui_artist_selection(
-            df_lineup_artists,
-            festival_name
-        )
+            # Search Spotify for each artist name in festival lineup.
+            df_lineup_artists = search_for_artists(
+                search_header,
+                lineup_artist_names
+            )
 
-        # Get new artist data and add it to df_artists
-        df_new_artists = search_for_artists(
-            search_header,
-            new_artist_names
-        ) # Artists added (i.e., not in lineup)
-        df_playlist_artists = create_df_playlist_artists(
-            df_lineup_artists,
-            df_new_artists,
-            selected_artist_names
-        )
+            # GUI screen 3a. Select artists from lineup (and add other artists)
+            selected_artist_names, new_artist_names = (
+                launch_gui_artist_selection(
+                    df_lineup_artists,
+                    festival_name
+                )
+            )
 
-        break # End while loop
+            # Get new artist data and add it to df_artists
+            df_new_artists = search_for_artists(
+                search_header,
+                new_artist_names
+            ) # Artists added (i.e., not in lineup)
+            df_playlist_artists = create_df_playlist_artists(
+                df_lineup_artists,
+                df_new_artists,
+                selected_artist_names
+            )
 
     if not create_from_festival: # Create playlist by manually entering artists
-        # Pseudo code for this:
-        # entered_artist_names = {launch gui screen 3b}
-        # df_playlist_artists = {spotipy_utils create df for artists}
 
-        print(
-            "Artist name manually entry not yet implemented. Use festival\n"
-            "link button, then enter 'songkick.com' on screen 2, then enter\n"
-            "artist names manually on the artist selection screen."
+        # Launch GUI screen 3b. Prompts user to enter artist names manually.
+        entered_artist_names = launch_gui_artist_manual_entry()
+
+        # Get data for user-entered artists
+        df_playlist_artists = search_for_artists(
+            search_header,
+            entered_artist_names
         )
-
-        return
+        festival_name = "Custom Playlist"
 
     # Launch GUI screen 4. Contains multiple playlist customization options.
     tracks_per_artist, artist_popularity_filtering, include_remixes = (
@@ -169,7 +176,7 @@ def main(
         df_songs = filter_songs_by_artist_popularity(df_songs)
 
     # Create a new playlist using df_songs
-    if new_playlist:
+    if create_new_playlist:
         create_playlist(f"Spotipy Playlist - {festival_name}", spot, df_songs)
 
     # Perform feature analysis and create summary
