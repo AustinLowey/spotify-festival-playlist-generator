@@ -6,12 +6,12 @@
 - Scrapes and extracts a specific music festival's lineup using Beautiful Soup.
 - Guides users through the process with a set of PyQt GUI screens, facilitating artist selection from the imported festival lineup.
 - Leverages Spotipy to retrieve top tracks for each artist and create a playlist in Spotify.
-- Delivers automated track feature analytics using track metadata and presents the user with an HTML/CSS playlist summary dashboard.
+- Delivers automated track feature analytics using track metadata and by providing the user with an HTML/CSS playlist summary dashboard.
 
 ### Demo Video:
 
 <a href="https://youtu.be/xa2-pl23kBE" target="_blank">
-  <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/e9c5905b-9d67-4118-a7e8-38f6da1d098c" width="600">
+  <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/e9c5905b-9d67-4118-a7e8-38f6da1d098c" width="500">
 </a>
 
 ## Main Python Libraries Used
@@ -23,14 +23,14 @@
 
 Note: To use the Spotipy API, you need to setup an API client key and secret key (https://developer.spotify.com/documentation/web-api). In this application, 3 environment variables were setup: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER. The first and second are used for retrieving artist top tracks and track metadata. The third, SPOTIFY_USER, links to a Spotify account.
 
-## Demo
+## Walkthrough
 A video will be added in the coming weeks, once a few more planned GUI features/improvements have been implemented.
 
 Running run_playlist_generator.py launches the below GUI, which asks the user if they'd like to create a playlist for a specific music festival or create a playlist by manually enter artist names.
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/704ef100-d016-45a6-9c3c-b2219be24e39" width="600">
 
-If the user picks the "From Music Festival" option, they are taken to the below screen, where they are asked to get a songkick.com link for a specific music festival. The second option, "Enter Artist Names," has not yet been implemented, but will be useful for if the music festival isn't available on songkick.com
+If the user picks the "From Music Festival" option, they are taken to the below screen, where they are asked to get a songkick.com link for a specific music festival. The second option, "Enter Artist Names," offers an alternative approach by bringing the user to a screen where they can type-in multiple artists' names that will be used to make a playlist.
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/08753f9d-5b72-475e-9d14-0c5b5384c63a" width="600">
 
