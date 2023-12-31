@@ -8,6 +8,12 @@
 - Leverages Spotipy to retrieve top tracks for each artist and create a playlist in Spotify.
 - Delivers automated track feature analytics using track metadata and presents the user with an HTML/CSS playlist summary dashboard.
 
+### Demo Video:
+
+<a href="https://youtu.be/xa2-pl23kBE" target="_blank">
+  <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/e9c5905b-9d67-4118-a7e8-38f6da1d098c" width="600">
+</a>
+
 ## Main Python Libraries Used
 - pandas
 - Spotipy (Python library for the Spotify Web API)
