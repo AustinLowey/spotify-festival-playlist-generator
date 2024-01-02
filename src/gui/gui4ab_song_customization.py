@@ -4,8 +4,8 @@ from collections import Counter
 
 import pandas as pd
 from PyQt5.QtWidgets import (
-    QApplication, QDesktopWidget, QGridLayout, QGroupBox,
-    QHBoxLayout, QLabel,QSpinBox, QVBoxLayout, QWidget
+    QApplication, QDesktopWidget, QGridLayout, QGroupBox, QHBoxLayout,
+    QLabel, QLineEdit, QSpinBox, QVBoxLayout, QWidget
 )
 from PyQt5.QtCore import Qt
 
@@ -17,18 +17,21 @@ from gui.gui_components import (
 class PlaylistGenSongCustomizationGui(QWidget):
     """Song Customization screen GUI class."""
 
-    def __init__(self, df_artists: pd.DataFrame) -> None:
+    def __init__(self, df_artists: pd.DataFrame, festival_name: str) -> None:
         """
         Initializes the Song Customization GUI.
 
         Parameters:
             df_artists (pd.DataFrame): DataFrame containing artist info.
+            festival_name (str): Name of music festival.
         """
 
         super().__init__()
         self.df_artists = df_artists
+        self.festival_name = festival_name
 
         # Initialize variables that will be outputs from this GUI screen
+        self.playlist_name = ""
         self.tracks_per_artist = 5 # Default=5. Input can be b/w 1-10
         self.artist_popularity_filtering = True
         self.include_remixes = False
@@ -99,6 +102,26 @@ class PlaylistGenSongCustomizationGui(QWidget):
 
         # Define indent value for the remaining QLabels
         indent_value = 20
+
+        # QHBoxLayout containing Q0 label and QLineEdit for playlist name.
+        q0_layout = QHBoxLayout()
+        container_left_layout.addLayout(q0_layout)
+        q0_label = QLabel("Playlist Name: ")
+        q0_label.setIndent(indent_value)
+        q0_layout.addWidget(q0_label)
+
+        # Q0 QLineEdit (playlist name input)
+        self.q0_lineedit = QLineEdit()
+        self.q0_lineedit.setPlaceholderText(f"{self.festival_name}")
+        self.q0_lineedit.setStyleSheet(
+            f"background-color: {color.mid_grey};"
+            f"border-radius: 10px;"
+            f"padding: 2px;"
+            f"padding-left: 10px;"
+            f"margin-right: {indent_value};"
+        )
+        q0_layout.addWidget(self.q0_lineedit)
+        q0_layout.setSpacing(10)
 
         # Add QHBoxLayout row to contain Q1 label and spinbox. Create label.
         q1_layout = QHBoxLayout()
@@ -316,11 +339,17 @@ class PlaylistGenSongCustomizationGui(QWidget):
             spinbox is updated, so no processing code is needed here.
         """
 
-        # Retrieve the current states of the radio button groups
+        # Retrieve the current states of the radio buttons
         self.artist_popularity_filtering = (
             self.q2_radio_buttons.yes_button.isChecked()
         )
         self.include_remixes = self.q3_radio_buttons.yes_button.isChecked()
+
+        # Process playlist name text, if any provided
+        if self.q0_lineedit.text() != "":
+            self.playlist_name = self.q0_lineedit.text()
+        else:
+            self.playlist_name = f"Spotipy Playlist - {self.festival_name}"
 
         # Close the window
         self.close()
@@ -426,8 +455,9 @@ class PlaylistGenSongCustomizationGui(QWidget):
 
 
 def launch_gui_song_customization(
-    df_artists: pd.DataFrame
-) -> Tuple[int, bool, bool]:
+    df_artists: pd.DataFrame,
+    festival_name: str
+) -> Tuple[str, int, bool, bool]:
     """
     Launches the GUI for song customization.
 
@@ -437,16 +467,18 @@ def launch_gui_song_customization(
 
     Parameters:
         df_artists (pd.DataFrame): DataFrame containing artist information.
+        festival_name (str): Name of music festival.
 
     Returns:
-        Tuple[int, bool, bool]: Tuple containing the selected number of
-        tracks per artist, the flag indicating whether to useartist popularity
-        filtering, and the flag indicating whether to include remixes.
+        str: playlist name
+        int: the selected number of tracks per artist
+        bool: flag indicating whether to use artist popularity filtering
+        bool: flag indicating whether to include remixes
     """
 
     # Initialize the QApplication and the PlaylistGenFestivalLink GUI instance
     app = QApplication(sys.argv)
-    gui = PlaylistGenSongCustomizationGui(df_artists)
+    gui = PlaylistGenSongCustomizationGui(df_artists, festival_name)
 
     # Center the window on the screen
     screen_geometry = QDesktopWidget().screenGeometry()
@@ -463,6 +495,7 @@ def launch_gui_song_customization(
     app.exec_()
 
     return (
+        gui.playlist_name,
         gui.tracks_per_artist,
         gui.artist_popularity_filtering,
         gui.include_remixes
@@ -477,16 +510,20 @@ if __name__ == "__main__":
         "output/sample_data/EdcOrlando2023Artists.csv"
     )
     df_artists['Artist Genres'] = df_artists['Artist Genres'].apply(eval)
-    print(f"df_artists loaded with len: {len(df_artists)}")
+    festival_name = "Edc Orlando 2023"
+    print(
+        f"df_artists loaded for '{festival_name}' with len: {len(df_artists)}"
+    )
 
     # Run GUI and print outputs
     print("Launching GUI screen...")
-    tracks_per_artist, artist_popularity_filtering, include_remixes = (
-        launch_gui_song_customization(df_artists)
+    playlist_name, tracks_per_artist, artist_pop_filtering, include_remixes = (
+        launch_gui_song_customization(df_artists, festival_name)
     )
+    print(f"Playlist name: {playlist_name}")
     print(f"Number of tracks per artist: {tracks_per_artist}")
     print(
         f"'Artist Popularity Filtering' selected? (T/F): "
-        f"{artist_popularity_filtering}"
+        f"{artist_pop_filtering}"
     )
     print(f"'Include Remixes' selected? (T/F): {include_remixes}")

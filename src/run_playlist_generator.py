@@ -139,6 +139,8 @@ def main(
                 selected_artist_names
             )
 
+        break # End while loop
+
     if not create_from_festival: # Create playlist by manually entering artists
 
         # Launch GUI screen 3b. Prompts user to enter artist names manually.
@@ -152,9 +154,12 @@ def main(
         festival_name = "Custom Playlist"
 
     # Launch GUI screen 4. Contains multiple playlist customization options.
-    tracks_per_artist, artist_popularity_filtering, include_remixes = (
-        launch_gui_song_customization(df_playlist_artists)
-    )
+    (
+        playlist_name,
+        tracks_per_artist,
+        artist_popularity_filtering,
+        include_remixes
+    ) = launch_gui_song_customization(df_playlist_artists, festival_name)
 
     # Get between 1-10 top tracks from each selected artist using Spotipy
     df_songs = get_top_tracks(spot, df_playlist_artists, tracks_per_artist)
@@ -177,7 +182,7 @@ def main(
 
     # Create a new playlist using df_songs
     if create_new_playlist:
-        create_playlist(f"Spotipy Playlist - {festival_name}", spot, df_songs)
+        create_playlist(playlist_name, spot, df_songs)
 
     # Perform feature analysis and create summary
     if analyze_playlist:
@@ -186,17 +191,17 @@ def main(
             df_playlist_artists
         ) # Get top 3 artist recs
         summary_data = create_playlist_summary(
-            df_songs, festival_name, recommended_artists
+            df_songs, playlist_name, recommended_artists
         )
-        create_artist_summary(df_songs, festival_name)
-        feature_trend_msgs = create_feature_plots(df_songs, festival_name)
-        create_dashboard(summary_data, feature_trend_msgs, festival_name)
+        create_artist_summary(df_songs, playlist_name)
+        feature_trend_msgs = create_feature_plots(df_songs, playlist_name)
+        create_dashboard(summary_data, feature_trend_msgs, playlist_name)
 
     # Create folder name for saving .csv file(s)
     if save_df_songs or save_df_artists:
         today = datetime.now().strftime("%Y-%m-%d")
         file_dir = (
-            f"output/created_playlists/{festival_name.replace(' ','')}"
+            f"output/created_playlists/{playlist_name.replace(' ','')}"
             f"Summary_Created{today}/"
         )
         if not os.path.exists(file_dir): # If directory DNE yet

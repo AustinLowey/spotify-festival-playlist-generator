@@ -1,6 +1,3 @@
-# Note: HTML/CSS outputs associated with this file are a prototype
-# and will be replaced/cleaned up fairly soon.
-
 import os
 from datetime import datetime
 from typing import List, Dict
