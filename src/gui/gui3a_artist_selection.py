@@ -2,12 +2,12 @@ import sys
 from typing import List, Tuple
 
 import pandas as pd
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QApplication, QDesktopWidget, QGridLayout, QGroupBox, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QScrollArea, QSizePolicy, QTextBrowser, 
     QVBoxLayout, QWidget
 )
-from PyQt5.QtCore import Qt
 
 from gui.gui_components import (
     ArtistSelectionButton, ColorScheme, CustomProceedButton

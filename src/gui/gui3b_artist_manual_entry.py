@@ -1,11 +1,11 @@
 import sys
 from typing import List
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QApplication, QDesktopWidget, QGroupBox, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QTextBrowser, QVBoxLayout, QWidget
 )
-from PyQt5.QtCore import Qt
 
 from gui.gui_components import (ColorScheme, CustomProceedButton)
 

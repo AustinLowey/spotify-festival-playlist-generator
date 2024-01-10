@@ -1,14 +1,14 @@
-from typing import List, Tuple, Callable
+from typing import Callable, List, Tuple
 
-import requests
-import numpy as np
 import cv2
+import numpy as np
+import requests
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QBrush, QImage, QPainter, QPainterPath, QPixmap
 from PyQt5.QtWidgets import (
     QHBoxLayout, QLabel, QPushButton, QRadioButton,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget
 )
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QBrush, QImage, QPainter, QPainterPath, QPixmap
 
 class ColorScheme:
     """A class to manage the color scheme for GUIs. Based off Spotify."""

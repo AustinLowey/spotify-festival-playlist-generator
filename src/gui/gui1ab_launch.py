@@ -1,9 +1,9 @@
 import sys
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QApplication, QDesktopWidget, QGroupBox, QLabel, QVBoxLayout, QWidget
 )
-from PyQt5.QtCore import Qt
 
 from gui.gui_components import ColorScheme, CustomProceedButton
 
