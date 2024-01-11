@@ -1,4 +1,4 @@
-# Spotify Festival Playlist Generator
+## Concept
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/f8155adc-c98e-47e9-90dd-6dfd8b770bd9" width="700">
 
