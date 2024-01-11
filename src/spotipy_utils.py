@@ -16,19 +16,19 @@
 #
 ###############################################################################
 
+import base64
+from collections import Counter
+import json
 import os
 import time
-import base64
-import json
-from typing import Dict, List
-from collections import Counter
+from typing import Any, Callable, Dict, List, Tuple
 
 import pandas as pd
 import requests
 
 from spotipy import Spotify
-from spotipy.oauth2 import SpotifyOAuth
 from spotipy.client import SpotifyException
+from spotipy.oauth2 import SpotifyOAuth
 
 
 def auth_flow() -> Spotify:
@@ -229,7 +229,7 @@ def search_for_artists(
     return df_artists
 
 
-def retry_spotify_request(func, *args):
+def retry_spotify_request(func: Callable[..., Any], *args: Tuple) -> Any:
     """
     Helper function to retry a Spotify API request if a rate limit is reached.
 
@@ -434,17 +434,21 @@ def get_top_tracks(
     return df_songs
 
 
-def create_playlist(playlist_name: str, spot: Spotify, df_songs: pd.DataFrame):
+def create_playlist(
+    playlist_name: str,
+    spot: Spotify,
+    df_songs: pd.DataFrame
+) -> str:
     """
     Creates a new Spotify playlist and adds songs to it from DataFrame.
 
     Parameters:
         playlist_name (str): Name of the new playlist.
         spot (Spotify): Authenticated Spotify instance.
-        df_songs (pd.DataFrame): DataFrame with song metadata.
+        df_songs (pd.DataFrame): DataFrame with song and artist metadata.
 
     Returns:
-        None
+        str: URI of the created playlist
     """
 
     # Get the user's Spotify ID
@@ -468,3 +472,5 @@ def create_playlist(playlist_name: str, spot: Spotify, df_songs: pd.DataFrame):
     for i in range(0, len(song_uris), batch_size):
         batch_uris = song_uris[i : i + batch_size]
         spot.playlist_add_items(playlist_uri, batch_uris)
+
+    return playlist_uri

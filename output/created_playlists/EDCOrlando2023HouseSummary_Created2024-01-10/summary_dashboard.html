@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>EDC Orlando 2023 House Summary</title>
+    <link rel="stylesheet" type="text/css" href="../styles/dashboard_style.css">
+
+    <!-- JavaScript function to toggle between feature plots -->
+    <script>
+        function showPlot(plotId) {
+            var plots = document.getElementsByClassName("plot");
+            for (var i = 0; i < plots.length; i++) {
+                plots[i].style.display = "none";
+            }
+            document.getElementById(plotId).style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Playlist Summary -->
+    <div id="playlist-summary">
+        <h2>Playlist Summary</h2>
+
+        <div id="top-line">EDC Orlando 2023 House</div> <!-- Separate id for spacing. -->
+        <div id="line2">Public playlist created on 01-10-2024</div>
+
+        <div id="line1">342 songs, 19 hr 11 min</div>
+        <div id="line2">Total song runtime</div>
+
+        <div id="line1">EDM, Pop Dance, House, Tech House, Electro House</div>
+        <div id="line2">Top 5 genres</div>
+
+        <div id="line1">Biscits, SIDEPIECE, Matroda</div>
+        <div id="line2">Similar artists to this playlist</div>
+
+        <div id="line1">All song features have strong trends</div>
+        <div id="line2">88% of songs within 112 - 142 BPM Tempo range</span></div>
+<div id="line2">82% of songs within 0.54 - 0.84 Danceability range</span></div>
+<div id="line2">84% of songs within 0.68 - 0.98 Energy range</span></div>
+<div id="line2">96% of songs within 0 - 0.22 Speechiness range</span></div>
+    </div>
+
+    <!-- Feature Plots -->
+    <div id="feature-plots">
+        <h2>Song Feature Plots</h2>
+
+        <!-- Plot Background Container -->
+        <div class="plot-background"></div>
+
+        <!-- Buttons for toggling between feature plots -->
+        <div class="plot-buttons">
+            <button onclick="showPlot('tempo_plot')">Show Tempo Plot</button>
+            <button onclick="showPlot('danceability_plot')">Show Danceability Plot</button>
+            <button onclick="showPlot('energy_plot')">Show Energy Plot</button>
+            <button onclick="showPlot('speechiness_plot')">Show Speechiness Plot</button>
+        </div>
+
+        <!-- Note: Below embedded src sizes should be slightly larger than actual plot sizes. -->
+        <div class="plots-container">
+            <div id="tempo_plot" class="plot">
+                <embed src="summary_dashboard_components/tempo_plot.html" width="630" height="360">
+            </div>
+            <div id="danceability_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/danceability_plot.html" width="630" height="360">
+            </div>
+            <div id="energy_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/energy_plot.html" type="text/html" width="630" height="360">
+            </div>
+            <div id="speechiness_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/speechiness_plot.html" width="630" height="360">
+            </div>
+        </div>
+    </div>
+
+    <!-- Artist Summary Table -->
+    <div id="artist-summary">
+        <h2>Artist Summary</h2>
+        <table border="1" class="dataframe table">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Artist</th>
+      <th>Total Songs</th>
+      <th>Total Runtime</th>
+      <th>Artist Popularity (0-100)</th>
+      <th>Artist Genres</th>
+      <th>Average Tempo (BPM)</th>
+      <th>Average Danceability (0-1)</th>
+      <th>Average Energy (0-1)</th>
+      <th>Average Speechiness (0-1)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>AFROJACK</td>
+      <td>8</td>
+      <td>24 min 23 sec</td>
+      <td>70</td>
+      <td>[Big Room, Dance Pop, Dutch House, EDM, Electro House, Pop Dance]</td>
+      <td>121</td>
+      <td>0.66</td>
+      <td>0.80</td>
+      <td>0.13</td>
+    </tr>
+    <tr>
+      <td>ARMNHMR</td>
+      <td>5</td>
+      <td>19 min 5 sec</td>
+      <td>46</td>
+      <td>[Melodic Dubstep, Pop EDM]</td>
+      <td>140</td>
+      <td>0.44</td>
+      <td>0.71</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Alesso</td>
+      <td>8</td>
+      <td>22 min 43 sec</td>
+      <td>72</td>
+      <td>[Dance Pop, EDM, Pop, Pop Dance]</td>
+      <td>124</td>
+      <td>0.59</td>
+      <td>0.79</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Alison Wonderland</td>
+      <td>6</td>
+      <td>19 min 31 sec</td>
+      <td>52</td>
+      <td>[Aussietronica, EDM, Electra, Electronic Trap, Escape Room, Indietronica]</td>
+      <td>121</td>
+      <td>0.49</td>
+      <td>0.71</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Alok</td>
+      <td>9</td>
+      <td>23 min 53 sec</td>
+      <td>78</td>
+      <td>[Electro House, Pop Nacional, Slap House]</td>
+      <td>132</td>
+      <td>0.66</td>
+      <td>0.78</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Armin van Buuren</td>
+      <td>8</td>
+      <td>23 min 21 sec</td>
+      <td>74</td>
+      <td>[Dutch Trance, EDM, Pop Dance, Progressive House, Trance]</td>
+      <td>127</td>
+      <td>0.64</td>
+      <td>0.87</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>BLOND:ISH</td>
+      <td>6</td>
+      <td>16 min 51 sec</td>
+      <td>56</td>
+      <td>[Deep Disco House, Melodic House]</td>
+      <td>124</td>
+      <td>0.70</td>
+      <td>0.84</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Ben Sterling</td>
+      <td>4</td>
+      <td>14 min 52 sec</td>
+      <td>30</td>
+      <td>[Tech House, UK Tech House]</td>
+      <td>128</td>
+      <td>0.82</td>
+      <td>0.72</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>CID</td>
+      <td>6</td>
+      <td>16 min 25 sec</td>
+      <td>51</td>
+      <td>[Bass House, Deep Groove House, Dutch House, EDM, Electro House, House, Pop Dance, Pop EDM, Progressive Electro House, Progressive House, Tech House, UK Dance]</td>
+      <td>125</td>
+      <td>0.71</td>
+      <td>0.89</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Chelina Manuhutu</td>
+      <td>3</td>
+      <td>16 min 33 sec</td>
+      <td>24</td>
+      <td>[Dutch Tech House]</td>
+      <td>125</td>
+      <td>0.77</td>
+      <td>0.90</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Chris Stussy</td>
+      <td>5</td>
+      <td>25 min 56 sec</td>
+      <td>46</td>
+      <td>[Dutch Tech House]</td>
+      <td>129</td>
+      <td>0.78</td>
+      <td>0.81</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>David Guetta</td>
+      <td>10</td>
+      <td>30 min 16 sec</td>
+      <td>87</td>
+      <td>[Big Room, Dance Pop, EDM, Pop, Pop Dance]</td>
+      <td>129</td>
+      <td>0.60</td>
+      <td>0.85</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Dennis Cruz</td>
+      <td>5</td>
+      <td>26 min 25 sec</td>
+      <td>46</td>
+      <td>[Latin Tech House]</td>
+      <td>125</td>
+      <td>0.84</td>
+      <td>0.62</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Deorro</td>
+      <td>7</td>
+      <td>21 min 38 sec</td>
+      <td>65</td>
+      <td>[Dutch House, EDM, Electro House, Melbourne Bounce, Melbourne Bounce International, Pop Dance, Progressive Electro House]</td>
+      <td>135</td>
+      <td>0.71</td>
+      <td>0.89</td>
+      <td>0.11</td>
+    </tr>
+    <tr>
+      <td>Dillon Francis</td>
+      <td>7</td>
+      <td>19 min 17 sec</td>
+      <td>62</td>
+      <td>[Brostep, EDM, Electro House, Moombahton, Pop Dance, Progressive Electro House, Slap House]</td>
+      <td>129</td>
+      <td>0.72</td>
+      <td>0.82</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Dom Dolla</td>
+      <td>8</td>
+      <td>28 min 52 sec</td>
+      <td>68</td>
+      <td>[Australian House, Deep Groove House, House]</td>
+      <td>126</td>
+      <td>0.75</td>
+      <td>0.79</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Dombresky</td>
+      <td>6</td>
+      <td>18 min 45 sec</td>
+      <td>51</td>
+      <td>[Bass House, Electro House, House, Tech House]</td>
+      <td>127</td>
+      <td>0.70</td>
+      <td>0.94</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Eats Everything</td>
+      <td>5</td>
+      <td>21 min 31 sec</td>
+      <td>41</td>
+      <td>[Deep Disco House, House, Raw Techno]</td>
+      <td>130</td>
+      <td>0.66</td>
+      <td>0.79</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Eli Brown</td>
+      <td>7</td>
+      <td>26 min 29 sec</td>
+      <td>60</td>
+      <td>[House, Tech House, UK Dance]</td>
+      <td>133</td>
+      <td>0.70</td>
+      <td>0.93</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>FISHER</td>
+      <td>8</td>
+      <td>26 min 23 sec</td>
+      <td>70</td>
+      <td>[Australian House, House]</td>
+      <td>126</td>
+      <td>0.82</td>
+      <td>0.90</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Franky Rizardo</td>
+      <td>6</td>
+      <td>21 min 15 sec</td>
+      <td>50</td>
+      <td>[Circuit, Dutch Tech House, House]</td>
+      <td>128</td>
+      <td>0.73</td>
+      <td>0.85</td>
+      <td>0.10</td>
+    </tr>
+    <tr>
+      <td>Franky Wah</td>
+      <td>6</td>
+      <td>25 min 25 sec</td>
+      <td>51</td>
+      <td>[Melodic House, UK Dance, UK House]</td>
+      <td>124</td>
+      <td>0.65</td>
+      <td>0.86</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Gorgon City</td>
+      <td>7</td>
+      <td>25 min 44 sec</td>
+      <td>61</td>
+      <td>[Future Garage, House, Pop Dance, UK Dance]</td>
+      <td>123</td>
+      <td>0.66</td>
+      <td>0.73</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Gryffin</td>
+      <td>7</td>
+      <td>26 min 6 sec</td>
+      <td>65</td>
+      <td>[EDM, Pop Dance]</td>
+      <td>122</td>
+      <td>0.60</td>
+      <td>0.76</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>HUGEL</td>
+      <td>7</td>
+      <td>19 min 19 sec</td>
+      <td>66</td>
+      <td>[Deep House]</td>
+      <td>126</td>
+      <td>0.76</td>
+      <td>0.78</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>HoneyLuv</td>
+      <td>5</td>
+      <td>15 min 11 sec</td>
+      <td>41</td>
+      <td>[Tech House]</td>
+      <td>126</td>
+      <td>0.80</td>
+      <td>0.82</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>JOYRYDE</td>
+      <td>6</td>
+      <td>22 min 42 sec</td>
+      <td>47</td>
+      <td>[Bass House, Brostep, EDM, Electro House, Electronic Trap]</td>
+      <td>144</td>
+      <td>0.71</td>
+      <td>0.92</td>
+      <td>0.28</td>
+    </tr>
+    <tr>
+      <td>James Hype</td>
+      <td>7</td>
+      <td>20 min 45 sec</td>
+      <td>68</td>
+      <td>[Deep Groove House, House, Pop Dance, UK Dance]</td>
+      <td>126</td>
+      <td>0.79</td>
+      <td>0.85</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Jamie Jones</td>
+      <td>6</td>
+      <td>21 min 43 sec</td>
+      <td>55</td>
+      <td>[Deep Disco House, Deep House, House, Minimal Techno, UK Tech House]</td>
+      <td>125</td>
+      <td>0.71</td>
+      <td>0.82</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>John Summit</td>
+      <td>8</td>
+      <td>26 min 31 sec</td>
+      <td>67</td>
+      <td>[EDM, House, Pop Dance, Tech House, UK Dance]</td>
+      <td>127</td>
+      <td>0.68</td>
+      <td>0.79</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Joshwa</td>
+      <td>6</td>
+      <td>18 min 16 sec</td>
+      <td>49</td>
+      <td>[Tech House, UK Tech House]</td>
+      <td>129</td>
+      <td>0.83</td>
+      <td>0.86</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Kaskade</td>
+      <td>4</td>
+      <td>16 min 2 sec</td>
+      <td>65</td>
+      <td>[EDM, Electro House, Pop Dance, Progressive Electro House, Progressive House, Vocal House]</td>
+      <td>120</td>
+      <td>0.74</td>
+      <td>0.77</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Loud Luxury</td>
+      <td>8</td>
+      <td>21 min 17 sec</td>
+      <td>68</td>
+      <td>[EDM, Pop Dance]</td>
+      <td>122</td>
+      <td>0.73</td>
+      <td>0.76</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>MEDUZA</td>
+      <td>7</td>
+      <td>18 min 52 sec</td>
+      <td>75</td>
+      <td>[EDM, Pop Dance, Pop House, UK Dance]</td>
+      <td>125</td>
+      <td>0.61</td>
+      <td>0.72</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Maddix</td>
+      <td>7</td>
+      <td>23 min 10 sec</td>
+      <td>65</td>
+      <td>[Big Room]</td>
+      <td>137</td>
+      <td>0.62</td>
+      <td>0.93</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Matt Sassari</td>
+      <td>7</td>
+      <td>17 min 23 sec</td>
+      <td>65</td>
+      <td>[French Tech House, French Techno, Tech House]</td>
+      <td>127</td>
+      <td>0.79</td>
+      <td>0.80</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Mau P</td>
+      <td>7</td>
+      <td>26 min 16 sec</td>
+      <td>62</td>
+      <td>[Tech House]</td>
+      <td>126</td>
+      <td>0.70</td>
+      <td>0.92</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Miss Monique</td>
+      <td>6</td>
+      <td>22 min 25 sec</td>
+      <td>53</td>
+      <td>[UKrainian Electronic]</td>
+      <td>124</td>
+      <td>0.63</td>
+      <td>0.90</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Noizu</td>
+      <td>7</td>
+      <td>21 min 7 sec</td>
+      <td>57</td>
+      <td>[Bass House, House, Tech House]</td>
+      <td>126</td>
+      <td>0.66</td>
+      <td>0.95</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Paul van Dyk</td>
+      <td>6</td>
+      <td>13 min 46 sec</td>
+      <td>54</td>
+      <td>[German Techno, Trance, Uplifting Trance]</td>
+      <td>135</td>
+      <td>0.52</td>
+      <td>0.91</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Pretty Pink</td>
+      <td>5</td>
+      <td>16 min 34 sec</td>
+      <td>45</td>
+      <td>[German House]</td>
+      <td>124</td>
+      <td>0.63</td>
+      <td>0.72</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Robbie Rivera</td>
+      <td>5</td>
+      <td>19 min 53 sec</td>
+      <td>40</td>
+      <td>[Circuit, House, Tribal House]</td>
+      <td>126</td>
+      <td>0.71</td>
+      <td>0.81</td>
+      <td>0.11</td>
+    </tr>
+    <tr>
+      <td>San Pacho</td>
+      <td>6</td>
+      <td>18 min 31 sec</td>
+      <td>49</td>
+      <td>[Tech House]</td>
+      <td>127</td>
+      <td>0.77</td>
+      <td>0.93</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Steve Aoki</td>
+      <td>8</td>
+      <td>31 min 36 sec</td>
+      <td>71</td>
+      <td>[EDM, Electro House, Pop Dance]</td>
+      <td>122</td>
+      <td>0.68</td>
+      <td>0.84</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <td>The Chainsmokers</td>
+      <td>9</td>
+      <td>32 min 48 sec</td>
+      <td>79</td>
+      <td>[Pop]</td>
+      <td>106</td>
+      <td>0.62</td>
+      <td>0.65</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Tini Gessler</td>
+      <td>4</td>
+      <td>8 min 58 sec</td>
+      <td>30</td>
+      <td>[Latin Tech House]</td>
+      <td>127</td>
+      <td>0.78</td>
+      <td>0.88</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Tiësto</td>
+      <td>9</td>
+      <td>23 min 52 sec</td>
+      <td>82</td>
+      <td>[Big Room, Brostep, Dutch EDM, EDM, House, Pop Dance, Slap House, Trance]</td>
+      <td>125</td>
+      <td>0.73</td>
+      <td>0.82</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <td>Todd Terry</td>
+      <td>6</td>
+      <td>25 min 48 sec</td>
+      <td>51</td>
+      <td>[Classic House, Deep House, Diva House, Garage House, Hip House]</td>
+      <td>124</td>
+      <td>0.74</td>
+      <td>0.76</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Valentino Khan</td>
+      <td>6</td>
+      <td>17 min 52 sec</td>
+      <td>51</td>
+      <td>[Brostep, EDM, Electro House, Electronic Trap, Moombahton]</td>
+      <td>128</td>
+      <td>0.76</td>
+      <td>0.95</td>
+      <td>0.10</td>
+    </tr>
+    <tr>
+      <td>Wax Motif</td>
+      <td>6</td>
+      <td>21 min 4 sec</td>
+      <td>54</td>
+      <td>[Bass House, Electro House, Tech House]</td>
+      <td>126</td>
+      <td>0.82</td>
+      <td>0.79</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Westend</td>
+      <td>4</td>
+      <td>12 min 7 sec</td>
+      <td>56</td>
+      <td>[Bass House, Tech House]</td>
+      <td>128</td>
+      <td>0.67</td>
+      <td>0.86</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Yotto</td>
+      <td>6</td>
+      <td>24 min 12 sec</td>
+      <td>56</td>
+      <td>[Finnish EDM, Melodic House, Progressive House]</td>
+      <td>123</td>
+      <td>0.57</td>
+      <td>0.88</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>deadmau5</td>
+      <td>7</td>
+      <td>31 min 23 sec</td>
+      <td>66</td>
+      <td>[Canadian Electronic, Complextro, EDM, Electro House, Pop Dance, Progressive House]</td>
+      <td>138</td>
+      <td>0.63</td>
+      <td>0.80</td>
+      <td>0.09</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</body>
+
+</html>

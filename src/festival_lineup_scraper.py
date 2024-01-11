@@ -1,7 +1,7 @@
-from typing import Tuple, List
+from typing import List, Tuple
 
-import requests
 from bs4 import BeautifulSoup
+import requests
 
 
 def get_artist_names(songkick_url: str) -> Tuple[str, List[str]]:

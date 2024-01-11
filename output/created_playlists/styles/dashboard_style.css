@@ -1,10 +1,20 @@
 /* dashboard_style.css */
 
+/*
+Designed in and intended for use in MS Edge browser.
+
+Broken up into 3 main containers:
+  Playlist Summary - Several summary messages about playlist (top-left)
+  Song Feature Plots - 4 plots containing song metadata info (top-right)
+  Artist Summary - Table containing artists' summary info (bottom)
+*/
+
+
 body {
-  box-sizing: border-box;
   background-color: rgb(0, 0, 0);
 }
 
+/* Background style of the 3 main containers (similar to Spotify's) */
 #playlist-summary, #feature-plots, #artist-summary {
   position: absolute;
   box-sizing: border-box;
@@ -13,32 +23,34 @@ body {
   background-color: rgb(18, 18, 18);
 }
 
+h2 {
+  color: rgb(30, 215, 96);
+  margin: 3px 0px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ---------- Playlist Summary (top-left container) ---------- */
 #playlist-summary {
   top: 2%;
   left: 1%;
   width: 41%;
   height: 52%;
-  box-sizing: border-box;
-  padding-top: 3px;
-  padding-right: 10px;
-  padding-left: 30px;
-  border-radius: 10px;
-  background-color: rgb(18, 18, 18);
+  padding: 3px 10px 3px 30px;
   font-family: Arial, Helvetica, sans-serif;
   overflow: hidden;
 }
 
-#playlist-summary #line0 { /* 1st line in section gets its own margin spacing */
+#playlist-summary #top-line, #line1 {
   font-size: 19px;
   font-weight: bold;
   color: white;
+}
+
+#playlist-summary #top-line {
   margin-top: 10px;
 }
 
 #playlist-summary #line1 {
-  font-size: 19px;
-  font-weight: bold;
-  color: white;
   margin-top: 20px;
 }
 
@@ -48,22 +60,34 @@ body {
   margin-top: 0;
 }
 
+/* ---------- Song Feature Plots (top-right container) ---------- */
 #feature-plots {
   top: 2%;
   right: 1%;
   width: 56.5%;
   height: 52%;
-  overflow: hidden;
+}
+
+#feature-plots .plot-background {
+  /* Round the corners of the plots. Workaround */
+  /* because Plotly doesn't allow for this.     */
+  position: absolute;
+  top: 42px;
+  left: 30px;
+  width: 613px;
+  height: 337px;
+  background-color: rgb(200, 200, 200);
+  border-radius: 15px;
 }
 
 #feature-plots .plot {
   position: absolute;
   top: 35px;
   left: 25px;
-  overflow: hidden;
 }
 
 #feature-plots .plot-buttons {
+  /* Button positioning */
   position: absolute;
   top: 130px;
   right: 25px;
@@ -72,23 +96,59 @@ body {
 }
 
 #feature-plots .plot-buttons button {
-  font-size: 13px; /* Adjust the font size as needed */
-  padding: 10px; /* Adjust the padding as needed */
+  /* Button internal styling and spacing */
+  font-size: 13px;
+  padding: 10px;
   margin-bottom: 5px;
   border-radius: 10px;
   background-color: rgb(200, 200, 200);
 }
 
+/* ---------- Artist Summary Table (bottom container) ---------- */
 #artist-summary {
   bottom: 1%;
   left: 1%;
   width: 98%;
   height: 44%;
-  overflow: hidden;
 }
 
-h2 {
-  color: rgb(30, 215, 96);
-  margin: 3px;
+#artist-summary .table {  
+  color: rgb(200, 200, 200);
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  text-align: center;
+  margin: 10px 0px;
+  border-collapse: collapse;
+  border: 2px solid;
+
+  /* All 3 of these lines needed for overflow/scroll-bar */
+  height: 85%;
+  overflow: auto;
+  display: block;
+}
+
+#artist-summary .table th {
+  /* White text for header row */
+  color: white;
+  font-size: 16px;
+}
+
+#artist-summary .table th,
+#artist-summary .table td {
+  padding: 2px 5px;
+}
+
+
+#artist-summary .table th:first-child,
+#artist-summary .table td:first-child,
+#artist-summary .table th:nth-child(5),
+#artist-summary .table td:nth-child(5) {
+  /* Left-align cols 1 and 5 (Artist and Artist Genres) */
+  text-align: left;
+}
+
+#artist-summary .table th:nth-child(3),
+#artist-summary .table td:nth-child(3) {
+  /* Force width of col 3 (Total Runtime) */
+  width: 110px;
 }

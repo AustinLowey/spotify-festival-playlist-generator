@@ -1,13 +1,13 @@
+from collections import Counter
 import sys
 from typing import List, Tuple
-from collections import Counter
 
 import pandas as pd
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QApplication, QDesktopWidget, QGridLayout, QGroupBox, QHBoxLayout,
     QLabel, QLineEdit, QSpinBox, QVBoxLayout, QWidget
 )
-from PyQt5.QtCore import Qt
 
 from gui.gui_components import (
     ColorScheme, CustomProceedButton, YesNoRadioButtons

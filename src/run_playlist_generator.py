@@ -1,5 +1,3 @@
-import os
-from datetime import datetime
 from typing import Tuple
 
 import pandas as pd
@@ -11,17 +9,14 @@ from gui.gui3b_artist_manual_entry import launch_gui_artist_manual_entry
 from gui.gui4ab_song_customization import launch_gui_song_customization
 
 from festival_lineup_scraper import get_artist_names
-from spotipy_utils import (
-    auth_flow, get_token_header, search_for_artists,
-    recommend_artists, get_top_tracks, create_playlist
-)
+from playlist_analytics import PlaylistGenOutputs
 from playlist_mods import (
+    create_df_playlist_artists, filter_songs_by_artist_popularity,
     remove_duplicates, remove_remixes_and_edits,
-    filter_songs_by_artist_popularity, create_df_playlist_artists
 )
-from playlist_analytics import (
-    create_playlist_summary, create_artist_summary,
-    create_feature_plots, create_dashboard
+from spotipy_utils import (
+    auth_flow, create_playlist, get_token_header, get_top_tracks,
+    recommend_artists, search_for_artists
 )
 
 
@@ -182,42 +177,35 @@ def main(
 
     # Create a new playlist using df_songs
     if create_new_playlist:
-        create_playlist(playlist_name, spot, df_songs)
+        playlist_uri = create_playlist(playlist_name, spot, df_songs)
+    else:
+        playlist_uri = ""
 
-    # Perform feature analysis and create summary
-    if analyze_playlist:
+    # If creating any outputs, instanstiate outputs class
+    if analyze_playlist or save_df_songs or save_df_artists:
         recommended_artists = recommend_artists(
             spot,
             df_playlist_artists
         ) # Get top 3 artist recs
-        summary_data = create_playlist_summary(
-            df_songs, playlist_name, recommended_artists
+        outputs = PlaylistGenOutputs(
+            df_songs,
+            recommended_artists,
+            playlist_name,
+            playlist_uri
         )
-        create_artist_summary(df_songs, playlist_name)
-        feature_trend_msgs = create_feature_plots(df_songs, playlist_name)
-        create_dashboard(summary_data, feature_trend_msgs, playlist_name)
 
-    # Create folder name for saving .csv file(s)
-    if save_df_songs or save_df_artists:
-        today = datetime.now().strftime("%Y-%m-%d")
-        file_dir = (
-            f"output/created_playlists/{playlist_name.replace(' ','')}"
-            f"Summary_Created{today}/"
-        )
-        if not os.path.exists(file_dir): # If directory DNE yet
-            os.makedirs(file_dir) # Create the directory
-        
-    # Save df_songs as a .csv file
+    # Create output summary dashboard, dashboard components, and folders
+    if analyze_playlist:
+        outputs.create_dashboard()
+        outputs.open_dashboard_and_playlist()
+
+    # Save songs df as a .csv file (and make output folder)
     if save_df_songs:
-        file_name = f"{file_dir}Playlist_Songs.csv"
-        df_songs.to_csv(file_name, index=False)
+        outputs.save_df_as_csv(df_songs, "playlist_songs.csv")
 
-    # Save df_artists as a .csv file
+    # Save artists df as a .csv file (and make output folder)
     if save_df_artists:
-        file_name = f"{file_dir}Playlist_Artists.csv"
-        df_playlist_artists.to_csv(file_name, index=False)
-
-    return df_songs, df_playlist_artists
+        outputs.save_df_as_csv(df_playlist_artists, "playlist_artists.csv")
 
 
 if __name__ == "__main__":

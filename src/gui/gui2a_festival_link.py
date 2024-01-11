@@ -1,11 +1,11 @@
 import sys
 from typing import Tuple
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (
     QApplication, QDesktopWidget, QGridLayout, QGroupBox,
     QLabel, QLineEdit, QMessageBox, QVBoxLayout, QWidget
 )
-from PyQt5.QtCore import Qt
 
 from gui.gui_components import ColorScheme, CustomProceedButton
 
