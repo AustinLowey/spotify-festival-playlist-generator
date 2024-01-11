@@ -1,4 +1,4 @@
-## Concept
+## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/c033cd7c-81f4-4056-8b32-8ae0da13d583" width="20"> Spotify Festival Playlist Generator
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/f8155adc-c98e-47e9-90dd-6dfd8b770bd9" width="700">
 
@@ -21,30 +21,37 @@
 - Leverages Spotipy to retrieve top tracks for each artist and create a playlist in Spotify.
 - Delivers automated track feature analytics using track metadata and by providing the user with an HTML/CSS playlist summary dashboard.
 
-#### _Main User Interface:_
+#### _Main User Interface and Process Flow:_
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/b840de90-a4f6-4662-8a11-ff38cf617a18">
 
 ---
 
-## Main Python Libraries Used
+## Getting Started
+
+### _Setup Instructions:_
+
+- Clone the GitHub repository.
+- Setup Spotipy Web API client and secret keys (https://developer.spotify.com/documentation/web-api).
+- Find your Spotify account's username id by opening Spotify and going to Account -> Edit Profile.
+- Setup these 3 id's as environment variables with names: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER
+
+### _Main Python Libraries Used:_
 - pandas
 - Spotipy (Python library for the Spotify Web API)
 - PyQt5
 - Beautiful Soup
 - Plotly
 
-Note: To use the Spotipy API, you need to setup an API client key and secret key (https://developer.spotify.com/documentation/web-api). In this application, 3 environment variables were setup: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER. The first and second are used for retrieving artist top tracks and track metadata. The third, SPOTIFY_USER, links to a Spotify account.
-
 ---
 
-## Walkthrough
+## Usage
 
-Running run_playlist_generator.py launches the below GUI, which asks the user if they'd like to create a playlist for a specific music festival or create a playlist by manually entering artist names.
+Running run_playlist_generator.py launches the below GUI, which asks the user if they'd like to create a playlist for a specific music festival or create a playlist by manually entering artists' names.
 
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/704ef100-d016-45a6-9c3c-b2219be24e39" width="400">
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/e954335b-92be-462a-b6d1-efe30b947c3a" width="400">
 
-If the user picks the "From Music Festival" option, they are taken to the below screen, where they are asked to get a songkick.com link for a specific music festival. The second option, "Enter Artist Names," offers an alternative approach by bringing the user to a screen where they can type-in multiple artists' names that will be used to make a playlist.
+If the user picks the "From Music Festival" option, they are taken to the below screen, where they are asked to get a songkick.com link for a specific music festival. The second option, "Enter Artists' Names," offers an alternative approach by bringing the user to a screen where they can type-in multiple artists' names that will be used to make a playlist.
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/33706e43-b682-4e2d-aeb4-1bf33bf791da" width="500">
 
@@ -62,16 +69,22 @@ The next GUI screen shows some info about the to-be-created playlist, as well as
 
 Finally, the playlist is created. For each artist, the top tracks per artist and their metadata, including track popularities and track features like tempo and danceability, are pulled using the Spotipy API. This playlist included the top (up to) 10 songs from 53 different artists, for a total of 342 songs (not 530 songs, as multiple remixes and repeats were removed and less songs were included for less popular artists), with a runtime of 19 hours and 11 minutes.
 
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/4e085e58-5f7d-40a8-a224-306b1241361f" width="700">
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/4e085e58-5f7d-40a8-a224-306b1241361f" width="600">
 
 The artist and song metadata are also saved as a .csv file.
 
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/d44c566d-3d56-4d0d-907f-877543f682c1" width="700">
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/d44c566d-3d56-4d0d-907f-877543f682c1" width="600">
 
 A dashboard is also created in HTML/CSS, providing multiple capabilities:
 1) Automated trend analysis on playlist song features (Tempo, Danceability, Energy and Speechiness) to identify the strongest trends present in the playlist data. This is especially useful if your playlist already fits specific qualities and you want to prune outliers to further strengthen those qualities.
 2) Interactive feature plots for all 4 song features (all plotted vs. Song Popularity), where you can hover over any data point to see to which song and artist it belongs, as well as hide artists using the plot's interactive legend. Useful for finding outliers and further exploring playlist trends.
 3) Summary information on the playlist and artists, including top playlist genres, similar artist recommendations, total runtime, number of songs, etc.
+
+---
+
+## Roadmap
+
+
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/e9e71e88-8f1d-4502-8eb3-5e93f4bc24a3" width="700">
 
