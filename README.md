@@ -33,8 +33,8 @@
 
 - Clone the GitHub repository.
 - Setup Spotipy Web API client and secret keys (https://developer.spotify.com/documentation/web-api).
-- Find your Spotify account's username id by opening Spotify and going to Account -> Edit Profile.
-- Setup these 3 id's as system environment variables with names: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER.
+- Find your Spotify account's username ID by opening Spotify and going to Account -> Edit Profile.
+- Setup these 3 IDs as system environment variables with names: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER.
 
 ### _Main Python Libraries Used:_
 - pandas
@@ -91,5 +91,9 @@ Interactive hover and artist isolation functionalities of Feature Plots:
 ## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/a6e5d2f2-7dcb-4f38-bf78-fe27cd0c2957" width="25"> Roadmap
 
 ### _Planned Features:_
+- [Advanced playlist sorting options](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/14)
+- [Playlist Summary Dashboard and automated metadata analysis for existing playlists](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/15)
+- [Add loading screens/bars/messages](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/16)
+- [Genre-filter buttons on Artist Selection screen](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/17)
 
 ### _Open Issues:_
