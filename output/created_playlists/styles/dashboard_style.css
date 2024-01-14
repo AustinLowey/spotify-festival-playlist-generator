@@ -152,3 +152,9 @@ h2 {
   /* Force width of col 3 (Total Runtime) */
   width: 110px;
 }
+
+#artist-summary .table th:nth-child(5),
+#artist-summary .table td:nth-child(5) {
+  /* Force width of col 5 (Artist Genres) */
+  width: 325px;
+}
