@@ -14,8 +14,8 @@
 
 #### _Key Features:_
 
-- Generates a Spotify playlist by curating top tracks from either a user-inputted music festival's artist lineup and/or manually entered artists' names.
-- Can create a playlist with dozens of hours of songs in 1-2 minutes.
+- Generates a Spotify playlist by curating top tracks from the lineup of a user-inputted music festival and/or manually-entered artists' names.
+- Can create a playlist with dozens of hours of songs in <1 minute.
 - Scrapes and extracts a specific music festival's lineup using Beautiful Soup.
 - Guides users through the process with a set of PyQt GUI screens, facilitating artist selection from the imported festival lineup.
 - Leverages Spotipy to retrieve top tracks for each artist and create a playlist in Spotify.
@@ -102,7 +102,6 @@ Interactive hover and artist isolation functionalities of Feature Plots:
 - [Update artist logos to have a straight line on the right side](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/28)
 - [Dashboard feature plots - Cap feature_range lower and upper bounds if all data within range](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/31)
 - [Spotify jams, mobile capability, and/or browser-usage](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/25)
-- [~~test~~](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues?q=is%3Aissue+is%3Aclosed)
 
 ### _Open Issues:_
 - [Improve artist search query](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/26)
