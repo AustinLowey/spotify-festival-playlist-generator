@@ -80,7 +80,7 @@ A dashboard is also created in HTML/CSS, providing multiple capabilities:
 2) Interactive feature plots for all 4 song features (all plotted vs. Song Popularity), where you can hover over any data point to see to which song and artist it belongs, as well as hide artists using the plot's interactive legend. Useful for finding outliers and further exploring playlist trends.
 3) Summary information on the playlist and artists, including top playlist genres, similar artist recommendations, total runtime, number of songs, etc.
 
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/e9e71e88-8f1d-4502-8eb3-5e93f4bc24a3" width="700">
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/fcebb796-12f3-40df-a411-c782f83c0dbc" width="700">
 
 Interactive hover and artist isolation functionalities of Feature Plots:
 
