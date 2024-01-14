@@ -32,9 +32,9 @@
 ### _Setup Instructions:_
 
 - Clone the GitHub repository.
-- Setup Spotipy Web API client and secret keys (https://developer.spotify.com/documentation/web-api).
-- Find your Spotify account's username ID by opening Spotify and going to Account -> Edit Profile.
-- Setup these 3 IDs as system environment variables with names: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER.
+- Set up Spotipy Web API client and secret keys (https://developer.spotify.com/documentation/web-api).
+- Find your Spotify account's username ID by opening Spotify and navigating to Account -> Edit Profile.
+- Set up these 3 IDs as system environment variables with names: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER.
 
 ### _Main Python Libraries Used:_
 - pandas
@@ -47,11 +47,11 @@
 
 ## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/3d889ec1-e4cd-4c72-94fe-8dd003ade51a" width="25"> Usage
 
-Running run_playlist_generator.py launches the below GUI, which asks the user if they'd like to create a playlist for a specific music festival or create a playlist by manually entering artists' names.
+Executing run_playlist_generator.py launches the below GUI, which asks the user if they'd like to create a playlist for a specific music festival or create a playlist by manually entering artists' names.
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/e954335b-92be-462a-b6d1-efe30b947c3a" width="400">
 
-If the user picks the "From Music Festival" option, they are taken to the below screen, where they are asked to get a songkick.com link for a specific music festival. The second option, "Enter Artists' Names," offers an alternative approach by bringing the user to a screen where they can type-in multiple artists' names that will be used to make a playlist.
+Choosing the "From Music Festival" option takes users to the screen below, where they are asked to get a songkick.com link for a specific music festival. The second option, "Enter Artists' Names," offers an alternative approach by bringing the user to a screen where they can type-in multiple artists' names that will be used to make a playlist.
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/33706e43-b682-4e2d-aeb4-1bf33bf791da" width="500">
 
@@ -80,7 +80,7 @@ A dashboard is also created in HTML/CSS, providing multiple capabilities:
 2) Interactive feature plots for all 4 song features (all plotted vs. Song Popularity), where you can hover over any data point to see to which song and artist it belongs, as well as hide artists using the plot's interactive legend. Useful for finding outliers and further exploring playlist trends.
 3) Summary information on the playlist and artists, including top playlist genres, similar artist recommendations, total runtime, number of songs, etc.
 
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/fcebb796-12f3-40df-a411-c782f83c0dbc" width="700">
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/b5281198-e7ef-4164-bc78-dbb89f0a4d34" width="700">
 
 Interactive hover and artist isolation functionalities of Feature Plots:
 
@@ -93,7 +93,7 @@ Interactive hover and artist isolation functionalities of Feature Plots:
 ### _Planned Features:_
 - [Advanced playlist sorting options](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/14)
 - [Playlist summary dashboard and automated metadata analysis for existing playlists](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/15)
-- [Add loading screens/bars/messages](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/16)
+- [Add loading screens, bars, and/or messages](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/16)
 - [Genre-filter buttons on Artist Selection screen](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/17)
 - [Song metadata retrieval during Playlist Customization screen to reduce user wait time](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/18)
 - ["Add to playlist" button for each recommended artist on Playlist Customization screen](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/19)
@@ -114,8 +114,7 @@ Interactive hover and artist isolation functionalities of Feature Plots:
 
 ### _Other Changes:_
 - [Reorganize PyQt styles into an init_widget_styles() method](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/36)
-- [Record new demo video for documentation](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/23)
+- [Record new demo video for documentation with most recent (minor) GUI updates](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/23)
 - [Add unit testing](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/20)
 - [(Maybe) Rename all column names in all DataFrames to remove spaces](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/37)
-- [.gitignore and .gitattributes](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/24)
-- [Minor cleanup items](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/38)
+- [Add .gitignore and .gitattributes](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/24)
