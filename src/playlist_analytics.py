@@ -56,8 +56,8 @@ class PlaylistGenOutputs():
             recommended_artists (List[str]): List of recommended artists.
             playlist_name (str): Name of the playlist.
             playlist_uri (str): Spotify URI of the playlist.
-            playlist_created_on (str): Date when the playlist was created
-                (default is the current date).
+            playlist_created_on (str): Date when the playlist was created in
+                month-day-year (default is the current date).
         """
 
         self.df_songs = df_songs
@@ -223,7 +223,7 @@ class PlaylistGenOutputs():
                 )
             ),
             Artist_Popularity=("Artist Popularity", "first"),
-            Artist_Genres=("Artist Genres", "first"),
+            Artist_Genres=("Artist Genres", lambda x: ", ".join(x.iloc[0])),
             Average_Tempo=("Tempo", lambda x: round(x.mean())),
             Average_Danceability=(
                 "Danceability",
@@ -239,7 +239,7 @@ class PlaylistGenOutputs():
             "Total Songs",
             "Total Runtime",
             "Artist Popularity (0-100)",
-            "Artist Genres",
+            "Genres",
             "Average Tempo (BPM)",
             "Average Danceability (0-1)",
             "Average Energy (0-1)",
