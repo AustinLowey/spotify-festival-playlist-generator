@@ -92,8 +92,31 @@ Interactive hover and artist isolation functionalities of Feature Plots:
 
 ### _Planned Features:_
 - [Advanced playlist sorting options](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/14)
-- [Playlist Summary Dashboard and automated metadata analysis for existing playlists](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/15)
+- [Playlist summary dashboard and automated metadata analysis for existing playlists](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/15)
 - [Add loading screens/bars/messages](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/16)
 - [Genre-filter buttons on Artist Selection screen](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/17)
+- [Song metadata retrieval during Playlist Customization screen to reduce user wait time](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/18)
+- ["Add to playlist" button for each recommended artist on Playlist Customization screen](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/19)
+- [Re-implement "offline_main()" function in run_playlist_generator.py](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/21)
+- [Auto-pruning capabilities to remove songs above/below certain feature thresholds](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/22)
+- [Update artist logos to have a straight line on the right side](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/28)
+- [Dashboard feature plots - Cap feature_range lower and upper bounds if all data within range](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/31)
+- [Spotify jams, mobile capability, and/or browser-usage](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/25)
+- [~~test~~](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues?q=is%3Aissue+is%3Aclosed)
 
 ### _Open Issues:_
+- [Improve artist search query](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/26)
+- [Improve artist logo scaling on Artist Selection screen](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/27)
+- [Improve Festival Link screen (general interface)](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/29)
+- [Error handling if no artist selected or entered on Artist Selection screen](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/30)
+- [Negative runtime in Playlist Customization screen (update regression model)](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/32)
+- [Bad festival link (additional) error handling](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/33)
+- [Single artist selection/entry leads to a crash](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/34)
+
+### _Other Changes:_
+- [Reorganize PyQt styles into an init_widget_styles() method](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/36)
+- [Record new demo video for documentation](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/23)
+- [Add unit testing](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/20)
+- [(Maybe) Rename all column names in all DataFrames to remove spaces](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/37)
+- [.gitignore and .gitattributes](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/24)
+- [Minor cleanup items](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/38)
