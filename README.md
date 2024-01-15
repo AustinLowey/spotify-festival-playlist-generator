@@ -1,6 +1,6 @@
 ## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/c033cd7c-81f4-4056-8b32-8ae0da13d583" width="25"> Festival Playlist Generator
 
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/c0ec88eb-8f40-4a71-bec1-f002f7acc8b2" width="700">
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/6583aec8-39af-4314-97d7-2a84f4c25e21" width="700">
 
 ## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/f97c5ed9-acf1-4d53-8520-6052b52d954c" width="25"> Top-Level Overview
 
