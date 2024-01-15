@@ -1,4 +1,4 @@
-## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/c033cd7c-81f4-4056-8b32-8ae0da13d583" width="25"> Spotify Festival Playlist Generator
+## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/c033cd7c-81f4-4056-8b32-8ae0da13d583" width="25"> Festival Playlist Generator
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/f8155adc-c98e-47e9-90dd-6dfd8b770bd9" width="700">
 
