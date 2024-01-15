@@ -2,8 +2,6 @@
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/c0ec88eb-8f40-4a71-bec1-f002f7acc8b2" width="700">
 
----
-
 ## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/f97c5ed9-acf1-4d53-8520-6052b52d954c" width="25"> Top-Level Overview
 
 #### _Demo Video:_
