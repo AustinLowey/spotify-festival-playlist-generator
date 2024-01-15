@@ -1,6 +1,6 @@
 ## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/c033cd7c-81f4-4056-8b32-8ae0da13d583" width="25"> Festival Playlist Generator
 
-<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/f8155adc-c98e-47e9-90dd-6dfd8b770bd9" width="700">
+<img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/f8155adc-c98e-47e9-90dd-6dfd8b770bd9" width="675">
 
 ---
 
@@ -9,7 +9,7 @@
 #### _Demo Video:_
 
 <a href="https://youtu.be/xa2-pl23kBE" target="_blank">
-  <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/e9c5905b-9d67-4118-a7e8-38f6da1d098c" width="500">
+  <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/e9c5905b-9d67-4118-a7e8-38f6da1d098c" width="475">
 </a>
 
 #### _Key Features:_
