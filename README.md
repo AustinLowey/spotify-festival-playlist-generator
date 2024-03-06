@@ -2,6 +2,8 @@
 
 <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/6583aec8-39af-4314-97d7-2a84f4c25e21" width="700">
 
+One of the main features of this application: Simply enter a specific music festival, click which artists you want from the lineup, and a playlist will automatically be generated for you.
+
 ## <img src="https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/assets/49540411/f97c5ed9-acf1-4d53-8520-6052b52d954c" width="25"> Top-Level Overview
 
 #### _Demo Video:_
