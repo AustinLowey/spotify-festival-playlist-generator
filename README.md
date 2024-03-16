@@ -118,3 +118,9 @@ Interactive hover and artist isolation functionalities of Feature Plots:
 - [Add unit testing](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/20)
 - [(Maybe) Rename all column names in all DataFrames to remove spaces](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/37)
 - [Add .gitignore and .gitattributes](https://github.com/AustinLowey/SpotifyFestivalPlaylistGenerator/issues/24)
+
+---
+
+## Sample Playlists by Music Genre/Festival Type
+1. Coming soon...
+2. SeaHearNow 2024: list main music genres, link the spotify playlist. link the dashboard?
