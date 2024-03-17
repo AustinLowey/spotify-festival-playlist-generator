@@ -122,5 +122,27 @@ Interactive hover and artist isolation functionalities of Feature Plots:
 ---
 
 ## Sample Playlists by Music Genre/Festival Type
-1. Coming soon...
-2. SeaHearNow 2024: list main music genres, link the spotify playlist. link the dashboard?
+
+# Rock
+- [Sea.Hear.Now 2024 (Rock, Alternative, Indie, Pop) - 169 songs, 10 hr 36 min](https://open.spotify.com/playlist/2r6J67ohr4xzgHRvmpwAY3?si=a57f2431c46b4da9)
+- [Austin City Limits 2023 (Rock artists only) - 130 songs, 8hr 16min](https://open.spotify.com/playlist/4ZmRXoFPo7Vg8wn9SkRW4P?si=c219d4e3c6c14613)
+
+# Electronic
+- [Electric Zoo 2023 (Electronic, House, Dubstep, Trance) - 818 songs, 49 hr 7 min](https://open.spotify.com/playlist/6HfL8jbc4Fg8UVda0mD61U?si=8c37fa86729c4450)
+- [Electric Daisy Carnival 2023 (House artists only) - 342 songs, 19 hr 11 min](https://open.spotify.com/playlist/3G5t70d2U5XX2NahtPjh81?si=62244a4cace1441a)
+
+# Pop
+- [Coachella 2024 (Pop artists only) - 183 songs, 10 hr 31 min](https://open.spotify.com/playlist/1z6imiEKV9Y2SSFCeXoIrJ?si=cdfb0f8274dd4c67)
+
+# Folk
+- [Newport Folk Festival - 106 songs, 6 hr 32 min](https://open.spotify.com/playlist/2vrWh0r0OApjiyJZpVdsPu?si=87d201370cf34fb3)
+
+# Country
+- [CMA Music Festival - 245 songs, 13 hr 47 min](https://open.spotify.com/playlist/1sQvtjGKAj5yvsDB5yKNF7?si=c748b93424e5464a)
+
+# Rap / Hip-Hop
+- [Rolling Loud 2024 - 237 songs, 11 hr 35 min](https://open.spotify.com/playlist/6XRzy10I1b9HSZ8IhW9hWk?si=445437c49d6c42fb)
+
+# Jazz
+- [Newport Jazz Festival - 178 songs, 13 hr 23 min](https://open.spotify.com/playlist/44ZHAa6fVzLSWitf6mc6Cd?si=88846fd5814a4695)
+
