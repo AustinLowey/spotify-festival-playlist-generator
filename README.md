@@ -128,7 +128,7 @@ Interactive hover and artist isolation functionalities of Feature Plots:
 - [Austin City Limits 2023 (Rock artists only) - 130 songs, 8hr 16min](https://open.spotify.com/playlist/4ZmRXoFPo7Vg8wn9SkRW4P?si=c219d4e3c6c14613)
 
 ### Electronic
-- [Electric Zoo 2023 (Electronic, House, Dubstep, Trance) - 818 songs, 49 hr 7 min](https://open.spotify.com/playlist/6HfL8jbc4Fg8UVda0mD61U?si=8c37fa86729c4450)
+- [Electric Zoo 2023 - 818 songs, 49 hr 7 min](https://open.spotify.com/playlist/6HfL8jbc4Fg8UVda0mD61U?si=8c37fa86729c4450)
 - [Electric Daisy Carnival 2023 (House artists only) - 342 songs, 19 hr 11 min](https://open.spotify.com/playlist/3G5t70d2U5XX2NahtPjh81?si=62244a4cace1441a)
 
 ### Pop
