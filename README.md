@@ -35,6 +35,7 @@ One of the main features of this application: Simply enter a specific music fest
 - Set up Spotipy Web API client and secret keys (https://developer.spotify.com/documentation/web-api).
 - Find your Spotify account's username ID by opening Spotify and navigating to Account -> Edit Profile.
 - Set up these 3 IDs as system environment variables with names: SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIFY_USER.
+- Note: Using Python 3.8; requirements.txt contains all package/library versions.
 
 ### _Main Python Libraries Used:_
 - pandas
