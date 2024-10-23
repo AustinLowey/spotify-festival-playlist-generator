@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SeaHearNow 2024 Summary</title>
+    <link rel="stylesheet" type="text/css" href="../styles/dashboard_style.css">
+
+    <!-- JavaScript function to toggle between feature plots -->
+    <script>
+        function showPlot(plotId) {
+            var plots = document.getElementsByClassName("plot");
+            for (var i = 0; i < plots.length; i++) {
+                plots[i].style.display = "none";
+            }
+            document.getElementById(plotId).style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Playlist Summary -->
+    <div id="playlist-summary">
+        <h2>Playlist Summary</h2>
+
+        <div id="top-line">SeaHearNow 2024</div> <!-- Separate id for spacing. -->
+        <div id="line2">Public playlist created on 03-05-2024</div>
+
+        <div id="line1">169 songs, 10 hr 37 min</div>
+        <div id="line2">Total song runtime</div>
+
+        <div id="line1">Jam Band, Heartland Rock, Rock, Alternative Rock, Asbury Park Indie</div>
+        <div id="line2">Top 5 genres</div>
+
+        <div id="line1">JJ Grey & Mofro, Tedeschi Trucks Band, Mt. Joy</div>
+        <div id="line2">Similar artists to this playlist</div>
+
+        <div id="line1">Speechiness have strong trends</div>
+        <div id="line2">95% of songs within 0 - 0.22 Speechiness range</span></div>
+    </div>
+
+    <!-- Feature Plots -->
+    <div id="feature-plots">
+        <h2>Song Feature Plots</h2>
+
+        <!-- Plot Background Container -->
+        <div class="plot-background"></div>
+
+        <!-- Buttons for toggling between feature plots -->
+        <div class="plot-buttons">
+            <button onclick="showPlot('tempo_plot')">Show Tempo Plot</button>
+            <button onclick="showPlot('danceability_plot')">Show Danceability Plot</button>
+            <button onclick="showPlot('energy_plot')">Show Energy Plot</button>
+            <button onclick="showPlot('speechiness_plot')">Show Speechiness Plot</button>
+        </div>
+
+        <!-- Note: Below embedded src sizes should be slightly larger than actual plot sizes. -->
+        <div class="plots-container">
+            <div id="tempo_plot" class="plot">
+                <embed src="summary_dashboard_components/tempo_plot.html" width="630" height="360">
+            </div>
+            <div id="danceability_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/danceability_plot.html" width="630" height="360">
+            </div>
+            <div id="energy_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/energy_plot.html" type="text/html" width="630" height="360">
+            </div>
+            <div id="speechiness_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/speechiness_plot.html" width="630" height="360">
+            </div>
+        </div>
+    </div>
+
+    <!-- Artist Summary Table -->
+    <div id="artist-summary">
+        <h2>Artist Summary</h2>
+        <table border="1" class="dataframe table">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Artist</th>
+      <th>Total Songs</th>
+      <th>Total Runtime</th>
+      <th>Artist Popularity (0-100)</th>
+      <th>Genres</th>
+      <th>Average Tempo (BPM)</th>
+      <th>Average Danceability (0-1)</th>
+      <th>Average Energy (0-1)</th>
+      <th>Average Speechiness (0-1)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>311</td>
+      <td>7</td>
+      <td>23 min 42 sec</td>
+      <td>61</td>
+      <td>Alternative Metal, Alternative Rock, Funk Metal, Funk Rock, Nu Metal, Pop Rock, Rap Rock, Reggae Fusion</td>
+      <td>158</td>
+      <td>0.61</td>
+      <td>0.76</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Action Bronson</td>
+      <td>7</td>
+      <td>31 min 15 sec</td>
+      <td>62</td>
+      <td>Alternative Hip Hop, East Coast Hip Hop, Hip Hop, NYC Rap, Queens Hip Hop</td>
+      <td>117</td>
+      <td>0.55</td>
+      <td>0.68</td>
+      <td>0.32</td>
+    </tr>
+    <tr>
+      <td>Bertha Tillman</td>
+      <td>2</td>
+      <td>4 min 44 sec</td>
+      <td>26</td>
+      <td>Souldies</td>
+      <td>121</td>
+      <td>0.50</td>
+      <td>0.62</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Bruce Springsteen</td>
+      <td>8</td>
+      <td>32 min 37 sec</td>
+      <td>74</td>
+      <td>Heartland Rock, Mellow Gold, Permanent Wave, Rock, Singer-Songwriter</td>
+      <td>119</td>
+      <td>0.51</td>
+      <td>0.71</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Eggy</td>
+      <td>4</td>
+      <td>22 min 34 sec</td>
+      <td>29</td>
+      <td>Jam Band</td>
+      <td>127</td>
+      <td>0.40</td>
+      <td>0.70</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Gogol Bordello</td>
+      <td>5</td>
+      <td>22 min 2 sec</td>
+      <td>43</td>
+      <td>Balkan Brass, Gypsy Punk</td>
+      <td>126</td>
+      <td>0.52</td>
+      <td>0.87</td>
+      <td>0.13</td>
+    </tr>
+    <tr>
+      <td>Grace Potter</td>
+      <td>7</td>
+      <td>28 min 43 sec</td>
+      <td>58</td>
+      <td></td>
+      <td>111</td>
+      <td>0.56</td>
+      <td>0.76</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Guster</td>
+      <td>6</td>
+      <td>23 min 16 sec</td>
+      <td>47</td>
+      <td>Boston Rock</td>
+      <td>122</td>
+      <td>0.45</td>
+      <td>0.69</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Illiterate Light</td>
+      <td>4</td>
+      <td>15 min 54 sec</td>
+      <td>27</td>
+      <td>Virginia Indie</td>
+      <td>96</td>
+      <td>0.55</td>
+      <td>0.65</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Joe P</td>
+      <td>6</td>
+      <td>20 min 52 sec</td>
+      <td>47</td>
+      <td>Asbury Park Indie</td>
+      <td>113</td>
+      <td>0.57</td>
+      <td>0.76</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Joy Oladokun</td>
+      <td>7</td>
+      <td>23 min 21 sec</td>
+      <td>58</td>
+      <td>Black Americana, La Pop</td>
+      <td>128</td>
+      <td>0.57</td>
+      <td>0.46</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Kool &amp; The Gang</td>
+      <td>7</td>
+      <td>28 min 1 sec</td>
+      <td>66</td>
+      <td>Disco, Funk, Motown, Soft Rock, Soul</td>
+      <td>119</td>
+      <td>0.68</td>
+      <td>0.65</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Larkin Poe</td>
+      <td>5</td>
+      <td>15 min 59 sec</td>
+      <td>46</td>
+      <td>Modern Blues Rock</td>
+      <td>117</td>
+      <td>0.54</td>
+      <td>0.71</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Noah Kahan</td>
+      <td>10</td>
+      <td>39 min 29 sec</td>
+      <td>87</td>
+      <td>POV: Indie</td>
+      <td>130</td>
+      <td>0.58</td>
+      <td>0.53</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Norah Jones</td>
+      <td>8</td>
+      <td>24 min 36 sec</td>
+      <td>73</td>
+      <td>Contemporary Vocal Jazz, Jazz Pop, Vocal Jazz</td>
+      <td>114</td>
+      <td>0.62</td>
+      <td>0.28</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Passafire</td>
+      <td>5</td>
+      <td>17 min 38 sec</td>
+      <td>46</td>
+      <td>East Coast Reggae, Reggae Rock</td>
+      <td>125</td>
+      <td>0.70</td>
+      <td>0.70</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Peaches</td>
+      <td>5</td>
+      <td>18 min 14 sec</td>
+      <td>44</td>
+      <td>Alternative Dance, Dance-Punk, Electroclash, Escape Room, Neo-Synthpop, New Rave</td>
+      <td>140</td>
+      <td>0.83</td>
+      <td>0.68</td>
+      <td>0.19</td>
+    </tr>
+    <tr>
+      <td>Rachel Ana Dobken</td>
+      <td>3</td>
+      <td>13 min 28 sec</td>
+      <td>8</td>
+      <td>Asbury Park Indie</td>
+      <td>148</td>
+      <td>0.43</td>
+      <td>0.54</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Robert Randolph &amp; The Family Band</td>
+      <td>5</td>
+      <td>17 min 52 sec</td>
+      <td>39</td>
+      <td>Jam Band, Modern Blues, Sacred Steel</td>
+      <td>123</td>
+      <td>0.53</td>
+      <td>0.88</td>
+      <td>0.10</td>
+    </tr>
+    <tr>
+      <td>Sierra Ferrell</td>
+      <td>7</td>
+      <td>20 min 48 sec</td>
+      <td>61</td>
+      <td>Alternative Americana, New Americana</td>
+      <td>122</td>
+      <td>0.62</td>
+      <td>0.54</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Sonic Blume</td>
+      <td>3</td>
+      <td>11 min 1 sec</td>
+      <td>14</td>
+      <td>New Jersey Indie</td>
+      <td>115</td>
+      <td>0.55</td>
+      <td>0.66</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Sunshine Spazz</td>
+      <td>3</td>
+      <td>11 min 47 sec</td>
+      <td>2</td>
+      <td></td>
+      <td>141</td>
+      <td>0.37</td>
+      <td>0.87</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
+      <td>The Aces</td>
+      <td>6</td>
+      <td>19 min 27 sec</td>
+      <td>48</td>
+      <td>Alt Z, Indie Pop, Indie Poptimism, UK Pop</td>
+      <td>112</td>
+      <td>0.59</td>
+      <td>0.77</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>The Black Crowes</td>
+      <td>7</td>
+      <td>34 min 53 sec</td>
+      <td>60</td>
+      <td>Album Rock, Blues Rock, Classic Rock, Electric Blues, Hard Rock, Heartland Rock, Jam Band, Rock, Southern Rock</td>
+      <td>149</td>
+      <td>0.49</td>
+      <td>0.78</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>The Gaslight Anthem</td>
+      <td>6</td>
+      <td>21 min 33 sec</td>
+      <td>53</td>
+      <td>Heartland Rock, New Jersey Hardcore, New Jersey Indie, New Jersey Punk</td>
+      <td>161</td>
+      <td>0.46</td>
+      <td>0.84</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>The Hives</td>
+      <td>7</td>
+      <td>17 min 54 sec</td>
+      <td>59</td>
+      <td>Alternative Rock, Garage Rock, Garage Rock Revival, Modern Rock, Rock, Swedish Garage Rock, Swedish Hard Rock, Swedish Indie Rock</td>
+      <td>129</td>
+      <td>0.53</td>
+      <td>0.93</td>
+      <td>0.10</td>
+    </tr>
+    <tr>
+      <td>The Revivalists</td>
+      <td>7</td>
+      <td>28 min 49 sec</td>
+      <td>57</td>
+      <td>Modern Alternative Rock</td>
+      <td>108</td>
+      <td>0.62</td>
+      <td>0.76</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Trey Anastasio</td>
+      <td>5</td>
+      <td>19 min 14 sec</td>
+      <td>38</td>
+      <td>Jam Band</td>
+      <td>108</td>
+      <td>0.60</td>
+      <td>0.65</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Ziggy Alberts</td>
+      <td>7</td>
+      <td>27 min 47 sec</td>
+      <td>58</td>
+      <td>Australian Singer-Songwriter, Folk-Pop, Indie Anthem-Folk</td>
+      <td>113</td>
+      <td>0.67</td>
+      <td>0.45</td>
+      <td>0.05</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</body>
+
+</html>

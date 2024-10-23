@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Coachella 2024 (Pop Artists Only) Summary</title>
+    <link rel="stylesheet" type="text/css" href="../styles/dashboard_style.css">
+
+    <!-- JavaScript function to toggle between feature plots -->
+    <script>
+        function showPlot(plotId) {
+            var plots = document.getElementsByClassName("plot");
+            for (var i = 0; i < plots.length; i++) {
+                plots[i].style.display = "none";
+            }
+            document.getElementById(plotId).style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Playlist Summary -->
+    <div id="playlist-summary">
+        <h2>Playlist Summary</h2>
+
+        <div id="top-line">Coachella 2024 (Pop Artists Only)</div> <!-- Separate id for spacing. -->
+        <div id="line2">Public playlist created on 03-17-2024</div>
+
+        <div id="line1">183 songs, 10 hr 31 min</div>
+        <div id="line2">Total song runtime</div>
+
+        <div id="line1">Pop, Dance Pop, Indie Pop, Pop Dance, Art Pop</div>
+        <div id="line2">Top 5 genres</div>
+
+        <div id="line1">Lucy Dacus, Phoebe Bridgers, MUNA</div>
+        <div id="line2">Similar artists to this playlist</div>
+
+        <div id="line1">Speechiness have strong trends</div>
+        <div id="line2">94% of songs within 0 - 0.23 Speechiness range</span></div>
+    </div>
+
+    <!-- Feature Plots -->
+    <div id="feature-plots">
+        <h2>Song Feature Plots</h2>
+
+        <!-- Plot Background Container -->
+        <div class="plot-background"></div>
+
+        <!-- Buttons for toggling between feature plots -->
+        <div class="plot-buttons">
+            <button onclick="showPlot('tempo_plot')">Show Tempo Plot</button>
+            <button onclick="showPlot('danceability_plot')">Show Danceability Plot</button>
+            <button onclick="showPlot('energy_plot')">Show Energy Plot</button>
+            <button onclick="showPlot('speechiness_plot')">Show Speechiness Plot</button>
+        </div>
+
+        <!-- Note: Below embedded src sizes should be slightly larger than actual plot sizes. -->
+        <div class="plots-container">
+            <div id="tempo_plot" class="plot">
+                <embed src="summary_dashboard_components/tempo_plot.html" width="630" height="360">
+            </div>
+            <div id="danceability_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/danceability_plot.html" width="630" height="360">
+            </div>
+            <div id="energy_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/energy_plot.html" type="text/html" width="630" height="360">
+            </div>
+            <div id="speechiness_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/speechiness_plot.html" width="630" height="360">
+            </div>
+        </div>
+    </div>
+
+    <!-- Artist Summary Table -->
+    <div id="artist-summary">
+        <h2>Artist Summary</h2>
+        <table border="1" class="dataframe table">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Artist</th>
+      <th>Total Songs</th>
+      <th>Total Runtime</th>
+      <th>Artist Popularity (0-100)</th>
+      <th>Genres</th>
+      <th>Average Tempo (BPM)</th>
+      <th>Average Danceability (0-1)</th>
+      <th>Average Energy (0-1)</th>
+      <th>Average Speechiness (0-1)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>AP Dhillon</td>
+      <td>8</td>
+      <td>24 min 55 sec</td>
+      <td>73.0</td>
+      <td>Desi Pop, Punjabi Hip Hop, Punjabi Pop</td>
+      <td>107</td>
+      <td>0.82</td>
+      <td>0.60</td>
+      <td>0.11</td>
+    </tr>
+    <tr>
+      <td>Bebe Rexha</td>
+      <td>8</td>
+      <td>23 min 53 sec</td>
+      <td>79.0</td>
+      <td>Dance Pop, Pop</td>
+      <td>122</td>
+      <td>0.63</td>
+      <td>0.78</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Chappell Roan</td>
+      <td>7</td>
+      <td>24 min 57 sec</td>
+      <td>67.0</td>
+      <td>Indie Pop, Springfield Mo Indie</td>
+      <td>125</td>
+      <td>0.58</td>
+      <td>0.65</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>DJ Snake</td>
+      <td>8</td>
+      <td>28 min 12 sec</td>
+      <td>78.0</td>
+      <td>EDM, Electronic Trap, Pop, Pop Dance</td>
+      <td>127</td>
+      <td>0.68</td>
+      <td>0.78</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
+      <td>Doja Cat</td>
+      <td>9</td>
+      <td>30 min 17 sec</td>
+      <td>87.0</td>
+      <td>Dance Pop, Pop</td>
+      <td>113</td>
+      <td>0.78</td>
+      <td>0.61</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Eartheater</td>
+      <td>6</td>
+      <td>22 min 8 sec</td>
+      <td>51.0</td>
+      <td>Art Pop, Electra, Escape Room, Experimental Pop, Spectra</td>
+      <td>135</td>
+      <td>0.55</td>
+      <td>0.70</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Faye Webster</td>
+      <td>8</td>
+      <td>27 min 55 sec</td>
+      <td>71.0</td>
+      <td>ATLanta Indie, Indie Pop</td>
+      <td>101</td>
+      <td>0.58</td>
+      <td>0.37</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Gorgon City</td>
+      <td>7</td>
+      <td>24 min 54 sec</td>
+      <td>62.0</td>
+      <td>Future Garage, House, Pop Dance, UK Dance</td>
+      <td>126</td>
+      <td>0.69</td>
+      <td>0.82</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>John Summit</td>
+      <td>8</td>
+      <td>27 min 6 sec</td>
+      <td>70.0</td>
+      <td>EDM, House, Pop Dance, UK Dance</td>
+      <td>126</td>
+      <td>0.67</td>
+      <td>0.80</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>L'Impératrice</td>
+      <td>7</td>
+      <td>23 min 15 sec</td>
+      <td>60.0</td>
+      <td>French Indie Pop, French Indietronica, French Synthpop</td>
+      <td>108</td>
+      <td>0.76</td>
+      <td>0.51</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>LE SSERAFIM</td>
+      <td>9</td>
+      <td>26 min 3 sec</td>
+      <td>81.0</td>
+      <td>K-Pop Girl Group</td>
+      <td>121</td>
+      <td>0.76</td>
+      <td>0.75</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>LUDMILLA</td>
+      <td>9</td>
+      <td>29 min 34 sec</td>
+      <td>80.0</td>
+      <td>Funk Carioca, Funk Pop, Funk Rj, Pagode Baiano, Pop Nacional</td>
+      <td>150</td>
+      <td>0.64</td>
+      <td>0.70</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Lana Del Rey</td>
+      <td>10</td>
+      <td>45 min 33 sec</td>
+      <td>90.0</td>
+      <td>Art Pop, Pop</td>
+      <td>108</td>
+      <td>0.42</td>
+      <td>0.48</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Mazzy Star</td>
+      <td>7</td>
+      <td>32 min 2 sec</td>
+      <td>68.0</td>
+      <td>Dream Pop, Melancholia, Shoegaze, Slowcore</td>
+      <td>155</td>
+      <td>0.43</td>
+      <td>0.22</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>No Doubt</td>
+      <td>7</td>
+      <td>29 min 4 sec</td>
+      <td>68.0</td>
+      <td>Dance Pop, Dance Rock, Permanent Wave, Pop Rock, Rock</td>
+      <td>128</td>
+      <td>0.64</td>
+      <td>0.77</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>RAYE</td>
+      <td>8</td>
+      <td>25 min 14 sec</td>
+      <td>79.0</td>
+      <td>UK Contemporary R&amp;B, UK Pop</td>
+      <td>118</td>
+      <td>0.70</td>
+      <td>0.72</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <td>Reneé Rapp</td>
+      <td>8</td>
+      <td>25 min 19 sec</td>
+      <td>75.0</td>
+      <td>Alt Z, Singer-Songwriter Pop</td>
+      <td>105</td>
+      <td>0.57</td>
+      <td>0.50</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <td>Sabrina Carpenter</td>
+      <td>9</td>
+      <td>27 min 0 sec</td>
+      <td>81.0</td>
+      <td>Pop</td>
+      <td>127</td>
+      <td>0.62</td>
+      <td>0.69</td>
+      <td>0.16</td>
+    </tr>
+    <tr>
+      <td>Suki Waterhouse</td>
+      <td>7</td>
+      <td>23 min 19 sec</td>
+      <td>68.0</td>
+      <td>Indie Pop</td>
+      <td>124</td>
+      <td>0.46</td>
+      <td>0.48</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Tems</td>
+      <td>8</td>
+      <td>26 min 56 sec</td>
+      <td>74.0</td>
+      <td>Afro R&amp;B, Afrobeats, Alte, Nigerian Pop</td>
+      <td>110</td>
+      <td>0.68</td>
+      <td>0.57</td>
+      <td>0.21</td>
+    </tr>
+    <tr>
+      <td>The Japanese House</td>
+      <td>7</td>
+      <td>25 min 1 sec</td>
+      <td>60.0</td>
+      <td>Indie Pop, Indietronica, Modern Dream Pop, POV: Indie, Vapor Soul</td>
+      <td>110</td>
+      <td>0.63</td>
+      <td>0.52</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Tinashe</td>
+      <td>7</td>
+      <td>22 min 38 sec</td>
+      <td>66.0</td>
+      <td>Alternative R&amp;B, Dance Pop, Metropopolis, Pop, R&amp;B, Urban Contemporary</td>
+      <td>117</td>
+      <td>0.73</td>
+      <td>0.60</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
+      <td>Young Fathers</td>
+      <td>6</td>
+      <td>22 min 6 sec</td>
+      <td>50.0</td>
+      <td>Abstract Hip Hop, Art Pop, Chamber Psych, Scottish Hip Hop</td>
+      <td>146</td>
+      <td>0.50</td>
+      <td>0.77</td>
+      <td>0.11</td>
+    </tr>
+    <tr>
+      <td>bar italia</td>
+      <td>5</td>
+      <td>13 min 36 sec</td>
+      <td>44.0</td>
+      <td>Crank Wave, Hypnagogic Pop</td>
+      <td>126</td>
+      <td>0.57</td>
+      <td>0.83</td>
+      <td>0.05</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</body>
+
+</html>

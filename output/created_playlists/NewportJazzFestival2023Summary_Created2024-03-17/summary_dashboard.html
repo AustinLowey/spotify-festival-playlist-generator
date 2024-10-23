@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Newport Jazz Festival 2023 Summary</title>
+    <link rel="stylesheet" type="text/css" href="../styles/dashboard_style.css">
+
+    <!-- JavaScript function to toggle between feature plots -->
+    <script>
+        function showPlot(plotId) {
+            var plots = document.getElementsByClassName("plot");
+            for (var i = 0; i < plots.length; i++) {
+                plots[i].style.display = "none";
+            }
+            document.getElementById(plotId).style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Playlist Summary -->
+    <div id="playlist-summary">
+        <h2>Playlist Summary</h2>
+
+        <div id="top-line">Newport Jazz Festival 2023</div> <!-- Separate id for spacing. -->
+        <div id="line2">Public playlist created on 03-17-2024</div>
+
+        <div id="line1">178 songs, 13 hr 23 min</div>
+        <div id="line2">Total song runtime</div>
+
+        <div id="line1">Jazz, Contemporary Jazz, Indie Soul, Contemporary Post-Bop, Jazz Fusion</div>
+        <div id="line2">Top 5 genres</div>
+
+        <div id="line1">Mark Turner, Chris Potter, Joe Lovano</div>
+        <div id="line2">Similar artists to this playlist</div>
+
+        <div id="line1">Speechiness have strong trends</div>
+        <div id="line2">93% of songs within 0 - 0.23 Speechiness range</span></div>
+    </div>
+
+    <!-- Feature Plots -->
+    <div id="feature-plots">
+        <h2>Song Feature Plots</h2>
+
+        <!-- Plot Background Container -->
+        <div class="plot-background"></div>
+
+        <!-- Buttons for toggling between feature plots -->
+        <div class="plot-buttons">
+            <button onclick="showPlot('tempo_plot')">Show Tempo Plot</button>
+            <button onclick="showPlot('danceability_plot')">Show Danceability Plot</button>
+            <button onclick="showPlot('energy_plot')">Show Energy Plot</button>
+            <button onclick="showPlot('speechiness_plot')">Show Speechiness Plot</button>
+        </div>
+
+        <!-- Note: Below embedded src sizes should be slightly larger than actual plot sizes. -->
+        <div class="plots-container">
+            <div id="tempo_plot" class="plot">
+                <embed src="summary_dashboard_components/tempo_plot.html" width="630" height="360">
+            </div>
+            <div id="danceability_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/danceability_plot.html" width="630" height="360">
+            </div>
+            <div id="energy_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/energy_plot.html" type="text/html" width="630" height="360">
+            </div>
+            <div id="speechiness_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/speechiness_plot.html" width="630" height="360">
+            </div>
+        </div>
+    </div>
+
+    <!-- Artist Summary Table -->
+    <div id="artist-summary">
+        <h2>Artist Summary</h2>
+        <table border="1" class="dataframe table">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Artist</th>
+      <th>Total Songs</th>
+      <th>Total Runtime</th>
+      <th>Artist Popularity (0-100)</th>
+      <th>Genres</th>
+      <th>Average Tempo (BPM)</th>
+      <th>Average Danceability (0-1)</th>
+      <th>Average Energy (0-1)</th>
+      <th>Average Speechiness (0-1)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Adi Oasis</td>
+      <td>6</td>
+      <td>22 min 43 sec</td>
+      <td>55</td>
+      <td>Indie R&amp;B, Indie Soul</td>
+      <td>100</td>
+      <td>0.61</td>
+      <td>0.70</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Alfa Mist</td>
+      <td>5</td>
+      <td>29 min 3 sec</td>
+      <td>49</td>
+      <td>British Jazz, Indie Soul</td>
+      <td>101</td>
+      <td>0.52</td>
+      <td>0.41</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Arooj Aftab</td>
+      <td>5</td>
+      <td>34 min 3 sec</td>
+      <td>41</td>
+      <td>Pakistani Indie</td>
+      <td>125</td>
+      <td>0.30</td>
+      <td>0.17</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Big Freedia</td>
+      <td>5</td>
+      <td>14 min 32 sec</td>
+      <td>49</td>
+      <td>Bounce, Escape Room, Lgbtq+ Hip Hop, New Orleans Rap, Trap Queen</td>
+      <td>104</td>
+      <td>0.82</td>
+      <td>0.77</td>
+      <td>0.20</td>
+    </tr>
+    <tr>
+      <td>Big Gigantic</td>
+      <td>6</td>
+      <td>21 min 5 sec</td>
+      <td>51</td>
+      <td>Glitch Hop</td>
+      <td>114</td>
+      <td>0.62</td>
+      <td>0.83</td>
+      <td>0.14</td>
+    </tr>
+    <tr>
+      <td>Bill Charlap</td>
+      <td>5</td>
+      <td>23 min 28 sec</td>
+      <td>41</td>
+      <td>Jazz Piano, Modern Jazz Piano</td>
+      <td>103</td>
+      <td>0.54</td>
+      <td>0.11</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Branford Marsalis</td>
+      <td>4</td>
+      <td>19 min 25 sec</td>
+      <td>37</td>
+      <td>Contemporary Post-Bop, Jazz, Jazz Saxophone, New Orleans Jazz</td>
+      <td>85</td>
+      <td>0.42</td>
+      <td>0.13</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Butcher Brown</td>
+      <td>5</td>
+      <td>14 min 50 sec</td>
+      <td>45</td>
+      <td>Indie Jazz, Indie Soul, Neo R&amp;B, Rva Indie</td>
+      <td>104</td>
+      <td>0.56</td>
+      <td>0.60</td>
+      <td>0.18</td>
+    </tr>
+    <tr>
+      <td>Cautious Clay</td>
+      <td>6</td>
+      <td>16 min 24 sec</td>
+      <td>56</td>
+      <td>Indie R&amp;B, NYC Pop</td>
+      <td>112</td>
+      <td>0.65</td>
+      <td>0.56</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Charles Lloyd</td>
+      <td>5</td>
+      <td>34 min 42 sec</td>
+      <td>39</td>
+      <td>Contemporary Jazz, Contemporary Post-Bop, Jazz Quartet, Jazz Saxophone</td>
+      <td>96</td>
+      <td>0.44</td>
+      <td>0.24</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Christian McBride</td>
+      <td>4</td>
+      <td>30 min 11 sec</td>
+      <td>38</td>
+      <td>Contemporary Jazz, Contemporary Post-Bop, Electric Bass, Hard Bop, Jazz, Jazz Double Bass, Jazz Fusion, Straight-Ahead Jazz</td>
+      <td>104</td>
+      <td>0.49</td>
+      <td>0.30</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Cimafunk</td>
+      <td>4</td>
+      <td>14 min 56 sec</td>
+      <td>37</td>
+      <td>Cuban Alternative</td>
+      <td>124</td>
+      <td>0.79</td>
+      <td>0.62</td>
+      <td>0.12</td>
+    </tr>
+    <tr>
+      <td>Claudia Acuna</td>
+      <td>2</td>
+      <td>7 min 6 sec</td>
+      <td>10</td>
+      <td>Jazz Chileno</td>
+      <td>127</td>
+      <td>0.47</td>
+      <td>0.29</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Dave Holland Octet</td>
+      <td>2</td>
+      <td>19 min 57 sec</td>
+      <td>2</td>
+      <td></td>
+      <td>124</td>
+      <td>0.46</td>
+      <td>0.53</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Diana Krall</td>
+      <td>6</td>
+      <td>26 min 2 sec</td>
+      <td>61</td>
+      <td>Contemporary Vocal Jazz, Jazz Pop, Vocal Jazz</td>
+      <td>126</td>
+      <td>0.57</td>
+      <td>0.28</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Dj Pee Wee</td>
+      <td>2</td>
+      <td>5 min 1 sec</td>
+      <td>0</td>
+      <td></td>
+      <td>106</td>
+      <td>0.46</td>
+      <td>0.46</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Dominic Fike</td>
+      <td>8</td>
+      <td>19 min 16 sec</td>
+      <td>76</td>
+      <td>Alternative Pop Rock, POV: Indie</td>
+      <td>117</td>
+      <td>0.77</td>
+      <td>0.59</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <td>Durand Jones &amp; The Indications</td>
+      <td>6</td>
+      <td>21 min 38 sec</td>
+      <td>58</td>
+      <td>Souldies</td>
+      <td>116</td>
+      <td>0.70</td>
+      <td>0.56</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Herbie Hancock</td>
+      <td>6</td>
+      <td>42 min 29 sec</td>
+      <td>55</td>
+      <td>Contemporary Post-Bop, Instrumental Funk, Jazz, Jazz Funk, Jazz Fusion, Jazz Piano</td>
+      <td>125</td>
+      <td>0.56</td>
+      <td>0.51</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Immanuel Wilkins</td>
+      <td>4</td>
+      <td>23 min 11 sec</td>
+      <td>38</td>
+      <td>Contemporary Jazz</td>
+      <td>108</td>
+      <td>0.43</td>
+      <td>0.46</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>JEON SOMI</td>
+      <td>6</td>
+      <td>17 min 7 sec</td>
+      <td>62</td>
+      <td>K-Pop</td>
+      <td>127</td>
+      <td>0.76</td>
+      <td>0.68</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Joe Russo's Almost Dead</td>
+      <td>4</td>
+      <td>38 min 39 sec</td>
+      <td>28</td>
+      <td>Jam Band</td>
+      <td>130</td>
+      <td>0.36</td>
+      <td>0.66</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Joey Calderazzo</td>
+      <td>3</td>
+      <td>26 min 53 sec</td>
+      <td>22</td>
+      <td>Modern Jazz Piano</td>
+      <td>103</td>
+      <td>0.45</td>
+      <td>0.11</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>John Scofield</td>
+      <td>5</td>
+      <td>23 min 47 sec</td>
+      <td>43</td>
+      <td>Jazz, Jazz Blues, Jazz Fusion, Jazz Guitar, Soul Jazz</td>
+      <td>115</td>
+      <td>0.68</td>
+      <td>0.43</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Jon Batiste</td>
+      <td>6</td>
+      <td>19 min 51 sec</td>
+      <td>61</td>
+      <td>New Orleans Jazz</td>
+      <td>119</td>
+      <td>0.59</td>
+      <td>0.47</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Julian Lage</td>
+      <td>5</td>
+      <td>18 min 45 sec</td>
+      <td>48</td>
+      <td>Contemporary Jazz, Jazz Guitar</td>
+      <td>102</td>
+      <td>0.48</td>
+      <td>0.25</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Lauren Sevian</td>
+      <td>2</td>
+      <td>10 min 20 sec</td>
+      <td>3</td>
+      <td>Jazz Saxophone</td>
+      <td>86</td>
+      <td>0.52</td>
+      <td>0.49</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Louis Cato</td>
+      <td>4</td>
+      <td>15 min 25 sec</td>
+      <td>28</td>
+      <td></td>
+      <td>119</td>
+      <td>0.58</td>
+      <td>0.51</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Marcus Miller</td>
+      <td>5</td>
+      <td>24 min 53 sec</td>
+      <td>42</td>
+      <td>Electric Bass, Instrumental Funk, Jazz Funk, Jazz Fusion</td>
+      <td>103</td>
+      <td>0.67</td>
+      <td>0.54</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Orrin Evans</td>
+      <td>4</td>
+      <td>21 min 40 sec</td>
+      <td>28</td>
+      <td>Contemporary Jazz, Jazz, Modern Jazz Piano, Straight-Ahead Jazz</td>
+      <td>108</td>
+      <td>0.42</td>
+      <td>0.17</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Redman</td>
+      <td>6</td>
+      <td>21 min 25 sec</td>
+      <td>63</td>
+      <td>East Coast Hip Hop, Hardcore Hip Hop, New Jersey Rap, Wu Fam</td>
+      <td>106</td>
+      <td>0.75</td>
+      <td>0.78</td>
+      <td>0.39</td>
+    </tr>
+    <tr>
+      <td>Samara Joy</td>
+      <td>5</td>
+      <td>22 min 6 sec</td>
+      <td>48</td>
+      <td></td>
+      <td>105</td>
+      <td>0.45</td>
+      <td>0.11</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Scary Goldings</td>
+      <td>4</td>
+      <td>14 min 49 sec</td>
+      <td>30</td>
+      <td></td>
+      <td>116</td>
+      <td>0.70</td>
+      <td>0.79</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Soulive</td>
+      <td>4</td>
+      <td>17 min 14 sec</td>
+      <td>34</td>
+      <td>Instrumental Funk, Jazz Funk, Jazz Organ, Soul Jazz</td>
+      <td>120</td>
+      <td>0.62</td>
+      <td>0.57</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Superblue</td>
+      <td>1</td>
+      <td>4 min 15 sec</td>
+      <td>0</td>
+      <td></td>
+      <td>151</td>
+      <td>0.37</td>
+      <td>0.84</td>
+      <td>0.10</td>
+    </tr>
+    <tr>
+      <td>The Soul Rebels</td>
+      <td>4</td>
+      <td>15 min 45 sec</td>
+      <td>31</td>
+      <td>Brass Band, Brass Band Pop, New Orleans Funk, Second Line, Street Band</td>
+      <td>110</td>
+      <td>0.67</td>
+      <td>0.62</td>
+      <td>0.22</td>
+    </tr>
+    <tr>
+      <td>The War And Treaty</td>
+      <td>7</td>
+      <td>27 min 56 sec</td>
+      <td>65</td>
+      <td>Black Americana</td>
+      <td>106</td>
+      <td>0.50</td>
+      <td>0.53</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Thundercat</td>
+      <td>7</td>
+      <td>22 min 45 sec</td>
+      <td>70</td>
+      <td>Afrofuturism, Escape Room, Indie Soul</td>
+      <td>112</td>
+      <td>0.68</td>
+      <td>0.73</td>
+      <td>0.11</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</body>
+
+</html>

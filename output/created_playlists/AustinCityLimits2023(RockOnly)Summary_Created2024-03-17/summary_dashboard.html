@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Austin City Limits 2023 (Rock Only) Summary</title>
+    <link rel="stylesheet" type="text/css" href="../styles/dashboard_style.css">
+
+    <!-- JavaScript function to toggle between feature plots -->
+    <script>
+        function showPlot(plotId) {
+            var plots = document.getElementsByClassName("plot");
+            for (var i = 0; i < plots.length; i++) {
+                plots[i].style.display = "none";
+            }
+            document.getElementById(plotId).style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Playlist Summary -->
+    <div id="playlist-summary">
+        <h2>Playlist Summary</h2>
+
+        <div id="top-line">Austin City Limits 2023 (Rock Only)</div> <!-- Separate id for spacing. -->
+        <div id="line2">Public playlist created on 03-17-2024</div>
+
+        <div id="line1">130 songs, 8 hr 16 min</div>
+        <div id="line2">Total song runtime</div>
+
+        <div id="line1">Modern Rock, Alternative Rock, POV: Indie, Post-Grunge, Rock</div>
+        <div id="line2">Top 5 genres</div>
+
+        <div id="line1">Okkervil River, The Lumineers, Vance Joy</div>
+        <div id="line2">Similar artists to this playlist</div>
+
+        <div id="line1">Speechiness have strong trends</div>
+        <div id="line2">99% of songs within 0 - 0.21 Speechiness range</span></div>
+    </div>
+
+    <!-- Feature Plots -->
+    <div id="feature-plots">
+        <h2>Song Feature Plots</h2>
+
+        <!-- Plot Background Container -->
+        <div class="plot-background"></div>
+
+        <!-- Buttons for toggling between feature plots -->
+        <div class="plot-buttons">
+            <button onclick="showPlot('tempo_plot')">Show Tempo Plot</button>
+            <button onclick="showPlot('danceability_plot')">Show Danceability Plot</button>
+            <button onclick="showPlot('energy_plot')">Show Energy Plot</button>
+            <button onclick="showPlot('speechiness_plot')">Show Speechiness Plot</button>
+        </div>
+
+        <!-- Note: Below embedded src sizes should be slightly larger than actual plot sizes. -->
+        <div class="plots-container">
+            <div id="tempo_plot" class="plot">
+                <embed src="summary_dashboard_components/tempo_plot.html" width="630" height="360">
+            </div>
+            <div id="danceability_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/danceability_plot.html" width="630" height="360">
+            </div>
+            <div id="energy_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/energy_plot.html" type="text/html" width="630" height="360">
+            </div>
+            <div id="speechiness_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/speechiness_plot.html" width="630" height="360">
+            </div>
+        </div>
+    </div>
+
+    <!-- Artist Summary Table -->
+    <div id="artist-summary">
+        <h2>Artist Summary</h2>
+        <table border="1" class="dataframe table">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Artist</th>
+      <th>Total Songs</th>
+      <th>Total Runtime</th>
+      <th>Artist Popularity (0-100)</th>
+      <th>Genres</th>
+      <th>Average Tempo (BPM)</th>
+      <th>Average Danceability (0-1)</th>
+      <th>Average Energy (0-1)</th>
+      <th>Average Speechiness (0-1)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ben Kweller</td>
+      <td>5</td>
+      <td>20 min 6 sec</td>
+      <td>34</td>
+      <td>Dallas Indie, Pop Rock</td>
+      <td>123</td>
+      <td>0.55</td>
+      <td>0.65</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Die Spitz</td>
+      <td>4</td>
+      <td>11 min 47 sec</td>
+      <td>28</td>
+      <td>Austin Rock</td>
+      <td>144</td>
+      <td>0.34</td>
+      <td>0.97</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Foo Fighters</td>
+      <td>9</td>
+      <td>38 min 7 sec</td>
+      <td>77</td>
+      <td>Alternative Metal, Alternative Rock, Modern Rock, Permanent Wave, Post-Grunge, Rock</td>
+      <td>144</td>
+      <td>0.41</td>
+      <td>0.88</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Hozier</td>
+      <td>10</td>
+      <td>40 min 9 sec</td>
+      <td>82</td>
+      <td>Irish Singer-Songwriter, Modern Rock, POV: Indie</td>
+      <td>123</td>
+      <td>0.50</td>
+      <td>0.45</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Katy Kirby</td>
+      <td>5</td>
+      <td>12 min 40 sec</td>
+      <td>41</td>
+      <td>Bubblegrunge, Indie Pop, Modern Indie Folk</td>
+      <td>116</td>
+      <td>0.62</td>
+      <td>0.40</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Mac Saturn</td>
+      <td>5</td>
+      <td>17 min 13 sec</td>
+      <td>33</td>
+      <td>Detroit Rock</td>
+      <td>113</td>
+      <td>0.75</td>
+      <td>0.63</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Mumford &amp; Sons</td>
+      <td>9</td>
+      <td>34 min 28 sec</td>
+      <td>72</td>
+      <td>Modern Folk Rock, Modern Rock, Neo Mellow, Stomp And Holler, UK Americana</td>
+      <td>123</td>
+      <td>0.51</td>
+      <td>0.66</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Myron Elkins</td>
+      <td>5</td>
+      <td>19 min 1 sec</td>
+      <td>32</td>
+      <td></td>
+      <td>114</td>
+      <td>0.59</td>
+      <td>0.75</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Sincere Engineer</td>
+      <td>5</td>
+      <td>16 min 42 sec</td>
+      <td>37</td>
+      <td>5Th Wave Emo, Bubblegrunge, Diy Emo</td>
+      <td>144</td>
+      <td>0.46</td>
+      <td>0.90</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Snõõper</td>
+      <td>5</td>
+      <td>8 min 31 sec</td>
+      <td>35</td>
+      <td>Egg Punk</td>
+      <td>105</td>
+      <td>0.48</td>
+      <td>0.76</td>
+      <td>0.09</td>
+    </tr>
+    <tr>
+      <td>Sunrose</td>
+      <td>3</td>
+      <td>12 min 47 sec</td>
+      <td>11</td>
+      <td></td>
+      <td>150</td>
+      <td>0.38</td>
+      <td>0.61</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>The 1975</td>
+      <td>9</td>
+      <td>40 min 10 sec</td>
+      <td>76</td>
+      <td>Modern Alternative Rock, Modern Rock, Pop, POV: Indie, Rock</td>
+      <td>116</td>
+      <td>0.59</td>
+      <td>0.74</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>The Breeders</td>
+      <td>7</td>
+      <td>19 min 9 sec</td>
+      <td>52</td>
+      <td>Alternative Rock</td>
+      <td>122</td>
+      <td>0.50</td>
+      <td>0.41</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>The Mars Volta</td>
+      <td>6</td>
+      <td>42 min 21 sec</td>
+      <td>49</td>
+      <td>El Paso Indie, Garage Rock</td>
+      <td>141</td>
+      <td>0.26</td>
+      <td>0.80</td>
+      <td>0.13</td>
+    </tr>
+    <tr>
+      <td>The Teskey Brothers</td>
+      <td>8</td>
+      <td>28 min 55 sec</td>
+      <td>63</td>
+      <td>Australian Americana</td>
+      <td>120</td>
+      <td>0.66</td>
+      <td>0.44</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>The Walkmen</td>
+      <td>6</td>
+      <td>21 min 58 sec</td>
+      <td>45</td>
+      <td>Chamber Pop, Indie Rock, Noise Pop</td>
+      <td>145</td>
+      <td>0.28</td>
+      <td>0.80</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Thirty Seconds To Mars</td>
+      <td>8</td>
+      <td>32 min 57 sec</td>
+      <td>69</td>
+      <td>Modern Rock, Post-Grunge</td>
+      <td>143</td>
+      <td>0.46</td>
+      <td>0.83</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Wunderhorse</td>
+      <td>6</td>
+      <td>21 min 54 sec</td>
+      <td>45</td>
+      <td></td>
+      <td>135</td>
+      <td>0.44</td>
+      <td>0.57</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Yeah Yeah Yeahs</td>
+      <td>8</td>
+      <td>33 min 17 sec</td>
+      <td>64</td>
+      <td>Alternative Dance, Alternative Rock, Art Pop, Dance-Punk, Garage Rock, Indie Rock, Modern Rock, Neo-Synthpop, New Rave</td>
+      <td>127</td>
+      <td>0.53</td>
+      <td>0.83</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>half•alive</td>
+      <td>7</td>
+      <td>24 min 11 sec</td>
+      <td>57</td>
+      <td>Alt Z, POV: Indie</td>
+      <td>111</td>
+      <td>0.67</td>
+      <td>0.66</td>
+      <td>0.09</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</body>
+
+</html>
