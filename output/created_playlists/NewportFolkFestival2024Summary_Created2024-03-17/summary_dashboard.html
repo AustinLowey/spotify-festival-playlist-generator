@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Newport Folk Festival 2024 Summary</title>
+    <link rel="stylesheet" type="text/css" href="../styles/dashboard_style.css">
+
+    <!-- JavaScript function to toggle between feature plots -->
+    <script>
+        function showPlot(plotId) {
+            var plots = document.getElementsByClassName("plot");
+            for (var i = 0; i < plots.length; i++) {
+                plots[i].style.display = "none";
+            }
+            document.getElementById(plotId).style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Playlist Summary -->
+    <div id="playlist-summary">
+        <h2>Playlist Summary</h2>
+
+        <div id="top-line">Newport Folk Festival 2024</div> <!-- Separate id for spacing. -->
+        <div id="line2">Public playlist created on 03-17-2024</div>
+
+        <div id="line1">106 songs, 6 hr 32 min</div>
+        <div id="line2">Total song runtime</div>
+
+        <div id="line1">New Americana, Countrygaze, Folk, Progressive Bluegrass, Chamber Pop</div>
+        <div id="line2">Top 5 genres</div>
+
+        <div id="line1">Lomelda, Indigo De Souza, Skullcrusher</div>
+        <div id="line2">Similar artists to this playlist</div>
+
+        <div id="line1">Speechiness have strong trends</div>
+        <div id="line2">92% of songs within 0 - 0.22 Speechiness range</span></div>
+    </div>
+
+    <!-- Feature Plots -->
+    <div id="feature-plots">
+        <h2>Song Feature Plots</h2>
+
+        <!-- Plot Background Container -->
+        <div class="plot-background"></div>
+
+        <!-- Buttons for toggling between feature plots -->
+        <div class="plot-buttons">
+            <button onclick="showPlot('tempo_plot')">Show Tempo Plot</button>
+            <button onclick="showPlot('danceability_plot')">Show Danceability Plot</button>
+            <button onclick="showPlot('energy_plot')">Show Energy Plot</button>
+            <button onclick="showPlot('speechiness_plot')">Show Speechiness Plot</button>
+        </div>
+
+        <!-- Note: Below embedded src sizes should be slightly larger than actual plot sizes. -->
+        <div class="plots-container">
+            <div id="tempo_plot" class="plot">
+                <embed src="summary_dashboard_components/tempo_plot.html" width="630" height="360">
+            </div>
+            <div id="danceability_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/danceability_plot.html" width="630" height="360">
+            </div>
+            <div id="energy_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/energy_plot.html" type="text/html" width="630" height="360">
+            </div>
+            <div id="speechiness_plot" class="plot" style="display: none;">
+                <embed src="summary_dashboard_components/speechiness_plot.html" width="630" height="360">
+            </div>
+        </div>
+    </div>
+
+    <!-- Artist Summary Table -->
+    <div id="artist-summary">
+        <h2>Artist Summary</h2>
+        <table border="1" class="dataframe table">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Artist</th>
+      <th>Total Songs</th>
+      <th>Total Runtime</th>
+      <th>Artist Popularity (0-100)</th>
+      <th>Genres</th>
+      <th>Average Tempo (BPM)</th>
+      <th>Average Danceability (0-1)</th>
+      <th>Average Energy (0-1)</th>
+      <th>Average Speechiness (0-1)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Adrianne Lenker</td>
+      <td>9</td>
+      <td>28 min 54 sec</td>
+      <td>62</td>
+      <td>Chamber Pop, Countrygaze, Indie Pop, Small Room</td>
+      <td>123</td>
+      <td>0.48</td>
+      <td>0.26</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>David Rawlings</td>
+      <td>7</td>
+      <td>27 min 40 sec</td>
+      <td>42</td>
+      <td>New England Americana</td>
+      <td>129</td>
+      <td>0.49</td>
+      <td>0.32</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Gillian Welch</td>
+      <td>8</td>
+      <td>30 min 23 sec</td>
+      <td>49</td>
+      <td>Alternative Country, Canadian Singer-Songwriter, Folk, Melancholia, Nashville Singer-Songwriter, New Americana, Progressive Bluegrass, Singer-Songwriter</td>
+      <td>114</td>
+      <td>0.64</td>
+      <td>0.24</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Guster</td>
+      <td>8</td>
+      <td>30 min 32 sec</td>
+      <td>48</td>
+      <td>Boston Rock</td>
+      <td>130</td>
+      <td>0.53</td>
+      <td>0.76</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Killer Mike</td>
+      <td>10</td>
+      <td>34 min 26 sec</td>
+      <td>66</td>
+      <td>Alternative Hip Hop, ATL Hip Hop, Conscious Hip Hop, Hip Hop, Old School ATLanta Hip Hop, Political Hip Hop, Southern Hip Hop</td>
+      <td>112</td>
+      <td>0.66</td>
+      <td>0.72</td>
+      <td>0.27</td>
+    </tr>
+    <tr>
+      <td>LA LOM</td>
+      <td>7</td>
+      <td>20 min 54 sec</td>
+      <td>43</td>
+      <td></td>
+      <td>105</td>
+      <td>0.61</td>
+      <td>0.75</td>
+      <td>0.07</td>
+    </tr>
+    <tr>
+      <td>Mighty Poplar</td>
+      <td>6</td>
+      <td>29 min 3 sec</td>
+      <td>28</td>
+      <td>Progressive Bluegrass</td>
+      <td>140</td>
+      <td>0.49</td>
+      <td>0.38</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <td>Palmyra</td>
+      <td>5</td>
+      <td>19 min 35 sec</td>
+      <td>23</td>
+      <td></td>
+      <td>118</td>
+      <td>0.54</td>
+      <td>0.46</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Reyna Tropical</td>
+      <td>7</td>
+      <td>23 min 30 sec</td>
+      <td>37</td>
+      <td>Latinx Alternative, Tropical Alternativo</td>
+      <td>128</td>
+      <td>0.72</td>
+      <td>0.73</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <td>Rhiannon Giddens</td>
+      <td>8</td>
+      <td>31 min 54 sec</td>
+      <td>47</td>
+      <td>Black Americana, Folk, New Americana, North Carolina Roots</td>
+      <td>103</td>
+      <td>0.54</td>
+      <td>0.37</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Sierra Ferrell</td>
+      <td>9</td>
+      <td>29 min 37 sec</td>
+      <td>61</td>
+      <td>Alternative Americana, New Americana</td>
+      <td>119</td>
+      <td>0.57</td>
+      <td>0.49</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>Sir Woman</td>
+      <td>7</td>
+      <td>25 min 3 sec</td>
+      <td>45</td>
+      <td>Austindie, Pop Soul</td>
+      <td>117</td>
+      <td>0.71</td>
+      <td>0.59</td>
+      <td>0.08</td>
+    </tr>
+    <tr>
+      <td>Tinariwen</td>
+      <td>8</td>
+      <td>33 min 18 sec</td>
+      <td>46</td>
+      <td>Afropop, Desert Blues, Malian Blues, Musique Touareg, Tuareg Guitar, Western Saharan Folk, World</td>
+      <td>116</td>
+      <td>0.65</td>
+      <td>0.65</td>
+      <td>0.05</td>
+    </tr>
+    <tr>
+      <td>Wednesday</td>
+      <td>7</td>
+      <td>27 min 35 sec</td>
+      <td>45</td>
+      <td>Asheville Indie, Bubblegrunge, Countrygaze</td>
+      <td>119</td>
+      <td>0.46</td>
+      <td>0.64</td>
+      <td>0.03</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+</body>
+
+</html>
